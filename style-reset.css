@@ -12,10 +12,7 @@ table, caption, tbody, tfoot, thead, tr, th, td,
 article, aside, canvas, details, embed, 
 figure, figcaption, footer, header, hgroup, 
 menu, nav, output, ruby, section, summary,
-time, mark, audio, video,
-/* My additions */
-button, input
-/* */
+time, mark, audio, video
 {
 	margin: 0;
 	padding: 0;
@@ -23,7 +20,17 @@ button, input
 	font-size: 100%;
 	font: inherit;
 	vertical-align: baseline;
-	/* Also mine */
+	/* My additions */
+	box-sizing: border-box;
+}
+/* Also mine */
+button, input, textarea, select
+{
+	margin: 0;
+	padding: 0;
+	border: 0;
+	vertical-align: top;
+	font-size: 0.8rem;
 	box-sizing: border-box;
 }
 /* HTML5 display-role reset for older browsers */
@@ -51,4 +58,21 @@ q:before, q:after {
 table {
 	border-collapse: collapse;
 	border-spacing: 0;
+}
+/* Also mine */
+a {
+	text-decoration: none;
+	color: unset;
+}
+@media (max-device-width: 720px)
+    and (orientation: landscape){
+    html{
+        font-size: 20px;
+    }
+}
+@media (max-device-width: 720px)
+    and (orientation: portrait){
+    html{
+        font-size: 28px;
+    }
 }
