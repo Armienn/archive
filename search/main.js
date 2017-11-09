@@ -186,12 +186,88 @@ class SectionContent extends Component {
 	constructor(main) {
 		super()
 		this.main = main
+		this.headerFunction = this.defaultHeaderFunction
+		this.cellFunction = this.defaultCellFunction
+		this.columns = ["1", "2", "3"]
 	}
 
 	renderThis() {
 		return l("section",
-			l("div", "there'll be a list here")
+			l("table",
+				l("thead",
+					l("tr",
+						...this.getHeader()
+					)
+				),
+				l("tbody",
+					...this.getRows()
+				)
+			)
 		)
+	}
+
+	static styleThis() {
+		return {
+			table: {
+				width: "calc(100% - 2rem)",
+				margin: "1rem"
+			},
+			tr: {
+				height: "2rem"
+			},
+			th: {
+				"vertical-align": "middle"
+			},
+			".odd": {
+				backgroundColor: "blue"
+			},
+			".even": {
+				backgroundColor: "green"
+			}
+		}
+	}
+
+	getHeader() {
+		var entries = []
+		var headers = this.headerFunction(this.main)
+		for (var i in headers)
+			entries.push(l("th", headers[i]))
+		return entries
+	}
+
+	getRows() {
+		var rows = []
+		var odd = true
+		for (var i in this.main.engine.filteredCollection) {
+			rows.push(l("tr" + (odd ? ".odd" : ".even"), ...this.getRow(this.main.engine.filteredCollection[i])))
+			odd = !odd
+		}
+		return rows
+	}
+
+	getRow(data) {
+		var entries = []
+		var dataEntries = this.cellFunction(data, this.main)
+		for (var i in dataEntries)
+			entries.push(l("th", dataEntries[i]))
+
+		return entries
+	}
+
+	defaultHeaderFunction(main) {
+		if (!main.engine.collection[0])
+			return []
+		return Object.keys(main.engine.collection[0])
+	}
+
+	defaultCellFunction(model, main) {
+		if (!main.engine.collection[0])
+			return []
+		var headers = Object.keys(main.engine.collection[0])
+		var cells = []
+		for (var i in headers)
+			cells.push(model[headers[i]])
+		return cells
 	}
 }
 
@@ -203,7 +279,7 @@ class SectionFooter extends Component {
 
 	renderThis() {
 		return l("footer",
-			l("p", "footer")
+			l("a", { href: "https://github.com/Armienn" }, "Design and code © Armienn, 2017.")
 		)
 	}
 
@@ -292,7 +368,58 @@ class Util {
 var site
 window.onload = function () {
 	site = new SearchSite()
-
+	site.engine.collection = [
+		{
+			"name": "Acid Arrow",
+			"school": "conjuration",
+			"casting_time": "1 standard action",
+			"range": "long (400 ft. + 40 ft./level)",
+			"duration": "1 round + 1 round per three levels",
+			"short_description": " Ranged touch attack; 2d4 damage for 1 round + 1 round/three levels.",
+			"classes": {
+				"sor": 2,
+				"wiz": 2,
+				"magus": 2,
+				"bloodrager": 2
+			},
+			"types": [
+				"acid"
+			]
+		},
+		{
+			"name": "Acid Fog",
+			"school": "conjuration",
+			"casting_time": "1 standard action",
+			"range": "medium (100 ft. + 10 ft./level)",
+			"duration": "1 round/level",
+			"short_description": " Fog deals acid damage.",
+			"classes": {
+				"sor": 6,
+				"wiz": 6,
+				"magus": 6
+			},
+			"types": [
+				"acid"
+			]
+		},
+		{
+			"name": "Acid Splash",
+			"school": "conjuration",
+			"casting_time": "1 standard action",
+			"range": "close (25 ft. + 5 ft./2 levels)",
+			"duration": "instantaneous",
+			"short_description": " Orb deals 1d3 acid damage.",
+			"classes": {
+				"sor": 0,
+				"wiz": 0,
+				"summoner": 0,
+				"inquisitor": 0,
+				"magus": 0
+			},
+			"types": [
+				"acid"
+			]
+		}]
 	arf.setRenderFunction(() => site.render())
 	arf.update()
 }
