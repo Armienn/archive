@@ -7,11 +7,14 @@ class SearchSite extends Component {
 	constructor() {
 		super()
 		this.constructor.styling = {
-			headerBackground: "red",
-			headerText: "white",
-			mainBackground: "grey",
-			mainText: "white",
-			unselectedText: "rgba(0,0,0,0.4)"
+			headerBackground: "#c00",
+			headerText: "#eee",
+			mainBackground: "#222",
+			mainText: "#eee",
+			unselectedText: "rgba(0,0,0,0.4)",
+			oddBackground: "rgba(180, 180, 180, 0.2)",
+			evenBackground: "rgba(80, 80, 80, 0.2)",
+			hoverBackground: "rgba(255, 255, 255, 0.35)"
 		}
 		this.sections = {
 			header: new SectionHeader(this),
@@ -213,17 +216,25 @@ class SectionContent extends Component {
 				margin: "1rem"
 			},
 			tr: {
-				height: "2rem"
+				height: "2rem",
+			},
+			"tbody tr": {
+				cursor: "pointer",
+				transition: "0.2s ease background"
+			},
+			"tbody tr:hover": {
+				backgroundColor: SearchSite.styling.hoverBackground,
+				transition: "0.2s ease background"
 			},
 			th: {
 				"vertical-align": "middle"
 			},
 			".odd": {
-				backgroundColor: "blue"
+				backgroundColor: SearchSite.styling.oddBackground,
 			},
 			".even": {
-				backgroundColor: "green"
-			}
+				backgroundColor: SearchSite.styling.evenBackground,
+			},
 		}
 	}
 
