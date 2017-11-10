@@ -33,6 +33,9 @@ button, input, textarea, select
 	font-size: 0.8rem;
 	box-sizing: border-box;
 }
+button {
+	cursor: pointer;
+}
 /* HTML5 display-role reset for older browsers */
 article, aside, details, figcaption, figure, 
 footer, header, hgroup, menu, nav, section {

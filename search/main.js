@@ -11,7 +11,7 @@ class SearchSite extends Component {
 			headerText: "#eee",
 			mainBackground: "#222",
 			mainText: "#eee",
-			unselectedText: "rgba(0,0,0,0.4)",
+			inactiveText: "rgba(0,0,0,0.4)",
 			oddBackground: "rgba(180, 180, 180, 0.2)",
 			evenBackground: "rgba(80, 80, 80, 0.2)",
 			hoverBackground: "rgba(255, 255, 255, 0.35)"
@@ -131,7 +131,7 @@ class NavigationEntry extends Component {
 				padding: "0 0.5rem"
 			},
 			".unselected": {
-				color: SearchSite.styling.unselectedText,
+				color: SearchSite.styling.inactiveText,
 			}
 		}
 	}
@@ -146,9 +146,9 @@ class SectionSearch extends Component {
 	renderThis() {
 		return l("section",
 			l("div.inputs",
-				this.searchInput,
-				this.filterInput,
-				this.sortInput
+				this.searchInput(),
+				this.filterInput(),
+				this.sortInput()
 			),
 			l("ul.filters",
 				l("li", "current filter 1"),
@@ -168,7 +168,45 @@ class SectionSearch extends Component {
 				display: "inline-block",
 				padding: "0 0.5rem"
 			},
+			".inputs": {
+				display: "flex",
+				width: "70%",
+				"margin-left": "15%"
+			},
+			input: {
+				"flex-grow": "2"
+			},
+			select: {
+				"flex-grow": "1",
+				"margin-left": "1rem"
+			},
+			button: {
+				"margin-left": "0.5rem",
+				"font-weight": "bold",
+				color: SearchSite.styling.headerText,
+				backgroundColor: "transparent"
+			}
 		}
+	}
+
+	searchInput() {
+		return l("input", { placeholder: "Search" })
+	}
+
+	filterInput() {
+		return l("select",
+			l("option", "hej"),
+			l("option", "hej2")
+		)
+	}
+
+	sortInput() {
+		return [l("select",
+			l("option", "hej"),
+			l("option", "hej2")
+		),
+		l("button", { style: { color: SearchSite.styling.inactiveText } }, "Reverse")
+		]
 	}
 }
 
@@ -180,7 +218,7 @@ class SectionSelection extends Component {
 
 	renderThis() {
 		return l("section",
-			l("p", "selection info")
+			l("p", { style: { display: "none" } }, "selection info")
 		)
 	}
 }
