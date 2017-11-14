@@ -190,7 +190,13 @@ class SectionSearch extends Component {
 	}
 
 	searchInput() {
-		return l("input", { placeholder: "Search" })
+		return l("input", {
+			placeholder: "Search", oninput: (event) => {
+				this.main.engine.query = event.target.value
+				this.main.engine.updateFilteredCollection()
+				arf.update()
+			}
+		})
 	}
 
 	filterInput() {
