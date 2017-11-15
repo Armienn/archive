@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<link rel="stylesheet" href="../style-reset.css"></link>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/rollups/aes.js"></script>
+	<title>Crypt</title>
+</head>
+
+<body style="margin:0;padding:0;">
+	<div style="height: 100vh; width: 100vw;">
+		<div style="width: 50vw; float: left;">
+			<textarea id="input" style="width: 100%; height: calc(100vh - 4rem); tab-size: 2; box-sizing: border-box;padding:0.5rem;"></textarea>
+			<input type="text" id="pass" style="width: 100%;height:2rem;" placeholder="Encryption key"></input>
+			<div style="width: 100%;height:2rem; display: flex;">
+				<button type="button" onclick="encrypt(document.getElementById('input').value)" style="height:2rem; flex-grow: 1;">Encrypt</button>
+				<button type="button" onclick="decrypt(document.getElementById('input').value)" style="height:2rem; flex-grow: 1; margin-left: 1rem;">Decrypt</button>
+			</div>
+		</div>
+		<textarea id="output" style="tab-size: 2; width: 50vw; float: left; box-sizing: border-box; margin:0;padding:0.5rem;height: 100vh;overflow-y: scroll;"></textarea>
+	</div>
+
+	<script type="text/javascript">
+		// output functions
+		var encrypt = function (text) {
+			var output = document.getElementById("output")
+			output.value = CryptoJS.AES.encrypt(text, document.getElementById("pass").value)
+			output.focus()
+			output.select()
+		}
+		var decrypt = function (text) {
+			var output = document.getElementById("output")
+			output.value = CryptoJS.AES.decrypt(text, document.getElementById("pass").value).toString(CryptoJS.enc.Utf8)
+			output.focus()
+			output.select()
+		}
+		// function to encode in html
+		var encodeHTML = (function () {
+			var encodeHTMLmap = { "&": "&amp;", "'": "&#39;", '"': "&quot;", "<": "&lt;", ">": "&gt;" };
+			function encodeHTMLmapper(ch) { return encodeHTMLmap[ch]; }
+			return function (text) { return text.replace(/[&"'<>]/g, encodeHTMLmapper); };
+		})();
+		// let tab work in textareas
+		var textareas = document.getElementsByTagName("textarea");
+		var count = textareas.length;
+		for (var i = 0; i < count; i++) {
+			textareas[i].onkeydown = function (e) {
+				if (e.keyCode == 9 || e.which == 9) {
+					e.preventDefault();
+					var s = this.selectionStart;
+					this.value = this.value.substring(0, this.selectionStart) + "\t" + this.value.substring(this.selectionEnd);
+					this.selectionEnd = s + 1;
+				}
+			}
+		}
+	</script>
+</body>
+
+</html>
