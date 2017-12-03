@@ -23,7 +23,7 @@ function draw() {
 }
 
 var mouseDown = false
-window.onmousedown = function (event) {
+var ondown = function (event) {
 	mouseDown = true
 	context.beginPath()
 	context.moveTo(event.x, event.y)
@@ -37,7 +37,7 @@ window.onmousedown = function (event) {
 	lastX = event.x
 	lastY = event.y
 }
-window.onmouseup = function (event) {
+var onup = function (event) {
 	mouseDown = false
 	lastX = -1
 	lastY = -1
@@ -45,7 +45,7 @@ window.onmouseup = function (event) {
 
 var lastX = -1
 var lastY = -1
-window.onmousemove = function (event) {
+var onmove = function (event) {
 	if (mouseDown) {
 		//context.fillStyle = lineColor
 		//context.fillRect(Math.floor(event.x-lineSize/2), Math.floor(event.y-lineSize/2), lineSize, lineSize)
@@ -69,5 +69,13 @@ window.onmousewheel = (event) => {
 	else
 		lineSize++
 }
+
+window.onmousedown = ondown
+window.onmouseup = onup
+window.onmousemove = onmove
+
+window.ontouchstart = ondown
+window.ontouchend = onup
+window.ontouchmove = onmove
 
 draw()
