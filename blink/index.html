@@ -4,7 +4,7 @@
 <head>
 	<meta charset="utf-8">
 	<link rel="stylesheet" href="../style-reset.css"></link>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.2/rollups/aes.js"></script>
+	<script src="../scripts/lz-string.min.js"></script>
 	<title>-</title>
 	<style>
 .blink_me {
@@ -22,19 +22,6 @@
 	</div>
 
 	<script type="text/javascript">
-		// output functions
-		var encrypt = function (text) {
-			var output = document.getElementById("output")
-			output.value = CryptoJS.AES.encrypt(text, document.getElementById("pass").value)
-			output.focus()
-			output.select()
-		}
-		var decrypt = function (text) {
-			var output = document.getElementById("output")
-			output.value = CryptoJS.AES.decrypt(text, document.getElementById("pass").value).toString(CryptoJS.enc.Utf8)
-			output.focus()
-			output.select()
-		}
 		// function to encode in html
 		var encodeHTML = (function () {
 			var encodeHTMLmap = { "&": "&amp;", "'": "&#39;", '"': "&quot;", "<": "&lt;", ">": "&gt;" };
@@ -42,7 +29,11 @@
 			return function (text) { return text.replace(/[&"'<>]/g, encodeHTMLmapper); };
 		})();
 		window.onload = () => {
-			document.getElementById("blub").innerHTML = encodeHTML(CryptoJS.AES.decrypt(window.location.hash.substr(1), "hey").toString(CryptoJS.enc.Utf8))
+			document.getElementById("blub").innerHTML = LZString.decompressFromEncodedURIComponent(window.location.hash.substr(1))
+		}
+
+		var newLink = function(text){
+			alert("armienn.github.io/archive/blink/#" + LZString.compressToEncodedURIComponent(text))
 		}
 	</script>
 </body>
