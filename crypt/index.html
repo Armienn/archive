@@ -9,34 +9,34 @@
 </head>
 
 <body style="margin:0;padding:0;">
-	<div style="height: 100vh; width: 100vw;">
-		<div style="width: 50vw; float: left;">
-			<textarea id="input" style="width: 100%; height: calc(100vh - 4rem); tab-size: 2; box-sizing: border-box;padding:0.5rem;"
-			 placeholder="text to encrypt/decrypt"></textarea>
-			<input type="text" id="pass" style="width: 100%;height:2rem;" placeholder="Encryption key"></input>
-			<div style="width: 100%;height:2rem; display: flex;">
-				<button type="button" onclick="encrypt(document.getElementById('input').value)" style="height:2rem; flex-grow: 1;">Encrypt</button>
-				<button type="button" onclick="decrypt(document.getElementById('input').value)" style="height:2rem; flex-grow: 1; margin-left: 1rem;">Decrypt</button>
-			</div>
-		</div>
-		<textarea id="output" style="tab-size: 2; width: 50vw; float: left; box-sizing: border-box; margin:0;padding:0.5rem;height: 100vh;overflow-y: scroll;"
-		 placeholder="encrypted/decrypted text"></textarea>
+	<input type="text" id="pass" style="width: 100vw;height:2rem; text-align: center;" placeholder="Encryption key" oninput="lastUsed()"></input>
+	<div style="height: calc(100vh - 2rem); width: 100vw;">
+		<textarea id="input" style="width: 50vw; float: left; height: 100%; tab-size: 2; box-sizing: border-box;padding:0.5rem;"
+		 placeholder="un-encrypted text" oninput="encrypt(); lastUsed = encrypt"></textarea>
+		<textarea id="output" style="tab-size: 2; width: 50vw; float: left; box-sizing: border-box; margin:0;padding:0.5rem;height: 100%;overflow-y: scroll;"
+		 placeholder="encrypted text" oninput="decrypt(); lastUsed = decrypt"></textarea>
 	</div>
 
 	<script type="text/javascript">
+		var clearText = document.getElementById("input")
+		var encryptedText = document.getElementById("output")
+		var passKey = document.getElementById("pass")
 		// output functions
-		var encrypt = function (text) {
-			var output = document.getElementById("output")
-			output.value = CryptoJS.AES.encrypt(text, document.getElementById("pass").value)
-			output.focus()
-			output.select()
+		var encrypt = function () {
+			encryptedText.value = CryptoJS.AES.encrypt(clearText.value, passKey.value)
 		}
-		var decrypt = function (text) {
-			var output = document.getElementById("output")
-			output.value = CryptoJS.AES.decrypt(text, document.getElementById("pass").value).toString(CryptoJS.enc.Utf8)
-			output.focus()
-			output.select()
+		var decrypt = function () {
+			var decrypted = ""
+			try {
+				decrypted = CryptoJS.AES.decrypt(encryptedText.value, passKey.value).toString(CryptoJS.enc.Utf8)
+			} catch (e) {
+				decrypted = ""
+			}
+			if (!decrypted)
+				decrypted = "Couldn't decrypt"
+			clearText.value = decrypted
 		}
+		var lastUsed = encrypt
 		// function to encode in html
 		var encodeHTML = (function () {
 			var encodeHTMLmap = { "&": "&amp;", "'": "&#39;", '"': "&quot;", "<": "&lt;", ">": "&gt;" };
@@ -56,11 +56,11 @@
 				}
 			}
 		}
-		document.getElementById("output").onkeydown = function (e) {
+		/*document.getElementById("output").onkeydown = function (e) {
 			if ((e.keyCode == 65 || e.keyCode == 86 || e.keyCode == 67) && (e.ctrlKey === true || e.metaKey === true))
 				return
 			e.preventDefault()
-		}
+		}*/
 	</script>
 </body>
 
