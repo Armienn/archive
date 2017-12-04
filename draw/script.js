@@ -75,6 +75,7 @@ addEventListener("pointermove", handleMove, { passive: false })
 addEventListener("pointerup", handleEnd, { passive: false })
 addEventListener("pointercancel", handleCancel, { passive: false })
 
+// catch up, firefox!
 addEventListener("mousedown", (e) => { e.pointerId = "mouse"; handleStart(e) }, { passive: false })
 addEventListener("mousemove", (e) => { e.pointerId = "mouse"; handleMove(e) }, { passive: false })
 addEventListener("mouseup", (e) => { e.pointerId = "mouse"; handleEnd(e) }, { passive: false })
