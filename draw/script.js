@@ -22,45 +22,45 @@ function draw() {
 	context.fillRect(0, 0, canvas.width, canvas.height)
 }
 
-var mouseDown = false
-var ondown = function (event) {
-	mouseDown = true
+
+var touches = {}
+function handleStart(event) {
+	event.preventDefault()
+	touches[event.pointerId] = event
 	context.beginPath()
-	context.moveTo(event.x, event.y)
-	context.lineTo(event.x, event.y)
+	context.moveTo(event.pageX, event.pageY)
+	context.lineTo(event.pageX, event.pageY)
 	context.lineWidth = lineSize
 	context.strokeStyle = lineColor
 	context.lineCap = "round"
 	context.stroke()
-	//context.fillStyle = lineColor
-	//context.fillRect(Math.floor(event.x-lineSize/2), Math.floor(event.y-lineSize/2), lineSize, lineSize)
-	lastX = event.x
-	lastY = event.y
-}
-var onup = function (event) {
-	mouseDown = false
-	lastX = -1
-	lastY = -1
 }
 
-var lastX = -1
-var lastY = -1
-var onmove = function (event) {
-	if (mouseDown) {
-		//context.fillStyle = lineColor
-		//context.fillRect(Math.floor(event.x-lineSize/2), Math.floor(event.y-lineSize/2), lineSize, lineSize)
-		if (lastX >= 0 && lastY >= 0) {
-			context.beginPath()
-			context.moveTo(lastX, lastY)
-			context.lineTo(event.x, event.y)
-			context.lineWidth = lineSize
-			context.strokeStyle = lineColor
-			context.lineCap = "round"
-			context.stroke()
-		}
-		lastX = event.x
-		lastY = event.y
-	}
+function handleMove(event) {
+	event.preventDefault()
+	if (!touches[event.pointerId])
+		return
+	context.beginPath()
+	context.moveTo(touches[event.pointerId].pageX, touches[event.pointerId].pageY)
+	context.lineTo(event.pageX, event.pageY)
+	context.lineWidth = lineSize
+	context.strokeStyle = lineColor
+	context.lineCap = "round"
+	context.stroke()
+
+	touches[event.pointerId] = event
+}
+
+function handleEnd(event) {
+	event.preventDefault()
+	if (touches[event.pointerId])
+		delete touches[event.pointerId]
+}
+
+function handleCancel(event) {
+	event.preventDefault()
+	if (touches[event.pointerId])
+		delete touches[event.pointerId]
 }
 
 window.onmousewheel = (event) => {
@@ -70,12 +70,9 @@ window.onmousewheel = (event) => {
 		lineSize++
 }
 
-window.onmousedown = ondown
-window.onmouseup = onup
-window.onmousemove = onmove
-
-window.ontouchstart = ondown
-window.ontouchend = onup
-window.ontouchmove = onmove
+addEventListener("pointerdown", handleStart, { passive: false })
+addEventListener("pointermove", handleMove, { passive: false })
+addEventListener("pointerup", handleEnd, { passive: false })
+addEventListener("pointercancel", handleCancel, { passive: false })
 
 draw()
