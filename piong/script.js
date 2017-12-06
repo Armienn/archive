@@ -488,8 +488,6 @@ function GameInput(key) {
 }
 
 window.addEventListener("keydown", function (event) {
-	if (event.defaultPrevented)
-		return
 	for (var i in gameInputs) {
 		if (event.key == gameInputs[i].key) {
 			gameInputs[i].pressed = true
@@ -499,8 +497,6 @@ window.addEventListener("keydown", function (event) {
 }, true)
 
 window.addEventListener("keyup", function (event) {
-	if (event.defaultPrevented)
-		return
 	for (var i in gameInputs) {
 		if (event.key == gameInputs[i].key) {
 			gameInputs[i].pressed = false
@@ -512,18 +508,12 @@ window.addEventListener("keyup", function (event) {
 var pressedPositions = {}
 
 window.addEventListener("mousedown", function (event) {
-	if (event.defaultPrevented)
-		return
 	pressedPositions["mouse"] = { x: (event.x - horisontalOffset) / scale, y: (event.y - verticalOffset) / scale }
-	event.preventDefault()
 }, true)
 
 window.addEventListener("mousemove", function (event) {
-	if (event.defaultPrevented)
-		return
 	if (pressedPositions["mouse"])
 		pressedPositions["mouse"] = { x: (event.x - horisontalOffset) / scale, y: (event.y - verticalOffset) / scale }
-	event.preventDefault()
 }, true)
 
 window.addEventListener("mouseup", function (event) {
@@ -534,31 +524,22 @@ window.addEventListener("mouseup", function (event) {
 
 
 window.addEventListener("touchstart", function (event) {
-	if (event.defaultPrevented)
-		return
 	for (var i = 0; i < event.changedTouches.length; i++) {
 		let touch = event.changedTouches[i]
 		pressedPositions[touch.identifier] = { x: (touch.clientX - horisontalOffset) / scale, y: (touch.clientY - verticalOffset) / scale }
 	}
-	event.preventDefault()
 }, {passive: false})
 
 window.addEventListener("touchmove", function (event) {
-	if (event.defaultPrevented)
-		return
 	for (var i = 0; i < event.changedTouches.length; i++) {
 		let touch = event.changedTouches[i]
 		pressedPositions[touch.identifier] = { x: (touch.clientX - horisontalOffset) / scale, y: (touch.clientY - verticalOffset) / scale }
 	}
-	event.preventDefault()
 }, {passive: false})
 
 window.addEventListener("touchend", function (event) {
-	if (event.defaultPrevented)
-		return
 	for (var i = 0; i < event.changedTouches.length; i++) {
 		let touch = event.changedTouches[i]
 		delete pressedPositions[touch.identifier]
 	}
-	event.preventDefault()
 }, {passive: false})
