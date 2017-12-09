@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8" />
+	<title>Penge</title>
+	<link rel="stylesheet" href="../style-reset.css">
+	<link rel="stylesheet" href="styles.css">
+	<script src="script.js"></script>
+	<script src="https://cdn.rawgit.com/naptha/tesseract.js/1.0.10/dist/tesseract.js"></script>
+</head>
+
+<body>
+	<div style="position: fixed; width: 100%; height: 100%; padding-top: 50vh; text-align: center;" id="data-box" onclick="document.getElementById('data-input').dispatchEvent(new MouseEvent('click'))">
+		Hiv data-fil herind
+		<br> eller klik
+		<div id="data-loading" style="display: none;">↻</div>
+		<input id="data-input" style="display: none;" type="file" onchange="handleFiles(this.files)" />
+	</div>
+	<main id="main" style="display: none;">
+		<p id="top-paragraph">
+		</p>
+
+		<section>
+			<div class="row">
+				<span>Betaler:</span>
+				<input id="payer" type="text" />
+				<select id="payerselect" oninput="document.getElementById('payer').value = document.getElementById('payerselect').value">
+					<option value=""></option>
+				</select>
+			</div>
+
+			<div class="row">
+				<span>Betalt for:</span>
+				<input id="receivers" type="text" />
+				<select id="receiverselect" oninput="document.getElementById('receivers').value += (document.getElementById('receivers').value?', ':'') + document.getElementById('receiverselect').value">
+					<option value=""></option>
+				</select>
+			</div>
+
+			<div class="row">
+				<span>Dato:</span>
+				<input id="date" type="date" />
+			</div>
+
+			<div class="row">
+				<span>Ting:</span>
+				<input id="thing" type="text" />
+				<select id="thingselect" oninput="selectThing(document.getElementById('thingselect').value)">
+					<option value=""></option>
+				</select>
+			</div>
+
+			<div class="row">
+				<span>Pris:</span>
+				<input id="price" type="number" step="0.01" />
+			</div>
+
+			<div class="row">
+				<span>Kategori:</span>
+				<input id="category" type="text" />
+				<select id="categoryselect" oninput="document.getElementById('category').value = document.getElementById('categoryselect').value">
+					<option value=""></option>
+				</select>
+			</div>
+
+			<div class="row">
+				<input type="button" value="Tilføj" onclick="addEntry();document.getElementById('blub').innerHTML = stringify(purchases, parser)"
+				/>
+				<input type="button" value="Gem" onclick="document.getElementById('blub').innerHTML = stringify(purchases, parser); save()"
+				/>
+			</div>
+		</section>
+
+		<section id="bon">
+		</section>
+
+		<div class="row">
+			<input type="button" value="Tilføj" onclick="addBon(parser);document.getElementById('blub').innerHTML = stringify(purchases, parser)"
+			/>
+		</div>
+
+		<div id="file-box" onclick="document.getElementById('file-input').dispatchEvent(new MouseEvent('click'))">
+			Hiv billede herind
+			<br> eller klik
+			<div id="file-loading" style="display: none;">↻</div>
+			<input id="file-input" style="display: none;" type="file" onchange="handleFiles(this.files)" />
+		</div>
+
+		<section>
+			<pre id="blub" style="overflow-y: scroll; height: 400px;-moz-tab-size: 2; tab-size: 2;"></pre>
+		</section>
+
+	</main>
+</body>
+
+</html>
