@@ -353,6 +353,8 @@ class BonParser {
 				number = numbers[i] + number
 			numberparts++
 		}
+		if (!number)
+			number = "0"
 		var factor = number.includes("-") ? -1 : 1
 		number = number.replace("-", "")
 		return { number: factor * (+(number.replace(/,/g, "."))), text: parts.splice(0, parts.length - numberparts).join(" ") }
