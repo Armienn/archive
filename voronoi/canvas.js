@@ -42,10 +42,10 @@ function redraw() {
 	context.strokeStyle = "#000";
 	context.stroke();
 
-	context.beginPath();
+	/*context.beginPath();
 	for (var i = 0, n = links.length; i < n; ++i) drawLink(links[i]);
 	context.strokeStyle = "rgba(0,0,0,0.2)";
-	context.stroke();
+	context.stroke();*/
 
 	context.beginPath();
 	drawSite(sites[0]);
