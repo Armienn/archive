@@ -7,7 +7,7 @@ class SearchSite extends Component {
 	constructor() {
 		super()
 		this.constructor.styling = {
-			headerBackground: "#c00",
+			headerBackground: "#080",
 			headerText: "#eee",
 			mainBackground: "#222",
 			mainText: "#eee",
@@ -90,17 +90,13 @@ class SectionNavigation extends Component {
 		super()
 		this.main = main
 		this.navigationEntries = [
-			new NavigationEntry("nav 1", () => {
-				this.main.engine.collection.push(
-					{
-						"navn": "Acid Arrow",
-						"type": "conjuration",
-						"beskrivelse": "1 standard action"
-					})
+			new NavigationEntry("Nyt sprog", () => {
+				language.generateWords(wordlist)
+				this.main.engine.collection = language.orderedWords
 				this.main.engine.updateFilteredCollection()
 				arf.update()
 			}),
-			new NavigationEntry("nav 2", () => {
+			new NavigationEntry("Nyt ord", () => {
 				this.main.sections.selection.text = language.randomWord()
 				arf.update()
 			}, true)]
@@ -399,22 +395,8 @@ class Util {
 var site
 window.onload = function () {
 	site = new SearchSite()
-	site.engine.collection = [
-		{
-			"navn": "Acid Arrow",
-			"type": "conjuration",
-			"beskrivelse": "1 standard action"
-		},
-		{
-			"navn": "Acid Fog",
-			"type": "conjuration",
-			"beskrivelse": "1 standard action"
-		},
-		{
-			"navn": "Acid Fog",
-			"type": "conjuration",
-			"beskrivelse": "1 standard action"
-		}]
+	language.generateWords(wordlist)
+	site.engine.collection = language.orderedWords
 	arf.setRenderFunction(() => site.render())
 	arf.update()
 }
