@@ -90,6 +90,19 @@ class SectionNavigation extends Component {
 		super()
 		this.main = main
 		this.navigationEntries = [
+			new NavigationEntry("Sætninger", () => {
+				var sentences = ""
+				var addSentence = (components) => {
+					sentences += language.writeSentence(components) + "\n"
+				}
+				addSentence(["shine", "time: present", "sun"])
+				addSentence(["shine", "time: present", "time: ongoing", "sun"])
+				addSentence(["shine", "time: past", "sun"])
+				addSentence(["shout, cry out", "time: past", "people (populace)", "some"])
+				addSentence(["city, town", "large, big"])
+				this.main.sections.selection.text = sentences
+				arf.update()
+			}),
 			new NavigationEntry("Nyt sprog", () => {
 				language.generateWords(wordlist)
 				this.main.engine.collection = language.orderedWords
@@ -213,7 +226,7 @@ class SectionSelection extends Component {
 
 	renderThis() {
 		return l("section",
-			l("p", { style: { display: "" } }, this.text)
+			l("pre", { style: { display: "" } }, this.text)
 		)
 	}
 }

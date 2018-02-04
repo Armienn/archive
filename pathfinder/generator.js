@@ -90,7 +90,7 @@ class Language {
 			var word = this.randomWord(max, Math.max(max - 1, 1))
 			if (this.words[word]) {
 				failure += 0.05
-				if (failure > 0.5)
+				if (failure > 0.6)
 					max++
 				continue
 			}
@@ -98,6 +98,16 @@ class Language {
 			this.orderedWords.push({ word: word, ...list[i] })
 			i++
 		}
+	}
+
+	writeSentence(sentenceComponents) {
+		var sentence = ""
+		for (var i in sentenceComponents) {
+			var word = this.orderedWords.find(e => e.meaning == sentenceComponents[i])
+			word = word ? word.word : sentenceComponents[i]
+			sentence += word + " "
+		}
+		return sentence
 	}
 }
 
@@ -112,7 +122,7 @@ var language = new Language(
 		new Sound("v", "labiodental", "fricative", "voiced", false),
 		new Sound("f", "labiodental", "fricative", "unvoiced", false),
 		new Sound("s", "alveolar", "fricative", "voiced", false),
-		new Sound("z", "alveolar", "fricative", "unvoiced", false),
+		// new Sound("z", "alveolar", "fricative", "unvoiced", false),
 		new Sound("ð", "alveolar", "fricative", "voiced", false),
 		new Sound("þ", "alveolar", "fricative", "unvoiced", false),
 		new Sound("x", "velar", "fricative", "voiced", false),
@@ -135,11 +145,23 @@ var language = new Language(
 		{ placement: "any", selection: { vocalisation: "unvoiced" }, weight: 2 },
 		{ placement: "coda", selection: { point: "alveolar" }, weight: 0.3 },
 		{ placement: "coda", selection: { point: "velar" }, weight: 0.3 },
-		{ placement: "coda", selection: { point: "velar", manner: "fricative" }, weight: 0.1 }
+		{ placement: "coda", selection: { point: "velar", manner: "fricative" }, weight: 0.1 },
+		{ placement: "coda", selection: { point: "labiodental", manner: "fricative" }, weight: 0.3 }
 	]
 )
 
 var wordlist = [
+	{ "meaning": "question marker", "group": "Grammar" },
+	{ "meaning": "time: future", "group": "Grammar" },
+	{ "meaning": "time: present", "group": "Grammar" },
+	{ "meaning": "time: past", "group": "Grammar" },
+	{ "meaning": "time: ongoing", "group": "Grammar" },
+	{ "meaning": "temporal: before", "group": "Grammar" },
+	{ "meaning": "temporal: after", "group": "Grammar" },
+	{ "meaning": "position: at", "group": "Grammar" },
+	{ "meaning": "position: on", "group": "Grammar" },
+	{ "meaning": "position: under", "group": "Grammar" },
+	{ "meaning": "position: in", "group": "Grammar" },
 	{ "meaning": "fire", "group": "The physical world" },
 	{ "meaning": "rain (noun)", "group": "The physical world" },
 	{ "meaning": "sun", "group": "The physical world" },
