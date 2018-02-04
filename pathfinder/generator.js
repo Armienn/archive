@@ -33,9 +33,10 @@ class Sound {
 }
 
 class Language {
-	constructor(sounds, weights) {
+	constructor(sounds, weights, seed) {
 		this.sounds = sounds
 		this.weights = weights
+		this.seed = seed
 	}
 
 	randomSyllable() {
@@ -83,6 +84,7 @@ class Language {
 	generateWords(list) {
 		this.words = {}
 		this.orderedWords = []
+		seed = this.seed
 		var max = 1
 		var failure = 0
 		for (var i = 0; i < list.length;) {
@@ -146,8 +148,9 @@ var language = new Language(
 		{ placement: "coda", selection: { point: "alveolar" }, weight: 0.3 },
 		{ placement: "coda", selection: { point: "velar" }, weight: 0.3 },
 		{ placement: "coda", selection: { point: "velar", manner: "fricative" }, weight: 0.1 },
-		{ placement: "coda", selection: { point: "labiodental", manner: "fricative" }, weight: 0.3 }
-	]
+		{ placement: "coda", selection: { point: "labiodental", manner: "fricative" }, weight: 0.3 },
+		{ placement: "coda", selection: { manner: "stop", vocalisation: "voiced" }, weight: 0 }
+	], 0.5
 )
 
 var wordlist = [
@@ -162,6 +165,8 @@ var wordlist = [
 	{ "meaning": "position: on", "group": "Grammar" },
 	{ "meaning": "position: under", "group": "Grammar" },
 	{ "meaning": "position: in", "group": "Grammar" },
+	{ "meaning": "relation: about", "group": "Grammar" },
+	{ "meaning": "relation: while, when", "group": "Grammar" },
 	{ "meaning": "fire", "group": "The physical world" },
 	{ "meaning": "rain (noun)", "group": "The physical world" },
 	{ "meaning": "sun", "group": "The physical world" },

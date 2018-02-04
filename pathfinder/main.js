@@ -100,6 +100,8 @@ class SectionNavigation extends Component {
 				addSentence(["shine", "time: past", "sun"])
 				addSentence(["shout, cry out", "time: past", "people (populace)", "some"])
 				addSentence(["city, town", "large, big"])
+				addSentence(["speak, talk", "time: past", "wind", "north", "and", "sun", "relation: about", "more", "strong, mighty, powerful" ,"who?",
+				"relation: while, when", "come", "time: past", "person, human being", "walk", "wind, wrap", "cloak", "warm"])
 				this.main.sections.selection.text = sentences
 				arf.update()
 			}),
