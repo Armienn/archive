@@ -100,8 +100,8 @@ class SectionNavigation extends Component {
 				addSentence(["shine", "time: past", "sun"])
 				addSentence(["shout, cry out", "time: past", "people (populace)", "some"])
 				addSentence(["city, town", "large, big"])
-				addSentence(["speak, talk", "time: past", "wind", "north", "and", "sun", "relation: about", "more", "strong, mighty, powerful" ,"who?",
-				"relation: while, when", "come", "time: past", "person, human being", "walk", "wind, wrap", "cloak", "warm"])
+				addSentence(["speak, talk", "time: past", "wind", "north", "and", "sun", "relation: about", "more", "strong, mighty, powerful", "who?",
+					"relation: while, when", "come", "time: past", "person, human being", "walk", "wind, wrap", "cloak", "warm"])
 				this.main.sections.selection.text = sentences
 				arf.update()
 			}),
@@ -114,7 +114,22 @@ class SectionNavigation extends Component {
 			new NavigationEntry("Nyt ord", () => {
 				this.main.sections.selection.text = language.randomWord()
 				arf.update()
-			}, true)]
+			}, true),
+			new NavigationEntry("Tilfældigt navn", () => {
+				seed = Math.random()
+				var words = [randomFromList(language.orderedWords.filter(e => {
+					return e.group == "The physical world" ||
+						e.group == "The body" ||
+						e.group == "Emotions and values" ||
+						e.group == "Sense perception" ||
+						e.group == "Animals" ||
+						e.group == "Agriculture and vegetation"
+				}))]
+				if (Math.random() > 0.3)
+					words.push(randomFromList(language.orderedWords.filter(e => e.group != "Grammar")))
+				this.main.sections.selection.text = words.map(e => e.word).join(" ") + " : " + words.map(e => e.meaning).join(" - ")
+				arf.update()
+			})]
 	}
 
 	renderThis() {

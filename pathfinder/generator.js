@@ -82,6 +82,7 @@ class Language {
 	}
 
 	generateWords(list) {
+		var log = ""
 		this.words = {}
 		this.orderedWords = []
 		seed = this.seed
@@ -91,15 +92,22 @@ class Language {
 			failure *= 0.95
 			var word = this.randomWord(max, Math.max(max - 1, 1))
 			if (this.words[word]) {
+				console.log(word)
 				failure += 0.05
-				if (failure > 0.6)
+				log += "1"
+				if (failure > 0.7) {
+					log += "--"
+					failure = 0
 					max++
+				}
 				continue
 			}
+			log+="0"
 			this.words[word] = list[i]
 			this.orderedWords.push({ word: word, ...list[i] })
 			i++
 		}
+		console.log(log)
 	}
 
 	writeSentence(sentenceComponents) {
