@@ -114,7 +114,7 @@ class SectionNavigation extends Component {
 			new NavigationEntry("Nyt ord", () => {
 				this.main.sections.selection.text = language.randomWord()
 				arf.update()
-			}, true),
+			}),
 			new NavigationEntry("Tilfældigt navn", () => {
 				seed = Math.random()
 				var words = [randomFromList(language.orderedWords.filter(e => {
@@ -168,10 +168,17 @@ class NavigationEntry extends Component {
 		return {
 			li: {
 				display: "inline-block",
-				padding: "0 0.5rem"
+				padding: "0 0.5rem",
+				cursor: "pointer",
+				transition: "0.3s"
 			},
 			".unselected": {
 				color: SearchSite.styling.inactiveText,
+				transition: "0.3s"
+			},
+			".unselected:hover": {
+				color: "white",
+				transition: "0.3s"
 			}
 		}
 	}
