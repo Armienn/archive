@@ -97,3 +97,9 @@ window.onload = () => {
 		}
 	}
 }
+
+var wMap = (characters)=>{var v=characters.split("-")[0];var c="-"+characters.split("-")[1];return (n)=>w(n,v,c)}
+var w = (n,v="aeiouy",c="-bdfghjklmnprstvwxz")=>{var f=(t,l)=>{var i=t.n%l.length;t.n=(t.n-i)/l.length;t.t=l[i]+t.t};var s=(t)=>{f(t,v);f(t,c);f(t,c);t.t=t.t.replace("--","");t.t=t.t[0]=="-"?t.t.replace("-",""):t.t};var t={n:n,t:""};for(;t.n;s(t));t.t=c.includes(t.t[0]) && c.includes(t.t[1])?t.t.substr(1)+t.t[0]:t.t;t.t=t.t[0]=="-"?t.t.replace("-",""):t.t;return t.t}
+var n = (w,v="aeiouy",c="-bdfghjklmnprstvwxz")=>{var n=0;w=c.includes(w[w.length-1])&&v.includes(w[0])?"-"+w:w;w=c.includes(w[w.length-1])?(w[w.length-1]+w).substr(0,w.length):w;var s=[];var last=-1;for(var i=0;i<w.length;i++)if(v.includes(w[i])){var ss=w.substring(last+1,i+1);while(ss.length<3)ss="-"+ss;s.unshift(ss);last=i;}for(var i in s)n+=(v.indexOf(s[i][2])+c.indexOf(s[i][1])*v.length+c.indexOf(s[i][0])*v.length*c.length)*Math.pow(v.length*c.length*c.length,+i);return n}
+var inter
+var startWordGen = ()=> {inter = setInterval(()=>{var num=Math.floor(Math.random()*10);for(;Math.random()<0.9;num=Math.floor(num*Math.random()*10));console.log(num+": "+w(num))},500)}
