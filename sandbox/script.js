@@ -103,3 +103,42 @@ var w = (n,v="aeiouy",c="-bdfghjklmnprstvwxz")=>{var f=(t,l)=>{var i=t.n%l.lengt
 var n = (w,v="aeiouy",c="-bdfghjklmnprstvwxz")=>{var n=0;w=c.includes(w[w.length-1])&&v.includes(w[0])?"-"+w:w;w=c.includes(w[w.length-1])?(w[w.length-1]+w).substr(0,w.length):w;var s=[];var last=-1;for(var i=0;i<w.length;i++)if(v.includes(w[i])){var ss=w.substring(last+1,i+1);while(ss.length<3)ss="-"+ss;s.unshift(ss);last=i;}for(var i in s)n+=(v.indexOf(s[i][2])+c.indexOf(s[i][1])*v.length+c.indexOf(s[i][0])*v.length*c.length)*Math.pow(v.length*c.length*c.length,+i);return n}
 var inter
 var startWordGen = ()=> {inter = setInterval(()=>{var num=Math.floor(Math.random()*10);for(;Math.random()<0.9;num=Math.floor(num*Math.random()*10));console.log(num+": "+w(num))},500)}
+
+class Tal {
+	constructor(source) {
+		this.digitsPerPart = 6
+		this.factorPerPart = 1000000
+		this.parts = [0]
+		if (!source)
+			return
+		this.parts = []
+		source = source.toString()
+		for (var part = source.substr(-this.digitsPerPart); part.length > 0; part = source.substr(-this.digitsPerPart)) {
+			this.parts.unshift(+part)
+			source = source.substr(0, source.length - this.digitsPerPart)
+		}
+	}
+
+	divideBy(number) {
+		var result = new Tal()
+		var remainder = 0
+		for (var i in this.parts) {
+			var currentPart = remainder * this.factorPerPart + this.parts[i]
+			if (number > currentPart) {
+				if (result.parts.length != 0)
+					result.parts.push(0)
+				continue
+			}
+			remainder = currentPart % number
+			result.parts.push(Math.floor(currentPart / number))
+		}
+		return { division: result, remainder: remainder }
+	}
+
+	toString() {
+		var text = ""
+		for (var i in this.parts)
+			text += this.parts[i]
+		return text
+	}
+}
