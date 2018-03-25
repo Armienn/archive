@@ -104,6 +104,46 @@ var n = (w,v="aeiouy",c="-bdfghjklmnprstvwxz")=>{var n=0;w=c.includes(w[w.length
 var inter
 var startWordGen = ()=> {inter = setInterval(()=>{var num=Math.floor(Math.random()*10);for(;Math.random()<0.9;num=Math.floor(num*Math.random()*10));console.log(num+": "+w(num))},500)}
 
+var toWord = (number, v = "aeiouy", c = "-bdfghjklmnprstvwxz") => {
+	var f = (thing, l) => {
+		var tal = new Tal(thing.number)
+		var result = tal.divideBy(l.length)
+		//var i = thing.number % l.length
+		thing.number = result.division // (thing.number - i) / l.length
+		thing.text = l[result.remainder] + thing.text
+	}
+	var syllable = (thing) => {
+		f(thing, v)
+		f(thing, c)
+		f(thing, c)
+		thing.text = thing.text.replace("--", "")
+		thing.text = thing.text[0] == "-" ? thing.text.replace("-", "") : thing.text
+	};
+	var thing = { number: number, text: "" }
+	for (; thing.number; syllable(thing))
+	thing.text = c.includes(thing.text[0]) && c.includes(thing.text[1]) ? thing.text.substr(1) + thing.text[0] : thing.text
+	thing.text = thing.text[0] == "-" ? thing.text.replace("-", "") : thing.text
+	return thing.text
+}
+
+var toNumber = (w, v = "aeiouy", c = "-bdfghjklmnprstvwxz") => {
+	var n = 0
+	w = c.includes(w[w.length - 1]) && v.includes(w[0]) ? "-" + w : w
+	w = c.includes(w[w.length - 1]) ? (w[w.length - 1] + w).substr(0, w.length) : w
+	var s = []
+	var last = -1
+	for (var i = 0; i < w.length; i++)
+		if (v.includes(w[i])) {
+			var ss = w.substring(last + 1, i + 1)
+			while (ss.length < 3) ss = "-" + ss
+			s.unshift(ss)
+			last = i
+		}
+	for (var i in s)
+		n += (v.indexOf(s[i][2]) + c.indexOf(s[i][1]) * v.length + c.indexOf(s[i][0]) * v.length * c.length) * Math.pow(v.length * c.length * c.length, +i)
+	return n
+}
+
 class Tal {
 	constructor(source) {
 		this.digitsPerPart = 6
