@@ -81,6 +81,7 @@ var newLink = function (text) {
 window.onload = () => {
 	output = document.getElementById("output")
 	input = document.getElementById("input")
+	createLoadButtons()
 	if (window.location.hash && window.location.hash.substr(1))
 		input.innerHTML = LZString.decompressFromEncodedURIComponent(window.location.hash.substr(1))
 	// let tab work in textareas
@@ -98,6 +99,34 @@ window.onload = () => {
 	}
 }
 
+function save(title, content) {
+	localStorage[title] = content
+	createLoadButtons()
+}
+
+function deleteSaved(title) {
+	delete localStorage[title]
+	createLoadButtons()
+}
+
+function createLoadButtons() {
+	var holder = document.getElementById("button-holder")
+	holder.innerHTML = ""
+	var keys = Object.keys(localStorage)
+	for (let i in keys) {
+		let key = keys[i]
+		var element = document.createElement("button")
+		element.style.padding = "0.5rem"
+		element.style.marginRight = "1px"
+		element.innerHTML = key
+		element.onclick = () => {
+			input.value = localStorage[key]
+			document.getElementById('title-input').value = key
+		}
+		holder.appendChild(element)
+	}
+}
+
 var wMap = (characters)=>{var v=characters.split("-")[0];var c="-"+characters.split("-")[1];return (n)=>w(n,v,c)}
 var w = (n,v="aeiouy",c="-bdfghjklmnprstvwxz")=>{var f=(t,l)=>{var i=t.n%l.length;t.n=(t.n-i)/l.length;t.t=l[i]+t.t};var s=(t)=>{f(t,v);f(t,c);f(t,c);t.t=t.t.replace("--","");t.t=t.t[0]=="-"?t.t.replace("-",""):t.t};var t={n:n,t:""};for(;t.n;s(t));t.t=c.includes(t.t[0]) && c.includes(t.t[1])?t.t.substr(1)+t.t[0]:t.t;t.t=t.t[0]=="-"?t.t.replace("-",""):t.t;return t.t}
 var n = (w,v="aeiouy",c="-bdfghjklmnprstvwxz")=>{var n=0;w=c.includes(w[w.length-1])&&v.includes(w[0])?"-"+w:w;w=c.includes(w[w.length-1])?(w[w.length-1]+w).substr(0,w.length):w;var s=[];var last=-1;for(var i=0;i<w.length;i++)if(v.includes(w[i])){var ss=w.substring(last+1,i+1);while(ss.length<3)ss="-"+ss;s.unshift(ss);last=i;}for(var i in s)n+=(v.indexOf(s[i][2])+c.indexOf(s[i][1])*v.length+c.indexOf(s[i][0])*v.length*c.length)*Math.pow(v.length*c.length*c.length,+i);return n}
@@ -105,9 +134,9 @@ var inter
 var startWordGen = ()=> {inter = setInterval(()=>{var num=Math.floor(Math.random()*10);for(;Math.random()<0.9;num=Math.floor(num*Math.random()*10));console.log(num+": "+w(num))},500)}
 
 var toWord = (number, v = "aeiouy", c = "-bdfghjklmnprstvwxz") => {
+	number = new Tal(number)
 	var f = (thing, l) => {
-		var tal = new Tal(thing.number)
-		var result = tal.divideBy(l.length)
+		var result = thing.number.divideBy(l.length)
 		//var i = thing.number % l.length
 		thing.number = result.division // (thing.number - i) / l.length
 		thing.text = l[result.remainder] + thing.text
@@ -120,7 +149,7 @@ var toWord = (number, v = "aeiouy", c = "-bdfghjklmnprstvwxz") => {
 		thing.text = thing.text[0] == "-" ? thing.text.replace("-", "") : thing.text
 	};
 	var thing = { number: number, text: "" }
-	for (; thing.number; syllable(thing))
+	for (; !thing.number.isZero(); syllable(thing))
 	thing.text = c.includes(thing.text[0]) && c.includes(thing.text[1]) ? thing.text.substr(1) + thing.text[0] : thing.text
 	thing.text = thing.text[0] == "-" ? thing.text.replace("-", "") : thing.text
 	return thing.text
@@ -157,6 +186,7 @@ class Tal {
 			this.parts.unshift(+part)
 			source = source.substr(0, source.length - this.digitsPerPart)
 		}
+		this.removeLeadingZeros()
 	}
 
 	divideBy(number) {
@@ -165,6 +195,7 @@ class Tal {
 		for (var i in this.parts) {
 			var currentPart = remainder * this.factorPerPart + this.parts[i]
 			if (number > currentPart) {
+				remainder = currentPart
 				if (result.parts.length != 0)
 					result.parts.push(0)
 				continue
@@ -172,7 +203,20 @@ class Tal {
 			remainder = currentPart % number
 			result.parts.push(Math.floor(currentPart / number))
 		}
+		result.removeLeadingZeros()
 		return { division: result, remainder: remainder }
+	}
+
+	removeLeadingZeros(){
+		while(this.parts[0] === 0){
+			this.parts.shift(0)
+		}
+		if(this.parts.length == 0)
+			this.parts.push(0)
+	}
+
+	isZero(){
+		return this.parts.length == 1 && this.parts[0] === 0
 	}
 
 	toString() {
