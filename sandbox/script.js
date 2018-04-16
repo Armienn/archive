@@ -85,6 +85,18 @@ window.onload = () => {
 		document.getElementById("error").innerHTML = msg
 	}
 	createLoadButtons()
+	input.title = `print(text: string): void - prints text to the output window ->
+
+printJSON(obj: any): void - converts obj to JSON and prints it
+
+clearOutput(): void - clears the output window
+
+formattedJSON(obj: any): string - converts obj to a pretty JSON string
+
+parseCSVTable(data: string, separator: string, ignoreSeparatorWithinQuotes: boolean): Array - converts CSV string to an array
+
+encodeHTML(text: string): string - HTML encodes a string
+`
 	if (window.location.hash && window.location.hash.substr(1))
 		input.innerHTML = LZString.decompressFromEncodedURIComponent(window.location.hash.substr(1))
 	// let tab work in textareas
