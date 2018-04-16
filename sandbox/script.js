@@ -81,6 +81,9 @@ var newLink = function (text) {
 window.onload = () => {
 	output = document.getElementById("output")
 	input = document.getElementById("input")
+	window.onerror = (msg, url, lineNo, columnNo, error) => {
+		document.getElementById("error").innerHTML = msg
+	}
 	createLoadButtons()
 	if (window.location.hash && window.location.hash.substr(1))
 		input.innerHTML = LZString.decompressFromEncodedURIComponent(window.location.hash.substr(1))
