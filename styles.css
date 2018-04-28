@@ -19,6 +19,7 @@ body {
 a, h1 {
 	text-align: center;
 	padding: 1rem;
+	box-sizing: border-box;
 	background-color: #222;
 }
 
@@ -28,6 +29,11 @@ a {
 	width: 100%;
 	display: block;
 	transition: background-color 0.3s ease;
+}
+
+div a {
+	font-size: 0.5rem;
+	width: auto;
 }
 
 a:hover {
