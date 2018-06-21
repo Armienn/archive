@@ -93,7 +93,7 @@ export class SectionContent extends Component {
 		var headers = Object.keys(main.engine.collection[0])
 		var cells = []
 		for (var i in headers)
-			cells.push(model[headers[i]])
+			cells.push(""+model[headers[i]])
 		return cells
 	}
 }

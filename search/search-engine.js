@@ -1,4 +1,4 @@
-import { fitsNested } from "./util.js"
+import { fitsNested, compareFit } from "./util.js"
 
 export class SearchEngine {
 	constructor() {
@@ -6,8 +6,9 @@ export class SearchEngine {
 		this.filteredCollection = []
 		this.filters = []
 		this.filter = { type: "", query: "" }
-		this.searchModel = {}
-		this.sorting = undefined
+		this.resetFilterModel()
+		this.resetSortingModel()
+		this.sorting = "_bestfit"
 		this.reverseSort = false
 	}
 
@@ -20,14 +21,28 @@ export class SearchEngine {
 		return this._collection
 	}
 
-	setSearchModelFromExample(source) {
-		this.searchModel = {}
+	resetFilterModel() {
+		this.filterModel = { "": new FilterType("Everything", "", [], false, fitsNested) }
+	}
+
+	setFilterModelFromExample(source) {
+		this.resetFilterModel()
 		for (var key in source) {
 			if (source[key] === true || source[key] === false)
-				this.searchModel[key] = new SearchType(key, key, ["true", "false"], true)
+				this.filterModel[key] = new FilterType(key, key, ["true", "false"], true)
 			else
-				this.searchModel[key] = new SearchType(key, key)
+				this.filterModel[key] = new FilterType(key, key)
 		}
+	}
+
+	resetSortingModel() {
+		this.sortingModel = { "_bestfit": new SortingType("Best Fit", "", compareFit) }
+	}
+
+	setSortingModelFromExample(source) {
+		this.resetSortingModel()
+		for (var key in source)
+			this.sortingModel[key] = new SortingType(key, key)
 	}
 
 	updateFilteredCollection() {
@@ -42,7 +57,7 @@ export class SearchEngine {
 			list = this.applyFilter(list, filter)
 		list = this.applyFilter(list, this.filter)
 		if (this.sorting) {
-			list.sort(this.sorting)
+			list.sort(this.sortingModel[this.sorting].compare)
 			if (this.reverseSort)
 				list.reverse()
 		}
@@ -50,17 +65,25 @@ export class SearchEngine {
 	}
 
 	applyFilter(list, filter) {
-		var searchType = this.searchModel[filter.type] || new SearchType("", "", [], false, fitsNested)
-		return list.filter(e => searchType.fits(e, filter.query))
+		var filterType = this.filterModel[filter.type] || this.filterModel[""]
+		return list.filter(e => filterType.fits(e, filter.query))
 	}
 }
 
-class SearchType {
+class FilterType {
 	constructor(title, key, options = [], restrictToOptions = false, fits = null) {
 		this.title = title
 		this.key = key
 		this.options = options
 		this.restrictToOptions = restrictToOptions
 		this.fits = fits || ((m, q) => fitsNested(m[this.key], q))
+	}
+}
+
+class SortingType {
+	constructor(title, key, compare = null) {
+		this.title = title
+		this.key = key
+		this.compare = compare || ((a, b) => a[key] > b[key])
 	}
 }

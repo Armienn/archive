@@ -4,29 +4,25 @@ export default function callOrReturn(thing) {
 }
 
 export function fitsFancy(thing, query) {
-	if (query.startsWith(">")) {
-		query = query.substr(1)
-		if (!query.startsWith(">"))
-			return thing > query
+	switch (query.type) {
+		case "greater": return thing > query.query
+		case "less": return thing < query.query
+		case "not":
+		case "normal":
+		default: return ("" + thing).toLowerCase().includes(query.query)
 	}
-	if (query.startsWith("<")) {
-		query = query.substr(1)
-		if (!query.startsWith("<"))
-			return thing < query
-	}
-	if (query.startsWith("!")) {
-		query = query.substr(1)
-		if (!query.startsWith("!"))
-			return !("" + thing).toLowerCase().includes(query)
-	}
-	return ("" + thing).toLowerCase().includes(query)
 }
 
-export function fitsNested(thing, query, forceLowerCase = true) {
+export function fitsNested(thing, query) {
 	if (!query)
 		return true
-	if(forceLowerCase)
-		query = query.toLowerCase()
+	if (typeof query === "string") {
+		for (let q of parseQuery(query))
+			if (q.type == "not" ? !fitsNested(thing, q) : fitsNested(thing, q))
+				return true
+		return false
+	}
+	thing = callOrReturn(thing)
 	if (thing == null)
 		return false
 	if (isBasicType(thing)) {
@@ -41,6 +37,35 @@ export function fitsNested(thing, query, forceLowerCase = true) {
 				return true
 	}
 	return false
+}
+
+function parseQuery(query) {
+	query = query.toLowerCase()
+	// split at single |, then merge || to |
+	return query.split(/(?<!\|)\|(?!\|)/g).map(e => e.replace(/\|\|/g, "|").trim())
+		.map(e => {
+			var q = { query: e.trim(), type: "normal" }
+			if (e.startsWith(">")) {
+				q.query = e.substr(1)
+				if (!q.query.startsWith(">")) {
+					q.type = "greater"
+					q.query = +q.query
+				}
+			}
+			if (e.startsWith("<")) {
+				q.query = e.substr(1)
+				if (!q.query.startsWith("<")) {
+					q.type = "less"
+					q.query = +q.query
+				}
+			}
+			if (e.startsWith("!")) {
+				q.query = e.substr(1)
+				if (!q.query.startsWith("!"))
+					q.type = "not"
+			}
+			return q
+		})
 }
 
 function isBasicType(thing) {
