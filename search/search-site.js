@@ -10,6 +10,7 @@ import { Component, l } from "../arf/arf.js"
 export class SearchSite extends Component {
 	constructor() {
 		super()
+		this.engine = new SearchEngine()
 		this.constructor.styling = {
 			headerBackground: "#c00",
 			headerText: "#eee",
@@ -28,7 +29,6 @@ export class SearchSite extends Component {
 			content: new SectionContent(this),
 			footer: new SectionFooter(this)
 		}
-		this.engine = new SearchEngine()
 	}
 
 	renderThis() {

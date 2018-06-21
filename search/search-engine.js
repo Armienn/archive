@@ -45,6 +45,11 @@ export class SearchEngine {
 			this.sortingModel[key] = new SortingType(key, key)
 	}
 
+	addCurrentFilter(){
+		this.filters.push(this.filter)
+		this.filter =  { type: "", query: "" }
+	}
+
 	updateFilteredCollection() {
 		this.filteredCollection = this.search()
 	}
@@ -62,6 +67,10 @@ export class SearchEngine {
 				list.reverse()
 		}
 		return list
+	}
+
+	filterTitle(filter){
+		return (this.filterModel[filter.type] || this.filterModel[""]).title
 	}
 
 	applyFilter(list, filter) {
