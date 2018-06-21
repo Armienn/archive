@@ -22,7 +22,7 @@ export class SearchEngine {
 	}
 
 	resetFilterModel() {
-		this.filterModel = { "": new FilterType("Everything", "", [], false, fitsNested) }
+		this.filterModel = { "": new FilterType("Anything", "", [], false, fitsNested) }
 	}
 
 	setFilterModelFromExample(source) {

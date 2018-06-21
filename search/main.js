@@ -1,9 +1,9 @@
 import { SearchSite } from "./search-site.js"
 import { update, setRenderFunction } from "../arf/arf.js"
 
-var site
 window.onload = function () {
-	site = new SearchSite()
+	var site = new SearchSite()
+	window.site = site
 	site.engine.collection = [
 		{
 			"name": "Acid Arrow",
@@ -32,6 +32,8 @@ window.onload = function () {
 			"short_description": " Orb deals 1d3 acid damage.",
 			"classes": 3
 		}]
+	site.engine.setFilterModelFromExample(site.engine.collection[0])
+	site.engine.setSortingModelFromExample(site.engine.collection[0])
 	setRenderFunction(() => site.render())
 	update()
 }
