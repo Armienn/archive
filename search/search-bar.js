@@ -96,7 +96,13 @@ export class SearchBar extends Component {
 			".filter-tag": {
 				padding: "0.5rem",
 				margin: "0 0.25rem",
+				transition: "0.5s ease",
+				cursor: "pointer",
 				backgroundColor: "rgba(0,0,0,0.3)"
+			},
+			".filter-tag:hover": {
+				transition: "0.5s ease",
+				backgroundColor: "rgba(50,0,0,0.3)"
 			},
 			".filter-tag span": {
 				color: "#888",
@@ -118,9 +124,20 @@ export class SearchBar extends Component {
 	}
 
 	filters() {
-		return this.engine.filters.map(e => l("div.filter-tag",
-			l("span", this.engine.filterTitle(e)),
-			e.query))
+		return this.engine.filters.map(e => {
+			return l("div.filter-tag",
+				{
+					onclick: () => {
+						this.engine.filters.splice(this.engine.filters.indexOf(e),1)
+						this.engine.filter = e
+						this.engine.updateFilteredCollection()
+						update()
+					}
+				},
+				l("span", this.engine.filterTitle(e)),
+				e.query
+			)
+		})
 	}
 
 	searchInput() {
@@ -192,7 +209,8 @@ export class SearchBar extends Component {
 			onclick: () => {
 				this.engine.addCurrentFilter()
 				update()
-			}
+			},
+			disabled: !this.engine.filter.query
 		}, "+")
 	}
 }
