@@ -29,7 +29,7 @@ export class SearchEngine {
 
 	search() {
 		var list = []
-		for (var i in this.collection)
+		for (let i in this.collection)
 			list[i] = this.collection[i]
 		/* tab stuff
 		if (stuff.state.currentTab == "mine") {
@@ -49,7 +49,7 @@ export class SearchEngine {
 		/* mode stuff
 		pokes = this.getCompletionModePokemon(pokes)*/
 
-		for (var i in this.filters)
+		for (let i in this.filters)
 			list = list.filter(this.filters[i])
 		if (this.query)
 			list = list.filter((entry) => this.fitsQuery(entry, this.query))
