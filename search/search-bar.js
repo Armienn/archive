@@ -9,15 +9,15 @@ export class SearchBar extends Component {
 
 	renderThis() {
 		return l("div.root",
-			l("div.inputs",
+			l("div.root-row", l("div.inputs",
 				this.searchInput(),
 				this.filterSelect(),
 				this.sortThing(),
 				this.filterAdd()
-			),
-			l("div.filters",
+			)),
+			l("div.root-row", l("div.filters",
 				...this.filters()
-			)
+			))
 		)
 	}
 
@@ -25,8 +25,10 @@ export class SearchBar extends Component {
 		return {
 			".root": {
 				padding: "0.5rem",
+			},
+			".root-row": {
+				width: "100%",
 				display: "flex",
-				flexWrap: "wrap",
 				justifyContent: "center"
 			},
 			".inputs": {
@@ -128,7 +130,7 @@ export class SearchBar extends Component {
 			return l("div.filter-tag",
 				{
 					onclick: () => {
-						this.engine.filters.splice(this.engine.filters.indexOf(e),1)
+						this.engine.filters.splice(this.engine.filters.indexOf(e), 1)
 						this.engine.filter = e
 						this.engine.updateFilteredCollection()
 						update()
