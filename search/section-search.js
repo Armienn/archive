@@ -2,6 +2,10 @@ import { SearchSite } from "./search-site.js"
 import { Component, update, l } from "../arf/arf.js"
 
 export class SectionSearch extends Component {
+	/**
+	 * 
+	 * @param {SearchSite} main 
+	 */
 	constructor(main) {
 		super()
 		this.main = main
@@ -56,7 +60,7 @@ export class SectionSearch extends Component {
 	searchInput() {
 		return l("input", {
 			placeholder: "Search", oninput: (event) => {
-				this.main.engine.query = event.target.value
+				this.main.engine.filter.query = event.target.value
 				this.main.engine.updateFilteredCollection()
 				update()
 			}
