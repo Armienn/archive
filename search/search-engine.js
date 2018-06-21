@@ -8,7 +8,7 @@ export class SearchEngine {
 		this.filter = { type: "", query: "" }
 		this.resetFilterModel()
 		this.resetSortingModel()
-		this.sorting = "_bestfit"
+		this.sorting = "bestfit"
 		this.reverseSort = false
 	}
 
@@ -36,7 +36,7 @@ export class SearchEngine {
 	}
 
 	resetSortingModel() {
-		this.sortingModel = { "_bestfit": new SortingType("Best Fit", "", compareFit) }
+		this.sortingModel = { "original": new SortingType("Original", "original"), "bestfit": new SortingType("Best Fit", "bestfit", compareFit) }
 	}
 
 	setSortingModelFromExample(source) {
@@ -45,9 +45,9 @@ export class SearchEngine {
 			this.sortingModel[key] = new SortingType(key, key)
 	}
 
-	addCurrentFilter(){
+	addCurrentFilter() {
 		this.filters.push(this.filter)
-		this.filter =  { type: "", query: "" }
+		this.filter = { type: "", query: "" }
 	}
 
 	updateFilteredCollection() {
@@ -61,15 +61,14 @@ export class SearchEngine {
 		for (let filter of this.filters)
 			list = this.applyFilter(list, filter)
 		list = this.applyFilter(list, this.filter)
-		if (this.sorting) {
+		if (this.sorting != "original")
 			list.sort(this.sortingModel[this.sorting].compare)
-			if (this.reverseSort)
-				list.reverse()
-		}
+		if (this.reverseSort)
+			list.reverse()
 		return list
 	}
 
-	filterTitle(filter){
+	filterTitle(filter) {
 		return (this.filterModel[filter.type] || this.filterModel[""]).title
 	}
 

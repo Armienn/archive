@@ -37,7 +37,8 @@ export class SearchBar extends Component {
 			".filters": {
 				display: "flex",
 				width: "100%",
-				maxWidth: "50rem"
+				maxWidth: "50rem",
+				justifyContent: "center"
 			},
 			input: {
 				flexGrow: "1"
@@ -91,12 +92,35 @@ export class SearchBar extends Component {
 				color: "black",
 				fontSize: "1.1rem",
 				fontWeight: "bold"
+			},
+			".filter-tag": {
+				padding: "0.5rem",
+				margin: "0 0.25rem",
+				backgroundColor: "rgba(0,0,0,0.3)"
+			},
+			".filter-tag span": {
+				color: "#888",
+				marginRight: "0.5rem"
+			},
+			".inputs .clickable": {
+				transition: "0.5s ease",
+				backgroundColor: "white",
+			},
+			".inputs .clickable:hover": {
+				transition: "0.5s ease",
+				backgroundColor: "#ccc",
+			},
+			".inputs button.clickable.toggled": {
+				transition: "0.5s ease",
+				backgroundColor: "#aaa",
 			}
 		}
 	}
 
 	filters() {
-		return this.engine.filters.map(e => l("div", this.engine.filterTitle(e) + ": " + e.query))
+		return this.engine.filters.map(e => l("div.filter-tag",
+			l("span", this.engine.filterTitle(e)),
+			e.query))
 	}
 
 	searchInput() {
@@ -111,7 +135,7 @@ export class SearchBar extends Component {
 	}
 
 	filterSelect() {
-		return l("select.filter", {
+		return l("select.filter.clickable", {
 			oninput: (event) => {
 				this.engine.filter.type = event.target.value
 				this.engine.updateFilteredCollection()
@@ -125,14 +149,14 @@ export class SearchBar extends Component {
 	filterOptions() {
 		const types = []
 		for (let key in this.engine.filterModel)
-			types.push(l("option", { value: this.engine.filterModel[key].type }, this.engine.filterModel[key].title))
+			types.push(l("option", { value: key }, this.engine.filterModel[key].title))
 		return types
 	}
 
 	sortThing() {
 		return [l(this.showSorting ? "div.sort" : "div.sort.hidden",
 			l("label", "Sort by"),
-			l("select", {
+			l("select.clickable", {
 				oninput: (event) => {
 					this.engine.sorting = event.target.value
 					this.engine.updateFilteredCollection()
@@ -140,7 +164,7 @@ export class SearchBar extends Component {
 				},
 				value: this.engine.sorting
 			}, ...this.sortOptions()),
-			l("button.sortOrder", {
+			l("button.sortOrder.clickable", {
 				onclick: () => {
 					this.engine.reverseSort = !this.engine.reverseSort
 					this.engine.updateFilteredCollection()
@@ -148,7 +172,7 @@ export class SearchBar extends Component {
 				}
 			}, this.engine.reverseSort ? "Descending" : "Ascending")
 		),
-		l("button.sort", {
+		l("button.sort.clickable" + (this.showSorting ? ".toggled" : ""), {
 			onclick: () => {
 				this.showSorting = !this.showSorting
 				update()
@@ -159,12 +183,12 @@ export class SearchBar extends Component {
 	sortOptions() {
 		const types = []
 		for (let key in this.engine.sortingModel)
-			types.push(l("option", { value: this.engine.sortingModel[key].type }, this.engine.sortingModel[key].title))
+			types.push(l("option", { value: key }, this.engine.sortingModel[key].title))
 		return types
 	}
 
 	filterAdd() {
-		return l("button.add", {
+		return l("button.add.clickable", {
 			onclick: () => {
 				this.engine.addCurrentFilter()
 				update()
