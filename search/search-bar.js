@@ -10,7 +10,7 @@ export class SearchBar extends Component {
 	renderThis() {
 		return l("div.root",
 			l("div.root-row", l("div.inputs",
-				...this.searchThing(),
+				this.searchThing(),
 				...this.sortThing(),
 				this.filterAdd()
 			)),
@@ -23,7 +23,7 @@ export class SearchBar extends Component {
 	static styleThis() {
 		return {
 			".root": {
-				padding: "0.5rem",
+				padding: "0.5em",
 			},
 			".root-row": {
 				width: "100%",
@@ -33,16 +33,26 @@ export class SearchBar extends Component {
 			".inputs": {
 				display: "flex",
 				width: "100%",
-				maxWidth: "50rem"
+				maxWidth: "50em"
 			},
 			".filters": {
 				display: "flex",
 				width: "100%",
-				maxWidth: "50rem",
+				maxWidth: "50em",
 				justifyContent: "center"
 			},
+			"input, select, button": {
+				fontSize: "1em",
+				height: "2em",
+				padding: "0.2em"
+			},
+			".search-input-root": {
+				display: "flex",
+				flexGrow: "1",
+				minWidth: "0",
+			},
 			".search-input": {
-				flexGrow: "1"
+				flexGrow: "1",
 			},
 			"button.search-input": {
 				fontWeight: "bold",
@@ -51,48 +61,55 @@ export class SearchBar extends Component {
 			"select.filter": {
 				color: "#888",
 				flexGrow: "0",
-				width: "8rem",
+				width: "8em",
 				textAlignLast: "center"
 			},
 			"div.sort": {
 				display: "flex",
-				width: "15rem",
+				width: "16em",
+				minWidth: "16em",
 				flexGrow: "0",
 				overflow: "hidden",
 				transition: "0.5s ease"
 			},
 			"div.sort.hidden": {
 				width: "0",
+				minWidth: "0",
 				transition: "0.5s ease"
 			},
 			".sort label": {
 				color: "#888",
 				backgroundColor: "white",
 				borderLeft: "1px solid #ddd",
-				width: "4rem",
-				height: "1.5rem",
-				lineHeight: "1.5rem"
+				width: "4em",
+				minWidth: "4em",
+				height: "2em",
+				lineHeight: "2em"
 			},
 			".sort select": {
 				color: "#888",
 				flexGrow: "0",
-				width: "7rem",
+				width: "7em",
+				minWidth: "7em",
 				textAlignLast: "center"
 			},
 			"button.sort": {
-				width: "1.5rem",
+				width: "2em",
+				minWidth: "2em",
 				color: "black",
+				fontWeight: "bold",
 				backgroundColor: "white",
 				borderLeft: "1px solid #ddd"
 			},
 			"button.sortOrder": {
-				width: "5rem",
+				minWidth: "5em",
+				width: "5em",
 				color: "#888",
 				backgroundColor: "white"
 			},
 			"button.remove": {
 				transition: "0.5s ease",
-				width: "1.5rem",
+				width: "2em",
 				color: "white",
 				backgroundColor: "white"
 			},
@@ -105,15 +122,15 @@ export class SearchBar extends Component {
 				color: "black"
 			},
 			"button.add": {
-				width: "1.5rem",
+				width: "2em",
+				minWidth: "2em",
 				borderLeft: "1px solid #ddd",
 				color: "black",
-				fontSize: "1.1rem",
 				fontWeight: "bold"
 			},
 			".filter-tag": {
-				padding: "0.5rem",
-				margin: "0 0.25rem",
+				padding: "0.5em",
+				margin: "0 0.25em",
 				transition: "0.5s ease",
 				cursor: "pointer",
 				backgroundColor: "rgba(0,0,0,0.3)"
@@ -124,7 +141,7 @@ export class SearchBar extends Component {
 			},
 			".filter-tag span": {
 				color: "#888",
-				marginRight: "0.5rem"
+				marginRight: "0.5em"
 			},
 			".inputs .clickable": {
 				transition: "0.5s ease",
@@ -160,7 +177,7 @@ export class SearchBar extends Component {
 	}
 
 	searchThing() {
-		return [
+		return l("div.search-input-root",
 			...this.searchInput(),
 			l("button.remove", {
 				onclick: () => {
@@ -184,7 +201,7 @@ export class SearchBar extends Component {
 				},
 				value: this.engine.filter.type
 			}, ...this.filterOptions())
-		]
+		)
 	}
 
 	searchInput() {
@@ -251,7 +268,7 @@ export class SearchBar extends Component {
 				this.showSorting = !this.showSorting
 				update()
 			}
-		}, "⚙")]
+		}, l("span",{style:{fontSize:"1.2em"}},"⚙"))]
 	}
 
 	sortOptions() {
@@ -268,6 +285,6 @@ export class SearchBar extends Component {
 				update()
 			},
 			disabled: !this.engine.filter.query
-		}, "+")
+		}, l("span",{style:{fontSize:"1.2em"}},"+"))
 	}
 }
