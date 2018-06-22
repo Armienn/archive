@@ -1,11 +1,11 @@
 import { SearchEngine } from "./search-engine.js"
 import { SectionHeader } from "./section-header.js"
 import { SectionNavigation } from "./section-navigation.js"
-import { SectionSearch } from "./section-search.js"
 import { SectionSelection } from "./section-selection.js"
 import { SectionContent } from "./section-content.js"
 import { SectionFooter } from "./section-footer.js"
-import { Component, l } from "../arf/arf.js"
+import { Component, l, update } from "../arf/arf.js"
+import { SearchBar } from "./search-bar.js"
 
 export class SearchSite extends Component {
 	constructor() {
@@ -24,7 +24,7 @@ export class SearchSite extends Component {
 		this.sections = {
 			header: new SectionHeader(this),
 			navigation: new SectionNavigation(this),
-			search: new SectionSearch(this),
+			search: new SearchBar(this.engine),
 			selection: new SectionSelection(this),
 			content: new SectionContent(this),
 			footer: new SectionFooter(this)
@@ -33,12 +33,12 @@ export class SearchSite extends Component {
 
 	renderThis() {
 		return l("div", {},
-			this.sections.header,
-			this.sections.navigation,
-			this.sections.search,
-			this.sections.selection,
-			this.sections.content,
-			this.sections.footer
+			l("section.header",this.sections.header),
+			l("section.navigation",this.sections.navigation),
+			l("section.search",this.sections.search),
+			l("section.selection",this.sections.selection),
+			l("section.content",this.sections.content),
+			l("section.footer",this.sections.footer)
 		)
 	}
 
@@ -47,12 +47,29 @@ export class SearchSite extends Component {
 			div: {
 				backgroundColor: SearchSite.styling.mainBackground,
 				color: SearchSite.styling.mainText,
-				"text-align": "center",
+				textAlign: "center",
 				width: "100vw",
 				height: "100vh",
 				overflow: "auto",
-				"overflow-x": "hidden"
-			}
+				display: "grid",
+				gridTemplateAreas: `
+				"header header"
+				"navigation navigation"
+				"search search"
+				"selection selection"
+				"content content"
+				"footer footer"`
+			},
+			".header":{ gridArea:"header"	},
+			".navigation":{ gridArea:"navigation"	},
+			".search":{ gridArea:"search"	},
+			".selection":{ gridArea:"selection"	},
+			".content":{ gridArea:"content"	},
+			".footer":{ gridArea:"footer"	}
 		}
+	}
+
+	update(){
+		update()
 	}
 }

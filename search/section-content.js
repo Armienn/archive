@@ -11,16 +11,14 @@ export class SectionContent extends Component {
 	}
 
 	renderThis() {
-		return l("section",
-			l("table",
-				l("thead",
-					l("tr",
-						...this.getHeader()
-					)
-				),
-				l("tbody",
-					...this.getRows()
+		return l("table",
+			l("thead",
+				l("tr",
+					...this.getHeader()
 				)
+			),
+			l("tbody",
+				...this.getRows()
 			)
 		)
 	}
@@ -28,8 +26,7 @@ export class SectionContent extends Component {
 	static styleThis() {
 		return {
 			table: {
-				width: "calc(100% - 2rem)",
-				margin: "1rem"
+				width: "100%"
 			},
 			tr: {
 				height: "2rem",
@@ -93,7 +90,7 @@ export class SectionContent extends Component {
 		var headers = Object.keys(main.engine.collection[0])
 		var cells = []
 		for (var i in headers)
-			cells.push(""+model[headers[i]])
+			cells.push("" + model[headers[i]])
 		return cells
 	}
 }
