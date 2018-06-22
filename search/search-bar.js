@@ -10,9 +10,8 @@ export class SearchBar extends Component {
 	renderThis() {
 		return l("div.root",
 			l("div.root-row", l("div.inputs",
-				this.searchInput(),
-				this.filterSelect(),
-				this.sortThing(),
+				...this.searchThing(),
+				...this.sortThing(),
 				this.filterAdd()
 			)),
 			l("div.root-row", l("div.filters",
@@ -42,8 +41,12 @@ export class SearchBar extends Component {
 				maxWidth: "50rem",
 				justifyContent: "center"
 			},
-			input: {
+			".search-input": {
 				flexGrow: "1"
+			},
+			"button.search-input": {
+				fontWeight: "bold",
+				color: "#888"
 			},
 			"select.filter": {
 				color: "#888",
@@ -87,9 +90,22 @@ export class SearchBar extends Component {
 				color: "#888",
 				backgroundColor: "white"
 			},
+			"button.remove": {
+				transition: "0.5s ease",
+				width: "1.5rem",
+				color: "white",
+				backgroundColor: "white"
+			},
+			"div.inputs:hover button.remove": {
+				transition: "0.5s ease",
+				color: "#aaa"
+			},
+			"div.inputs:hover button.remove:hover": {
+				transition: "0.5s ease",
+				color: "black"
+			},
 			"button.add": {
 				width: "1.5rem",
-				backgroundColor: "white",
 				borderLeft: "1px solid #ddd",
 				color: "black",
 				fontSize: "1.1rem",
@@ -104,7 +120,7 @@ export class SearchBar extends Component {
 			},
 			".filter-tag:hover": {
 				transition: "0.5s ease",
-				backgroundColor: "rgba(50,0,0,0.3)"
+				backgroundColor: "rgba(100,100,100,0.3)"
 			},
 			".filter-tag span": {
 				color: "#888",
@@ -121,6 +137,7 @@ export class SearchBar extends Component {
 			".inputs button.clickable.toggled": {
 				transition: "0.5s ease",
 				backgroundColor: "#aaa",
+				color: "white"
 			}
 		}
 	}
@@ -142,27 +159,65 @@ export class SearchBar extends Component {
 		})
 	}
 
-	searchInput() {
-		return l("input", {
-			placeholder: "Search", oninput: (event) => {
-				this.engine.filter.query = event.target.value
-				this.engine.updateFilteredCollection()
-				update()
-			},
-			value: this.engine.filter.query
-		})
+	searchThing() {
+		return [
+			...this.searchInput(),
+			l("button.remove", {
+				onclick: () => {
+					if (this.engine.filter.query)
+						this.engine.filter.query = ""
+					else
+						this.engine.filter.type = ""
+					this.engine.updateFilteredCollection()
+					update()
+				},
+			}, "🗙"),
+			l("select.filter.clickable", {
+				oninput: (event) => {
+					if(this.engine.currentFilterType.restrictToOptions)
+						this.engine.filter.query = ""
+					this.engine.filter.type = event.target.value
+					if(this.engine.currentFilterType.restrictToOptions)
+						this.engine.filter.query = ""
+					this.engine.updateFilteredCollection()
+					update()
+				},
+				value: this.engine.filter.type
+			}, ...this.filterOptions())
+		]
 	}
 
-	filterSelect() {
-		return l("select.filter.clickable", {
-			oninput: (event) => {
-				this.engine.filter.type = event.target.value
-				this.engine.updateFilteredCollection()
-				update()
-			},
-			value: this.engine.filter.type
-		}, ...this.filterOptions()
-		)
+	searchInput() {
+		const current = this.engine.currentFilterType()
+		const parsedQuery = this.engine.currentParsedQuery()
+		if (current.restrictToOptions) {
+			return current.options.map(e => {
+				const currentIndex = parsedQuery.findIndex(q => q.query == e)
+				return l("button.search-input.clickable" + (currentIndex > -1 ? ".toggled" : ""), {
+					onclick: () => {
+						if (currentIndex > -1)
+							parsedQuery.splice(currentIndex, 1)
+						else
+							parsedQuery.push({ type: "", query: e })
+						this.engine.setCurrentQueryFrom(parsedQuery)
+						this.engine.updateFilteredCollection()
+						update()
+					},
+				}, e)
+			})
+		}
+		else {
+			return [l("input.search-input", {
+				placeholder: "Search", oninput: (event) => {
+					this.engine.filter.query = event.target.value
+					this.engine.updateFilteredCollection()
+					update()
+				},
+				attributes: { list: "search-input-datalist" },
+				value: this.engine.filter.query
+			}),
+			l("datalist#search-input-datalist", ...current.options.map(e => l("option", e)))]
+		}
 	}
 
 	filterOptions() {

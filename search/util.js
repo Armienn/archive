@@ -5,10 +5,10 @@ export default function callOrReturn(thing) {
 
 export function fitsFancy(thing, query) {
 	switch (query.type) {
-		case "greater": return thing > query.query
-		case "less": return thing < query.query
-		case "not":
-		case "normal":
+		case ">": return thing > query.query
+		case "<": return thing < query.query
+		case "!":
+		case "":
 		default: return ("" + thing).toLowerCase().includes(query.query)
 	}
 }
@@ -17,9 +17,12 @@ export function fitsNested(thing, query) {
 	if (!query)
 		return true
 	if (typeof query === "string") {
-		for (let q of parseQuery(query))
-			if (q.type == "not" ? !fitsNested(thing, q) : fitsNested(thing, q))
+		const parsed = parseQuery(query)
+		for (let q of parsed)
+			if (q.type == "!" ? !fitsNested(thing, q) : fitsNested(thing, q))
 				return true
+		if (parsed.length == 0)
+			return true
 		return false
 	}
 	thing = callOrReturn(thing)
@@ -39,39 +42,40 @@ export function fitsNested(thing, query) {
 	return false
 }
 
-function parseQuery(query) {
+export function parseQuery(query) {
 	query = query.toLowerCase()
 	// split at single |, then merge || to |
 	return query.split(/(?<!\|)\|(?!\|)/g).map(e => e.replace(/\|\|/g, "|").trim())
 		.map(e => {
-			var q = { query: e.trim(), type: "normal" }
+			var q = { query: e.trim(), type: "" }
 			if (e.startsWith(">")) {
 				q.query = e.substr(1)
 				if (!q.query.startsWith(">")) {
-					q.type = "greater"
+					q.type = ">"
 					q.query = +q.query
 				}
 			}
 			if (e.startsWith("<")) {
 				q.query = e.substr(1)
 				if (!q.query.startsWith("<")) {
-					q.type = "less"
+					q.type = "<"
 					q.query = +q.query
 				}
 			}
 			if (e.startsWith("!")) {
 				q.query = e.substr(1)
 				if (!q.query.startsWith("!"))
-					q.type = "not"
+					q.type = "!"
 			}
 			return q
 		})
+		.filter(e => e.query)
 }
 
 function isBasicType(thing) {
 	return typeof thing === "string" || typeof thing === "number" || typeof thing === "boolean"
 }
 
-export function compareFit(a, b, query){
+export function compareFit(a, b, query) {
 	return 0
 }

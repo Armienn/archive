@@ -1,11 +1,11 @@
-import { fitsNested, compareFit } from "./util.js"
+import { fitsNested, compareFit, parseQuery } from "./util.js"
 
 export class SearchEngine {
 	constructor() {
 		this._collection = []
 		this.filteredCollection = []
 		this.filters = []
-		this.filter = { type: "", query: "" }
+		this.resetFilter()
 		this.resetFilterModel()
 		this.resetSortingModel()
 		this.sorting = "bestfit"
@@ -19,6 +19,10 @@ export class SearchEngine {
 
 	get collection() {
 		return this._collection
+	}
+
+	resetFilter() {
+		this.filter = { type: "", query: "" }
 	}
 
 	resetFilterModel() {
@@ -36,13 +40,20 @@ export class SearchEngine {
 	}
 
 	resetSortingModel() {
-		this.sortingModel = { "original": new SortingType("Original", "original"), "bestfit": new SortingType("Best Fit", "bestfit", compareFit) }
+		this.sortingModel = { "bestfit": new SortingType("Best Fit", "", compareFit), "": new SortingType("Original", "original") }
 	}
 
 	setSortingModelFromExample(source) {
 		this.resetSortingModel()
 		for (var key in source)
 			this.sortingModel[key] = new SortingType(key, key)
+	}
+
+	setModelFromCollection() {
+		if (this.collection.length == 0)
+			return
+		this.setFilterModelFromExample(this.collection[0])
+		this.setSortingModelFromExample(this.collection[0])
 	}
 
 	addCurrentFilter() {
@@ -68,13 +79,25 @@ export class SearchEngine {
 		return list
 	}
 
+	applyFilter(list, filter) {
+		var filterType = this.filterModel[filter.type] || this.filterModel[""]
+		return list.filter(e => filterType.fits(e, filter.query))
+	}
+
 	filterTitle(filter) {
 		return (this.filterModel[filter.type] || this.filterModel[""]).title
 	}
 
-	applyFilter(list, filter) {
-		var filterType = this.filterModel[filter.type] || this.filterModel[""]
-		return list.filter(e => filterType.fits(e, filter.query))
+	currentFilterType() {
+		return this.filterModel[this.filter.type] || this.filterModel[""]
+	}
+
+	currentParsedQuery() {
+		return parseQuery(this.filter.query)
+	}
+
+	setCurrentQueryFrom(parsedQuery) {
+		this.filter.query = parsedQuery.map(e => e.type + e.query).join("|")
 	}
 }
 

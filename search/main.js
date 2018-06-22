@@ -10,7 +10,7 @@ window.onload = function () {
 			"school": "conjuration",
 			"casting_time": "1 standard action",
 			"range": "long (400 ft. + 40 ft./level)",
-			"duration": "1 round + 1 round per three levels",
+			"duration": true,
 			"short_description": " Ranged touch attack; 2d4 damage for 1 round + 1 round/three levels.",
 			"classes": 23
 		},
@@ -19,7 +19,7 @@ window.onload = function () {
 			"school": "conjuration",
 			"casting_time": "1 standard action",
 			"range": "medium (100 ft. + 10 ft./level)",
-			"duration": "1 round/level",
+			"duration": false,
 			"short_description": " Fog deals acid damage.",
 			"classes": 6
 		},
@@ -28,12 +28,11 @@ window.onload = function () {
 			"school": "conjuration",
 			"casting_time": "1 standard action",
 			"range": "close (25 ft. + 5 ft./2 levels)",
-			"duration": "instantaneous",
+			"duration": true,
 			"short_description": " Orb deals 1d3 acid damage.",
 			"classes": 3
 		}]
-	site.engine.setFilterModelFromExample(site.engine.collection[0])
-	site.engine.setSortingModelFromExample(site.engine.collection[0])
+	site.engine.setModelFromCollection()
 	setRenderFunction(() => site.render())
 	update()
 }
