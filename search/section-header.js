@@ -7,13 +7,11 @@ export class SectionHeader extends Component {
 		super()
 		this.main = main
 		this.header = "header"
-		this.subheader = l("a", { href: "google.com" }, "hej du") // "subheader"
 	}
 
 	renderThis() {
 		return l("header",
-			l("h1", this.header),
-			l("h2", this.subheader)
+			l("h1", this.header)
 		)
 	}
 
@@ -22,14 +20,12 @@ export class SectionHeader extends Component {
 			header: {
 				backgroundColor: SearchSite.styling.headerBackground,
 				color: SearchSite.styling.headerText,
+				height: "100%",
 				fontWeight: "bold",
-				padding: "1rem 1rem 0rem 1rem"
+				padding: "0.5rem"
 			},
 			h1: {
 				fontSize: "2rem",
-			},
-			h2: {
-				fontSize: "1rem",
 			}
 		}
 	}

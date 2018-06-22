@@ -4,7 +4,7 @@ import { update, setRenderFunction } from "../arf/arf.js"
 window.onload = function () {
 	var site = new SearchSite()
 	window.site = site
-	site.engine.collection = [
+	site.sections.content.collection = [
 		{"id":38,"name":"Ninetales","form":"Alolan","classification":"Fox Pokémon","abilities":["Snow Cloak",null,"Snow Warning"],"ratio":"1:3"},
 		{"id":39,"name":"Jigglypuff","form":"Base","classification":"Balloon Pokémon","abilities":["Cute Charm","Competitive","Friend Guard"],"ratio":"1:3"},
 		{"id":40,"name":"Wigglytuff","form":"Base","classification":"Balloon Pokémon","abilities":["Cute Charm","Competitive","Frisk"],"ratio":"1:3"},
@@ -55,8 +55,7 @@ window.onload = function () {
 		{"id":77,"name":"Ponyta","form":"Base","classification":"Fire Horse Pokémon","abilities":["Run Away","Flash Fire","Flame Body"],"ratio":"1:1"},
 		{"id":78,"name":"Rapidash","form":"Base","classification":"Fire Horse Pokémon","abilities":["Run Away","Flash Fire","Flame Body"],"ratio":"1:1"},
 		{"id":79,"name":"Slowpoke","form":"Base","classification":"Dopey Pokémon","abilities":["Oblivious","Own Tempo","Regenerator"],"ratio":"1:1"}]
-	site.engine.setModelFromCollection()
-	site.sections.content.setDataEntriesFromCollection()
+	site.sections.content.setupFromCollection()
 	setRenderFunction(() => site.render())
 	update()
 }

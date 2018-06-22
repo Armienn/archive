@@ -1,16 +1,13 @@
-import { SearchEngine } from "./search-engine.js"
 import { SectionHeader } from "./section-header.js"
 import { SectionNavigation } from "./section-navigation.js"
 import { SectionSelection } from "./section-selection.js"
 import { SectionFooter } from "./section-footer.js"
 import { Component, l, update } from "../arf/arf.js"
-import { SearchBar } from "./search-bar.js"
 import { CollectionView } from "./collection-view.js"
 
 export class SearchSite extends Component {
 	constructor() {
 		super()
-		this.engine = new SearchEngine()
 		this.constructor.styling = {
 			headerBackground: "#c00",
 			headerText: "#eee",
@@ -24,9 +21,8 @@ export class SearchSite extends Component {
 		this.sections = {
 			header: new SectionHeader(this),
 			navigation: new SectionNavigation(this),
-			search: new SearchBar(this.engine),
 			selection: new SectionSelection(this),
-			content: new CollectionView(this.engine),
+			content: new CollectionView(),
 			footer: new SectionFooter(this)
 		}
 	}
@@ -35,7 +31,6 @@ export class SearchSite extends Component {
 		return l("div", {},
 			l("section.header",this.sections.header),
 			l("section.navigation",this.sections.navigation),
-			l("section.search",this.sections.search),
 			l("section.selection",this.sections.selection),
 			l("section.content",this.sections.content),
 			l("section.footer",this.sections.footer)
@@ -50,12 +45,12 @@ export class SearchSite extends Component {
 				textAlign: "center",
 				width: "100vw",
 				height: "100vh",
-				overflow: "auto",
+				overflow: "hidden",
 				display: "grid",
+				gridTemplateRows: "3rem 2rem 0 calc(100vh - 7rem) 2rem",
 				gridTemplateAreas: `
 				"header header"
 				"navigation navigation"
-				"search search"
 				"selection selection"
 				"content content"
 				"footer footer"`

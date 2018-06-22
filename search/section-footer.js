@@ -8,16 +8,16 @@ export class SectionFooter extends Component {
 
 	renderThis() {
 		return l("footer",
-			l("a", { href: "https://github.com/Armienn" }, "Design and code © Armienn, 2017.")
+			l("a", { href: "https://github.com/Armienn" }, "Design and code © Armienn, 2017-2018.")
 		)
 	}
 
 	static styleThis() {
 		return {
 			footer: {
-				padding: "1rem",
-				"text-align": "left",
-				"font-size": "0.8rem"
+				padding: "0.5rem",
+				textAign: "left",
+				fontSize: "0.8rem"
 			}
 		}
 	}
