@@ -25,7 +25,7 @@ export class SectionHeader extends Component {
 				padding: "0.5rem"
 			},
 			h1: {
-				fontSize: "2rem",
+				fontSize: "1.5rem",
 			}
 		}
 	}

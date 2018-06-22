@@ -1,12 +1,13 @@
 import { SearchSite } from "./search-site.js"
 import { Component, l } from "../arf/arf.js"
-import callOrReturn from "./util.js"
 
 export class SectionNavigation extends Component {
 	constructor(main) {
 		super()
 		this.main = main
-		this.navigationEntries = [new NavigationEntry("nav 1"), new NavigationEntry("nav 2", true)]
+		this.navigationEntries = [
+			new SingleLineNavGroup(new NavEntry("nav 1", undefined, () => false), new NavEntry("nav 2")),
+			new NavGroup("blubl", new NavEntry("nav 1"), new NavEntry("nav 2"))]
 	}
 
 	renderThis() {
@@ -22,33 +23,95 @@ export class SectionNavigation extends Component {
 			nav: {
 				backgroundColor: SearchSite.styling.headerBackground,
 				color: SearchSite.styling.headerText,
-				fontWeight: "bold",
-				padding: "0.5rem"
+				height: "100%",
+				overflowY: "auto",
+				fontWeight: "bold"
 			}
 		}
 	}
 }
 
-class NavigationEntry extends Component {
-	constructor(content, selected) {
+export class NavGroup extends Component {
+	constructor(title, ...entries) {
 		super()
-		this.selected = selected
-		this.content = content
+		this.title = title
+		this.entries = entries
 	}
 
 	renderThis() {
-		return l(callOrReturn(this.selected) ? "li" : "li.unselected", this.content)
+		return l("ul", l("li.title", this.title),
+			...this.entries.map(this.entryElement))
+	}
+
+	entryElement(e) {
+		return l("li.entry" + (e.selected() ? "" : ".unselected"), { onclick: e.onclick }, e.content)
 	}
 
 	static styleThis() {
 		return {
-			li: {
-				display: "inline-block",
-				padding: "0 0.5rem"
+			ul: {
+				width: "100%"
+			},
+			"li.title": {
+				padding: "0.25rem",
+				width: "100%",
+				backgroundColor: "rgba(0,0,0,0.3)"
+			},
+			"li.entry": {
+				cursor: "pointer",
+				padding: "0.25rem",
+				width: "100%",
+				transition: "0.5s ease"
+			},
+			"li.entry:hover": {
+				color: "rgba(255,255,255,0.4)",
 			},
 			".unselected": {
 				color: SearchSite.styling.inactiveText,
 			}
 		}
+	}
+}
+
+export class SingleLineNavGroup extends Component {
+	constructor(...entries) {
+		super()
+		this.entries = entries
+	}
+
+	renderThis() {
+		return l("ul", ...this.entries.map(this.entryElement))
+	}
+
+	entryElement(e) {
+		return l("li.entry" + (e.selected() ? "" : ".unselected"), { onclick: e.onclick }, e.content)
+	}
+
+	static styleThis() {
+		return {
+			ul: {
+				width: "100%"
+			},
+			"li.entry": {
+				cursor: "pointer",
+				padding: "0.25rem",
+				display: "inline-block",
+				transition: "0.5s ease"
+			},
+			"li.entry:hover": {
+				color: "rgba(255,255,255,0.4)",
+			},
+			".unselected": {
+				color: SearchSite.styling.inactiveText,
+			}
+		}
+	}
+}
+
+export class NavEntry {
+	constructor(content, onclick, selected = () => true) {
+		this.selected = selected
+		this.onclick = onclick
+		this.content = content
 	}
 }

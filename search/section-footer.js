@@ -1,4 +1,5 @@
 import { Component, l } from "../arf/arf.js"
+import { SearchSite } from "./search-site.js"
 
 export class SectionFooter extends Component {
 	constructor(main) {
@@ -15,9 +16,11 @@ export class SectionFooter extends Component {
 	static styleThis() {
 		return {
 			footer: {
+				height: "100%",
 				padding: "0.5rem",
-				textAign: "left",
-				fontSize: "0.8rem"
+				textAlign: "center",
+				fontSize: "0.8rem",
+				backgroundColor: SearchSite.styling.headerBackground,
 			}
 		}
 	}

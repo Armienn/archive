@@ -47,13 +47,13 @@ export class SearchSite extends Component {
 				height: "100vh",
 				overflow: "hidden",
 				display: "grid",
-				gridTemplateRows: "3rem 2rem 0 calc(100vh - 7rem) 2rem",
+				gridTemplateRows: "0 4rem calc(100vh - 7rem) 3rem",
+				gridTemplateColumns: "12rem auto",
 				gridTemplateAreas: `
-				"header header"
-				"navigation navigation"
-				"selection selection"
-				"content content"
-				"footer footer"`
+				"header selection"
+				"header content"
+				"navigation content"
+				"footer content"`
 			},
 			".header":{ gridArea:"header"	},
 			".navigation":{ gridArea:"navigation"	},
