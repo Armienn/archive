@@ -2,10 +2,10 @@ import { SearchEngine } from "./search-engine.js"
 import { SectionHeader } from "./section-header.js"
 import { SectionNavigation } from "./section-navigation.js"
 import { SectionSelection } from "./section-selection.js"
-import { SectionContent } from "./section-content.js"
 import { SectionFooter } from "./section-footer.js"
 import { Component, l, update } from "../arf/arf.js"
 import { SearchBar } from "./search-bar.js"
+import { CollectionView } from "./collection-view.js"
 
 export class SearchSite extends Component {
 	constructor() {
@@ -26,7 +26,7 @@ export class SearchSite extends Component {
 			navigation: new SectionNavigation(this),
 			search: new SearchBar(this.engine),
 			selection: new SectionSelection(this),
-			content: new SectionContent(this),
+			content: new CollectionView(this.engine),
 			footer: new SectionFooter(this)
 		}
 	}

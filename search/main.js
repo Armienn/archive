@@ -56,6 +56,7 @@ window.onload = function () {
 		{"id":78,"name":"Rapidash","form":"Base","classification":"Fire Horse Pokémon","abilities":["Run Away","Flash Fire","Flame Body"],"ratio":"1:1"},
 		{"id":79,"name":"Slowpoke","form":"Base","classification":"Dopey Pokémon","abilities":["Oblivious","Own Tempo","Regenerator"],"ratio":"1:1"}]
 	site.engine.setModelFromCollection()
+	site.sections.content.setDataEntriesFromCollection()
 	setRenderFunction(() => site.render())
 	update()
 }

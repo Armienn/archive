@@ -30,6 +30,8 @@ export class SectionContent extends Component {
 			},
 			tr: {
 				height: "2rem",
+				backgroundColor: "rgba(130,130,130,0.2)",
+				borderBottom: "1px solid rgba(130,130,130,0.5)"
 			},
 			"tbody tr": {
 				cursor: "pointer",
@@ -41,13 +43,7 @@ export class SectionContent extends Component {
 			},
 			th: {
 				"vertical-align": "middle"
-			},
-			".odd": {
-				backgroundColor: SearchSite.styling.oddBackground,
-			},
-			".even": {
-				backgroundColor: SearchSite.styling.evenBackground,
-			},
+			}
 		}
 	}
 

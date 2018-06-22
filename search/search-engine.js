@@ -72,7 +72,7 @@ export class SearchEngine {
 		for (let filter of this.filters)
 			list = this.applyFilter(list, filter)
 		list = this.applyFilter(list, this.filter)
-		if (this.sorting != "original")
+		if (this.sorting)
 			list.sort(this.sortingModel[this.sorting].compare)
 		if (this.reverseSort)
 			list.reverse()
@@ -115,6 +115,6 @@ class SortingType {
 	constructor(title, key, compare = null) {
 		this.title = title
 		this.key = key
-		this.compare = compare || ((a, b) => a[key] > b[key])
+		this.compare = compare || ((a, b) => a[key] > b[key] ? 1 : a[key] < b[key] ? -1 : 0)
 	}
 }
