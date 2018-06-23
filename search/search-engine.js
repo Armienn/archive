@@ -7,8 +7,8 @@ export class SearchEngine {
 		this.filters = []
 		this.resetFilter()
 		this.resetFilterModel()
+		this.resetSorting()
 		this.resetSortingModel()
-		this.sorting = "bestfit"
 		this.reverseSort = false
 	}
 
@@ -23,6 +23,10 @@ export class SearchEngine {
 
 	resetFilter() {
 		this.filter = { type: "", query: "" }
+	}
+
+	resetSorting() {
+		this.sorting = "bestfit"
 	}
 
 	resetFilterModel() {
@@ -101,7 +105,7 @@ export class SearchEngine {
 	}
 }
 
-class FilterType {
+export class FilterType {
 	constructor(title, key, options = [], restrictToOptions = false, fits = null) {
 		this.title = title
 		this.key = key
@@ -111,7 +115,7 @@ class FilterType {
 	}
 }
 
-class SortingType {
+export class SortingType {
 	constructor(title, key, compare = null) {
 		this.title = title
 		this.key = key

@@ -32,7 +32,6 @@ export class CollectionView extends Component {
 				height: "100%",
 			},
 			"div.search-section": {
-				backgroundColor: "#222",
 				height: "3em",
 			},
 			"div.table-section": {
@@ -104,14 +103,20 @@ export class CollectionView extends Component {
 	}
 
 	setup(filters, sorting, dataEntries, defaultShownData = null) {
-		this.engine.filterModel = filters
-		this.engine.sortingModel = sorting
-		this.engine.dataEntries = dataEntries
+		this.engine.resetFilter()
+		this.engine.resetFilterModel()
+		for (let key in filters)
+			this.engine.filterModel[key] = filters[key]
+		this.engine.resetSorting()
+		this.engine.resetSortingModel()
+		for (let key in sorting)
+			this.engine.sortingModel[key] = sorting[key]
+		this.dataEntries = dataEntries
 		this.shownData = defaultShownData || Object.keys(dataEntries)
 	}
 }
 
-class DataEntry {
+export class DataEntry {
 	constructor(title, key, valueFrom = null) {
 		this.title = title
 		this.key = key

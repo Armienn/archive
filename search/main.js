@@ -1,5 +1,8 @@
 import { SearchSite } from "./search-site.js"
 import { update, setRenderFunction } from "../arf/arf.js"
+import { NavGroup, NavEntry } from "./section-navigation.js"
+import { FilterType, SortingType } from "./search-engine.js"
+import { DataEntry } from "./collection-view.js"
 
 window.onload = function () {
 	var site = new SearchSite()
@@ -56,6 +59,40 @@ window.onload = function () {
 		{"id":78,"name":"Rapidash","form":"Base","classification":"Fire Horse Pokémon","abilities":["Run Away","Flash Fire","Flame Body"],"ratio":"1:1"},
 		{"id":79,"name":"Slowpoke","form":"Base","classification":"Dopey Pokémon","abilities":["Oblivious","Own Tempo","Regenerator"],"ratio":"1:1"}]
 	site.sections.content.setupFromCollection()
+
+	site.sections.navigation.navigationEntries.push(
+		new NavGroup("Test functions",
+			new NavEntry("Test auto", ()=>{site.sections.content.setupFromCollection()}),
+			new NavEntry("Test manual", ()=>{
+				const filters = {
+					id: new FilterType("Id", "id"),
+					name: new FilterType("Name", "name"),
+					form: new FilterType("Form", "form", ["base", "alolan", "mega"], true),
+					ability: new FilterType("Ability", "abilities"),
+					ratio: new FilterType("Gender Ratio", "ratio", ["1:1", "3:1", "1:3"], true)
+				}
+				const sorting = {
+					id: new SortingType("Id", "id"),
+					name: new SortingType("Name", "name"),
+					form: new SortingType("Form", "form"),
+					classification: new SortingType("Classification", "classification"),
+					ability: new SortingType("Ability", "abilities", (a, b) => a.abilities[0] > b.abilities[0] ? 1 : a.abilities[0] < b.abilities[0] ? -1 : 0),
+					ratio: new SortingType("Gender Ratio", "ratio")
+				}
+				const dataEntries = {
+					id: new DataEntry("Id", "id"),
+					name: new DataEntry("Name", "name"),
+					form: new DataEntry("Form", "form"),
+					classification: new DataEntry("Classification", "classification"),
+					ability: new DataEntry("Ability", "abilities"),
+					ratio: new DataEntry("Gender Ratio", "ratio")
+				}
+				const defaultShown = ["id", "name", "classification", "ability", "ratio"]
+				site.sections.content.setup(filters, sorting, dataEntries, defaultShown)
+
+				update()
+			}))
+	)
 	setRenderFunction(() => site.render())
 	update()
 }
