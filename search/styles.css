@@ -1,4 +1,8 @@
-﻿input, select, button {
+﻿.symbol {
+	font-family: 'Segoe UI Symbol';
+}
+
+input, select, button {
 	padding: 0.2rem;
 	height: 1.5rem;
 }

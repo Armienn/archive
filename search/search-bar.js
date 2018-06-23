@@ -180,7 +180,7 @@ export class SearchBar extends Component {
 	searchThing() {
 		return l("div.search-input-root",
 			...this.searchInput(),
-			l("button.remove", {
+			l("button.remove.symbol", {
 				onclick: () => {
 					if (this.engine.filter.query)
 						this.engine.filter.query = ""
@@ -269,7 +269,7 @@ export class SearchBar extends Component {
 				this.showSorting = !this.showSorting
 				update()
 			}
-		}, l("span",{style:{fontSize:"1.2em"}},"⚙"))]
+		}, l("span.symbol",{style:{fontSize:"1.2em"}},"⚙"))]
 	}
 
 	sortOptions() {

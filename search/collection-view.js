@@ -94,19 +94,19 @@ export class CollectionView extends Component {
 					this.showSettings = !this.showSettings
 					update()
 				}
-			}, l("span", { style: { fontSize: "1.2em" } }, "▤")),
+			}, l("span.symbol", { style: { fontSize: "1.2em" } }, "▤")),
 			l("button.table-settings.clickable" + (this.showSettings ? ".active" : ""), {
 				onclick: () => {
 					this.showSettings = !this.showSettings
 					update()
 				}
-			}, l("span", { style: { fontSize: "1.2em" } }, "▦")),
+			}, l("span.symbol", { style: { fontSize: "1.2em" } }, "▦")),
 			l("button.table-settings.clickable" + (this.showSettings ? ".toggled" : ""), {
 				onclick: () => {
 					this.showSettings = !this.showSettings
 					update()
 				}
-			}, l("span", { style: { fontSize: "1.2em" } }, "⚙"))
+			}, l("span.symbol", { style: { fontSize: "1.2em" } }, "⚙"))
 		)
 	}
 	
