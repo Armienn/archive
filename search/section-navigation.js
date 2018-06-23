@@ -50,7 +50,8 @@ export class NavGroup extends Component {
 	static styleThis() {
 		return {
 			ul: {
-				width: "100%"
+				width: "100%",
+				paddingBottom: "0.5rem"
 			},
 			"li.title": {
 				padding: "0.25rem",

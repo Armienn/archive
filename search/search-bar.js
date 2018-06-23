@@ -78,16 +78,16 @@ export class SearchBar extends Component {
 				transition: "0.5s ease"
 			},
 			".sort label": {
-				color: "#888",
+				color: "#555",
 				backgroundColor: "white",
-				borderLeft: "1px solid #ddd",
+				borderLeft: "1px solid #555",
 				width: "4em",
 				minWidth: "4em",
 				height: "2em",
 				lineHeight: "2em"
 			},
 			".sort select": {
-				color: "#888",
+				color: "#555",
 				flexGrow: "0",
 				width: "7em",
 				minWidth: "7em",
@@ -104,7 +104,7 @@ export class SearchBar extends Component {
 			"button.sortOrder": {
 				minWidth: "5em",
 				width: "5em",
-				color: "#888",
+				color: "#555",
 				backgroundColor: "white"
 			},
 			"button.remove": {
@@ -191,15 +191,14 @@ export class SearchBar extends Component {
 			}, "🗙"),
 			l("select.filter.clickable", {
 				oninput: (event) => {
-					if(this.engine.currentFilterType.restrictToOptions)
+					if(this.engine.currentFilterType().restrictToOptions)
 						this.engine.filter.query = ""
 					this.engine.filter.type = event.target.value
-					if(this.engine.currentFilterType.restrictToOptions)
+					if(this.engine.currentFilterType().restrictToOptions)
 						this.engine.filter.query = ""
 					this.engine.updateFilteredCollection()
 					update()
-				},
-				value: this.engine.filter.type
+				}
 			}, ...this.filterOptions())
 		)
 	}
@@ -239,8 +238,10 @@ export class SearchBar extends Component {
 
 	filterOptions() {
 		const types = []
-		for (let key in this.engine.filterModel)
-			types.push(l("option", { value: key }, this.engine.filterModel[key].title))
+		for (let key in this.engine.filterModel){
+			const props = key == this.engine.filter.type ? { value: key, selected: true } : { value: key }
+			types.push(l("option", props, this.engine.filterModel[key].title))
+		}
 		return types
 	}
 
@@ -252,8 +253,7 @@ export class SearchBar extends Component {
 					this.engine.sorting = event.target.value
 					this.engine.updateFilteredCollection()
 					update()
-				},
-				value: this.engine.sorting
+				}
 			}, ...this.sortOptions()),
 			l("button.sortOrder.clickable", {
 				onclick: () => {
@@ -273,8 +273,10 @@ export class SearchBar extends Component {
 
 	sortOptions() {
 		const types = []
-		for (let key in this.engine.sortingModel)
-			types.push(l("option", { value: key }, this.engine.sortingModel[key].title))
+		for (let key in this.engine.sortingModel){
+			const props = key == this.engine.sorting ? { value: key, selected: true } : { value: key }
+			types.push(l("option", props, this.engine.sortingModel[key].title))
+		}
 		return types
 	}
 
@@ -287,4 +289,12 @@ export class SearchBar extends Component {
 			disabled: !this.engine.filter.query
 		}, l("span",{style:{fontSize:"1.2em"}},"+"))
 	}
+}
+
+function SelectValueHook(value){
+	this.value = value
+}
+
+SelectValueHook.prototype.hook = function(node){
+	node.setAttribute("value", this.value)
 }
