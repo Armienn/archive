@@ -1,4 +1,4 @@
-import { Component, l } from "../arf/arf.js"
+import { Component, l, update } from "../arf/arf.js"
 import { SearchEngine } from "./search-engine.js"
 import { SearchBar } from "./search-bar.js"
 
@@ -9,6 +9,7 @@ export class CollectionView extends Component {
 		this.searchBar = new SearchBar(this.engine)
 		this.dataEntries = {}
 		this.shownData = []
+		this.showSettings = false
 	}
 
 	set collection(value) {
@@ -21,7 +22,7 @@ export class CollectionView extends Component {
 	renderThis() {
 		return l("div.root",
 			l("div.search-section", this.searchBar),
-			l("div.table-section", this.getTable())
+			l("div.table-section", this.tableSettings(), this.getTable())
 		)
 	}
 
@@ -30,9 +31,6 @@ export class CollectionView extends Component {
 			"div.root": {
 				width: "100%",
 				height: "100%",
-			},
-			"div.search-section": {
-				height: "3em",
 			},
 			"div.table-section": {
 				height: "calc(100% - 3em)",
@@ -56,10 +54,62 @@ export class CollectionView extends Component {
 			},
 			th: {
 				"vertical-align": "middle"
+			},
+			"div.table-settings": {
+				display: "flex",
+				width: "100%",
+				height: "2em"
+			},
+			"button.table-settings": {
+				fontSize: "1em",
+				fontWeight: "bold",
+				width: "2em",
+				height: "2em"
+			},
+			".clickable": {
+				transition: "0.5s ease",
+				backgroundColor: "transparent",
+				color: "#888"
+			},
+			".clickable:hover": {
+				transition: "0.5s ease",
+				backgroundColor: "#555",
+			},
+			"button.clickable.toggled": {
+				transition: "0.5s ease",
+				backgroundColor: "#888",
+				color: "white"
+			},
+			"button.clickable.active": {
+				transition: "0.5s ease",
+				color: "white"
 			}
 		}
 	}
 
+	tableSettings() {
+		return l("div.table-settings",
+			l("button.table-settings.clickable" + (this.showSettings ? ".active" : ""), {
+				onclick: () => {
+					this.showSettings = !this.showSettings
+					update()
+				}
+			}, l("span", { style: { fontSize: "1.2em" } }, "▤")),
+			l("button.table-settings.clickable" + (this.showSettings ? ".active" : ""), {
+				onclick: () => {
+					this.showSettings = !this.showSettings
+					update()
+				}
+			}, l("span", { style: { fontSize: "1.2em" } }, "▦")),
+			l("button.table-settings.clickable" + (this.showSettings ? ".toggled" : ""), {
+				onclick: () => {
+					this.showSettings = !this.showSettings
+					update()
+				}
+			}, l("span", { style: { fontSize: "1.2em" } }, "⚙"))
+		)
+	}
+	
 	getTable() {
 		return l("table",
 			l("thead",

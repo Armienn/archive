@@ -48,7 +48,7 @@ export class SearchSite extends Component {
 				overflow: "hidden",
 				display: "grid",
 				gridTemplateRows: "0 4rem calc(100vh - 7rem) 3rem",
-				gridTemplateColumns: "12rem auto",
+				gridTemplateColumns: "12rem minmax(auto, calc(100vw - 12rem))",
 				gridTemplateAreas: `
 				"header selection"
 				"header content"

@@ -7,7 +7,7 @@ import { DataEntry } from "./collection-view.js"
 window.onload = function () {
 	var site = new SearchSite()
 	window.site = site
-	site.sections.content.collection = [
+	const pokemons = [
 		{"id":38,"name":"Ninetales","form":"Alolan","classification":"Fox Pokémon","abilities":["Snow Cloak",null,"Snow Warning"],"ratio":"1:3"},
 		{"id":39,"name":"Jigglypuff","form":"Base","classification":"Balloon Pokémon","abilities":["Cute Charm","Competitive","Friend Guard"],"ratio":"1:3"},
 		{"id":40,"name":"Wigglytuff","form":"Base","classification":"Balloon Pokémon","abilities":["Cute Charm","Competitive","Frisk"],"ratio":"1:3"},
@@ -58,12 +58,132 @@ window.onload = function () {
 		{"id":77,"name":"Ponyta","form":"Base","classification":"Fire Horse Pokémon","abilities":["Run Away","Flash Fire","Flame Body"],"ratio":"1:1"},
 		{"id":78,"name":"Rapidash","form":"Base","classification":"Fire Horse Pokémon","abilities":["Run Away","Flash Fire","Flame Body"],"ratio":"1:1"},
 		{"id":79,"name":"Slowpoke","form":"Base","classification":"Dopey Pokémon","abilities":["Oblivious","Own Tempo","Regenerator"],"ratio":"1:1"}]
+	const staffList = [
+		{
+			DBID: 1,
+			ID: "1234",
+			Name: "Joakim von And",
+			Abbreviation: "JvA",
+			Title: "Rigand",
+			Gender: 0,
+
+			Email: "joakim@andeby.dk",
+			TelephoneNumbers: [{ Number: "87654321", Type: "home", Primary: true }],
+			Address: { AddressLine: "Store Velstands Boulevard 888", Country: "dk" },
+
+			PermissionGroupID: 1,
+			Competences: { AllowedProcedureTypes: [1], AllowedProcedures: [1, 2], DisallowedProcedures: [] },
+			WeeklyWorkhours: 40
+		},
+		{
+			DBID: 2,
+			ID: "121212-1234",
+			Name: "Sekretær 1",
+			Abbreviation: "S1",
+			Title: "Sekretær",
+			Gender: 1,
+
+			Email: "s1@clinic.dk",
+			TelephoneNumbers: [{ Number: "87654321", Type: "home", Primary: true }],
+			Address: { AddressLine: "Vej 888", Country: "dk" },
+
+			PermissionGroupID: 2,
+			Competences: { AllowedProcedureTypes: [], AllowedProcedures: [], DisallowedProcedures: [] },
+			WeeklyWorkhours: 40
+		},
+		{
+			DBID: 2,
+			ID: "121212-1236",
+			Name: "Sekretær 2",
+			Abbreviation: "S2",
+			Title: "Sekretær",
+			Gender: 1,
+
+			Email: "s2@clinic.dk",
+			TelephoneNumbers: [{ Number: "87654322", Type: "home", Primary: true }],
+			Address: { AddressLine: "Vej 888", Country: "dk" },
+
+			PermissionGroupID: 2,
+			Competences: { AllowedProcedureTypes: [], AllowedProcedures: [], DisallowedProcedures: [] },
+			WeeklyWorkhours: 40
+		},
+		{
+			DBID: 3,
+			ID: "121212-1235",
+			Name: "Radiograf 1",
+			Abbreviation: "R1",
+			Title: "Radiograf",
+			Gender: 1,
+
+			Email: "r1@clinic.dk",
+			TelephoneNumbers: [{ Number: "87654311", Type: "home", Primary: true }],
+			Address: { AddressLine: "Vej 888", Country: "dk" },
+
+			PermissionGroupID: 2,
+			Competences: { AllowedProcedureTypes: [3], AllowedProcedures: [], DisallowedProcedures: [] },
+			WeeklyWorkhours: 40
+		},
+		{
+			DBID: 4,
+			ID: "121212-1233",
+			Name: "Radiograf 2",
+			Abbreviation: "R2",
+			Title: "Radiograf",
+			Gender: 1,
+
+			Email: "r2@clinic.dk",
+			TelephoneNumbers: [{ Number: "87654312", Type: "home", Primary: true }],
+			Address: { AddressLine: "Vej 888", Country: "dk" },
+
+			PermissionGroupID: 2,
+			Competences: { AllowedProcedureTypes: [3], AllowedProcedures: [], DisallowedProcedures: [] },
+			WeeklyWorkhours: 40
+		},
+		{
+			DBID: 5,
+			ID: "121212-1233",
+			Name: "Doktor 2",
+			Abbreviation: "D2",
+			Title: "Doktor",
+			Gender: 1,
+
+			Email: "d2@clinic.dk",
+			TelephoneNumbers: [{ Number: "87654332", Type: "home", Primary: true }],
+			Address: { AddressLine: "Vej 888", Country: "dk" },
+
+			PermissionGroupID: 2,
+			Competences: { AllowedProcedureTypes: [], AllowedProcedures: [], DisallowedProcedures: [] },
+			WeeklyWorkhours: 40
+		},
+		{
+			DBID: 6,
+			ID: "121212-1233",
+			Name: "Doktor 1",
+			Abbreviation: "D1",
+			Title: "Doktor",
+			Gender: 1,
+
+			Email: "d1@clinic.dk",
+			TelephoneNumbers: [{ Number: "87654331", Type: "home", Primary: true }],
+			Address: { AddressLine: "Vej 888", Country: "dk" },
+
+			PermissionGroupID: 2,
+			Competences: { AllowedProcedureTypes: [1, 2], AllowedProcedures: [], DisallowedProcedures: [] },
+			WeeklyWorkhours: 40
+		}
+	]
+	site.sections.content.collection = pokemons
 	site.sections.content.setupFromCollection()
 
 	site.sections.navigation.navigationEntries.push(
 		new NavGroup("Test functions",
-			new NavEntry("Test auto", ()=>{site.sections.content.setupFromCollection()}),
-			new NavEntry("Test manual", ()=>{
+			new NavEntry("Test auto", () => {
+				site.sections.content.collection = pokemons
+				site.sections.content.setupFromCollection()
+				update()
+			}),
+			new NavEntry("Test manual", () => {
+				site.sections.content.collection = pokemons
 				const filters = {
 					id: new FilterType("Id", "id"),
 					name: new FilterType("Name", "name"),
@@ -91,7 +211,13 @@ window.onload = function () {
 				site.sections.content.setup(filters, sorting, dataEntries, defaultShown)
 
 				update()
-			}))
+			}),
+			new NavEntry("Test staff auto", () => {
+				site.sections.content.collection = staffList
+				site.sections.content.setupFromCollection()
+				update()
+			})
+		)
 	)
 	setRenderFunction(() => site.render())
 	update()
