@@ -1,4 +1,9 @@
-﻿.symbol {
+﻿@font-face{
+	font-family: "Segoe Ui Symbol";
+	src: url("../seguisym.ttf");
+}
+
+.symbol {
 	font-family: 'Segoe UI Symbol';
 }
 
