@@ -1,13 +1,13 @@
-﻿@font-face{
-	font-family: "Segoe UI Symbol";
-	src: url("../seguisym.ttf");
-}
-
-.symbol {
-	font-family: 'Segoe UI Symbol';
-}
-
-input, select, button {
-	padding: 0.2rem;
+﻿input, select, button {
+	padding: 0.2em;
 	height: 1.5rem;
+}
+
+button.icon{
+	padding: 0;
+	height: 2em;
+}
+
+.icon{
+	position: relative;
 }

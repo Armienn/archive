@@ -1,6 +1,7 @@
 import { Component, l, update } from "../arf/arf.js"
 import { SearchEngine } from "./search-engine.js"
 import { SearchBar } from "./search-bar.js"
+import iconButton, { barsIcon, gridIcon, gearIcon } from "./icons.js"
 
 export class CollectionView extends Component {
 	constructor() {
@@ -69,47 +70,41 @@ export class CollectionView extends Component {
 			".clickable": {
 				transition: "0.5s ease",
 				backgroundColor: "transparent",
-				color: "#888"
+				opacity: "0.4"
 			},
 			".clickable:hover": {
 				transition: "0.5s ease",
-				backgroundColor: "#555",
+				opacity: "0.7"
 			},
 			"button.clickable.toggled": {
 				transition: "0.5s ease",
 				backgroundColor: "#888",
-				color: "white"
+				opacity: "1"
 			},
 			"button.clickable.active": {
 				transition: "0.5s ease",
-				color: "white"
+				opacity: "1"
 			}
 		}
 	}
 
 	tableSettings() {
 		return l("div.table-settings",
-			l("button.table-settings.clickable" + (this.showSettings ? ".active" : ""), {
-				onclick: () => {
-					this.showSettings = !this.showSettings
-					update()
-				}
-			}, l("span.symbol", { style: { fontSize: "1.2em" } }, "▤")),
-			l("button.table-settings.clickable" + (this.showSettings ? ".active" : ""), {
-				onclick: () => {
-					this.showSettings = !this.showSettings
-					update()
-				}
-			}, l("span.symbol", { style: { fontSize: "1.2em" } }, "▦")),
-			l("button.table-settings.clickable" + (this.showSettings ? ".toggled" : ""), {
-				onclick: () => {
-					this.showSettings = !this.showSettings
-					update()
-				}
-			}, l("span.symbol", { style: { fontSize: "1.2em" } }, "⚙"))
+			iconButton(barsIcon({filter:"invert(1)"}), () => {
+				this.showSettings = !this.showSettings
+				update()
+			}, ".table-settings.clickable" + (this.showSettings ? ".active" : "")),
+			iconButton(gridIcon({filter:"invert(1)"}), () => {
+				this.showSettings = !this.showSettings
+				update()
+			}, ".table-settings.clickable" + (this.showSettings ? ".active" : "")),
+			iconButton(gearIcon({filter:"invert(1)"}), () => {
+				this.showSettings = !this.showSettings
+				update()
+			}, ".table-settings.clickable" + (this.showSettings ? ".toggled" : ""))
 		)
 	}
-	
+
 	getTable() {
 		return l("table",
 			l("thead",

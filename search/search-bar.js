@@ -1,4 +1,5 @@
 import { Component, update, l } from "../arf/arf.js"
+import iconButton, { gearIcon, crossIcon, plusIcon, arrowDownIcon, arrowUpIcon } from "./icons.js"
 
 export class SearchBar extends Component {
 	constructor(engine) {
@@ -33,7 +34,8 @@ export class SearchBar extends Component {
 			".inputs": {
 				display: "flex",
 				width: "100%",
-				maxWidth: "50em"
+				maxWidth: "50em",
+				backgroundColor: "white"
 			},
 			".filters": {
 				display: "flex",
@@ -43,8 +45,7 @@ export class SearchBar extends Component {
 			},
 			"input, select, button": {
 				fontSize: "1em",
-				height: "2em",
-				padding: "0.2em"
+				height: "2em"
 			},
 			".search-input-root": {
 				display: "flex",
@@ -63,14 +64,17 @@ export class SearchBar extends Component {
 				color: "#888",
 				flexGrow: "0",
 				width: "8em",
+				minWidth: "4em",
 				textAlignLast: "center"
 			},
 			"div.sort": {
 				display: "flex",
-				width: "16em",
-				minWidth: "16em",
+				width: "13em",
+				minWidth: "13em",
 				flexGrow: "0",
 				overflow: "hidden",
+				color: "rgba(0,0,0,0.6)",
+				backgroundColor: "white",
 				transition: "0.5s ease"
 			},
 			"div.sort.hidden": {
@@ -79,19 +83,17 @@ export class SearchBar extends Component {
 				transition: "0.5s ease"
 			},
 			".sort label": {
-				color: "#555",
-				backgroundColor: "white",
-				borderLeft: "1px solid #555",
+				borderLeft: "1px solid rgba(0,0,0,0.6)",
 				width: "4em",
 				minWidth: "4em",
 				height: "2em",
 				lineHeight: "2em"
 			},
 			".sort select": {
-				color: "#555",
 				flexGrow: "0",
 				width: "7em",
 				minWidth: "7em",
+				color: "rgba(0,0,0,0.6)",
 				textAlignLast: "center"
 			},
 			"button.sort": {
@@ -103,24 +105,23 @@ export class SearchBar extends Component {
 				borderLeft: "1px solid #ddd"
 			},
 			"button.sortOrder": {
-				minWidth: "5em",
-				width: "5em",
-				color: "#555",
+				minWidth: "2em",
+				width: "2em",
 				backgroundColor: "white"
 			},
 			"button.remove": {
 				transition: "0.5s ease",
 				width: "2em",
-				color: "white",
-				backgroundColor: "white"
+				opacity: "0",
+				backgroundColor: "transparent"
 			},
 			"div.inputs:hover button.remove": {
 				transition: "0.5s ease",
-				color: "#aaa"
+				opacity: "0.4",
 			},
 			"div.inputs:hover button.remove:hover": {
 				transition: "0.5s ease",
-				color: "black"
+				opacity: "1",
 			},
 			"button.add": {
 				width: "2em",
@@ -180,22 +181,20 @@ export class SearchBar extends Component {
 	searchThing() {
 		return l("div.search-input-root",
 			...this.searchInput(),
-			l("button.remove.symbol", {
-				onclick: () => {
-					if (this.engine.filter.query)
-						this.engine.filter.query = ""
-					else
-						this.engine.filter.type = ""
-					this.engine.updateFilteredCollection()
-					update()
-				},
-			}, "🗙"),
+			iconButton(crossIcon(), () => {
+				if (this.engine.filter.query)
+					this.engine.filter.query = ""
+				else
+					this.engine.filter.type = ""
+				this.engine.updateFilteredCollection()
+				update()
+			}, ".remove"),
 			l("select.filter.clickable", {
 				oninput: (event) => {
-					if(this.engine.currentFilterType().restrictToOptions)
+					if (this.engine.currentFilterType().restrictToOptions)
 						this.engine.filter.query = ""
 					this.engine.filter.type = event.target.value
-					if(this.engine.currentFilterType().restrictToOptions)
+					if (this.engine.currentFilterType().restrictToOptions)
 						this.engine.filter.query = ""
 					this.engine.updateFilteredCollection()
 					update()
@@ -239,7 +238,7 @@ export class SearchBar extends Component {
 
 	filterOptions() {
 		const types = []
-		for (let key in this.engine.filterModel){
+		for (let key in this.engine.filterModel) {
 			const props = key == this.engine.filter.type ? { value: key, selected: true } : { value: key }
 			types.push(l("option", props, this.engine.filterModel[key].title))
 		}
@@ -256,25 +255,23 @@ export class SearchBar extends Component {
 					update()
 				}
 			}, ...this.sortOptions()),
-			l("button.sortOrder.clickable", {
-				onclick: () => {
+			iconButton(this.engine.reverseSort ? arrowUpIcon({ opacity: "0.6" }) : arrowDownIcon({ opacity: "0.6" }),
+				() => {
 					this.engine.reverseSort = !this.engine.reverseSort
 					this.engine.updateFilteredCollection()
 					update()
-				}
-			}, this.engine.reverseSort ? "Descending" : "Ascending")
+				}, ".sortOrder.clickable")
 		),
-		l("button.sort.clickable" + (this.showSorting ? ".toggled" : ""), {
-			onclick: () => {
+		iconButton(gearIcon(),
+			() => {
 				this.showSorting = !this.showSorting
 				update()
-			}
-		}, l("span.symbol",{style:{fontSize:"1.2em"}},"⚙"))]
+			}, ".sort.clickable" + (this.showSorting ? ".toggled" : ""))]
 	}
 
 	sortOptions() {
 		const types = []
-		for (let key in this.engine.sortingModel){
+		for (let key in this.engine.sortingModel) {
 			const props = key == this.engine.sorting ? { value: key, selected: true } : { value: key }
 			types.push(l("option", props, this.engine.sortingModel[key].title))
 		}
@@ -282,20 +279,12 @@ export class SearchBar extends Component {
 	}
 
 	filterAdd() {
-		return l("button.add.clickable", {
-			onclick: () => {
+		return iconButton(plusIcon(),
+			() => {
 				this.engine.addCurrentFilter()
 				update()
 			},
-			disabled: !this.engine.filter.query
-		}, l("span",{style:{fontSize:"1.2em"}},"+"))
+			".add.clickable",
+			{ disabled: !this.engine.filter.query })
 	}
-}
-
-function SelectValueHook(value){
-	this.value = value
-}
-
-SelectValueHook.prototype.hook = function(node){
-	node.setAttribute("value", this.value)
 }
