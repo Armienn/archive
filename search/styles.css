@@ -3,13 +3,18 @@
 	height: 1.5rem;
 }
 
+button {
+	background-color: transparent;
+}
+
 button.icon{
 	padding: 0.25em;
 	height: 2em;
 }
 
-.icon{
+span.icon{
 	position: relative;
+	height: 0;
 }
 
 html{

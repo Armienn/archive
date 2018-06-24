@@ -1,6 +1,6 @@
 import { l } from "../arf/arf.js"
 
-export default function iconButton(icon, onclick, className, properties = {}) {
+export default function iconButton(icon, onclick, className = "", properties = {}) {
 	properties.onclick = onclick
 	return l("button.icon" + className, properties, icon)
 }
@@ -61,6 +61,26 @@ export function arrowDownIcon(style = {}) {
 	<svg width="1.5em" height="1.5em" viewBox="0 0 24 24">
 		<path fill="none" d="M0 0h24v24H0V0z"/>
 		<path fill="#010101" d="M20 12l-1.41-1.41L13 16.17V4h-2v12.17l-5.58-5.59L4 12l8 8 8-8z"/>
+	</svg>
+`})
+}
+
+export function arrowLeftIcon(style = {}) {
+	return l("span.icon", {
+		style: style, innerHTML: `
+	<svg width="1.5em" height="1.5em" viewBox="0 0 24 24">
+		<path d="M15.41,16.59L10.83,12l4.58-4.59L14,6l-6,6l6,6L15.41,16.59z"/>
+		<path fill="none" d="M0,0h24v24H0V0z"/>
+	</svg>
+`})
+}
+
+export function arrowRightIcon(style = {}) {
+	return l("span.icon", {
+		style: style, innerHTML: `
+	<svg width="1.5em" height="1.5em" viewBox="0 0 24 24">
+		<path d="M8.59,16.59L13.17,12L8.59,7.41L10,6l6,6l-6,6L8.59,16.59z"/>
+		<path fill="none" d="M0,0h24v24H0V0z"/>
 	</svg>
 `})
 }

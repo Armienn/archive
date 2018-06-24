@@ -1,7 +1,7 @@
 import { Component, l, update } from "../arf/arf.js"
 import { SearchEngine } from "./search-engine.js"
 import { SearchBar } from "./search-bar.js"
-import iconButton, { barsIcon, gridIcon, gearIcon } from "./icons.js"
+import iconButton, { barsIcon, gridIcon, gearIcon, arrowRightIcon, arrowLeftIcon } from "./icons.js"
 
 export class CollectionView extends Component {
 	constructor() {
@@ -9,7 +9,8 @@ export class CollectionView extends Component {
 		this.engine = new SearchEngine()
 		this.searchBar = new SearchBar(this.engine)
 		this.dataEntries = {}
-		this.shownData = []
+		this.tableDataSetup = []
+		this.mode = "table"
 		this.showSettings = false
 	}
 
@@ -23,7 +24,7 @@ export class CollectionView extends Component {
 	renderThis() {
 		return l("div.root",
 			l("div.search-section", this.searchBar),
-			l("div.table-section", this.tableSettings(), this.getTable())
+			l("div.table-section", this.viewSettings(), this.getTable())
 		)
 	}
 
@@ -64,15 +65,40 @@ export class CollectionView extends Component {
 				backgroundColor: "rgba(130,130,130,0.5)",
 				transition: "0.3s ease"
 			},
+			button: {
+				fontSize: "1rem",
+				color: "white"
+			},
 			"div.table-settings": {
 				display: "flex",
+				justifyContent: "flex-end",
 				width: "100%",
 				height: "2em"
+			},
+			"div.entry-editor": {
+				display: "flex",
+				height: "2em",
+				lineHeight: "2em",
+				maxWidth: "calc(100% - 2em)",
+				flexGrow: "0",
+				overflowX: "auto",
+				overflowY: "hidden",
+				transition: "0.5s ease"
+			},
+			"div.entry-editor.hidden": {
+				maxWidth: "0",
+				transition: "0.5s ease"
+			},
+			".data-entry": {
+				display: "contents"
 			},
 			"button.table-settings": {
 				fontSize: "1em",
 				fontWeight: "bold",
 				width: "2em",
+				height: "2em"
+			},
+			"button.label": {
 				height: "2em"
 			},
 			".clickable": {
@@ -96,20 +122,54 @@ export class CollectionView extends Component {
 		}
 	}
 
-	tableSettings() {
+	viewSettings() {
 		return l("div.table-settings",
 			iconButton(barsIcon({ filter: "invert(1)" }), () => {
-				this.showSettings = !this.showSettings
+				this.mode = "table"
 				update()
-			}, ".table-settings.clickable" + (this.showSettings ? ".active" : "")),
+			}, ".table-settings.clickable" + (this.mode == "table" ? ".active" : "")),
 			iconButton(gridIcon({ filter: "invert(1)" }), () => {
-				this.showSettings = !this.showSettings
+				this.mode = "grid"
 				update()
-			}, ".table-settings.clickable" + (this.showSettings ? ".active" : "")),
+			}, ".table-settings.clickable" + (this.mode == "grid" ? ".active" : "")),
+			this.entryEditor(),
 			iconButton(gearIcon({ filter: "invert(1)" }), () => {
 				this.showSettings = !this.showSettings
 				update()
 			}, ".table-settings.clickable" + (this.showSettings ? ".toggled" : ""))
+		)
+	}
+
+	entryEditor() {
+		const currentSetup = this.mode == "table" ? this.tableDataSetup : this.tableDataSetup
+		return l("div.entry-editor" + (this.showSettings ? "" : ".hidden"),
+			...currentSetup.map(e => {
+				return l("div.data-entry",
+					iconButton(arrowLeftIcon({ filter: "invert(1)" }),
+						() => {
+							const index = this.tableDataSetup.indexOf(e)
+							if (index == 0)
+								return
+							this.tableDataSetup.splice(index, 1)
+							this.tableDataSetup.splice(index - 1, 0, e)
+							update()
+						}, ".clickable"),
+					l("button.label.clickable" + (e.shown ? ".active" : ""), {
+						onclick: () => {
+							e.shown = !e.shown
+							update()
+						}
+					}, e.title),
+					iconButton(arrowRightIcon({ filter: "invert(1)" }),
+						() => {
+							const index = this.tableDataSetup.indexOf(e)
+							if (index == this.tableDataSetup - 1)
+								return
+							this.tableDataSetup.splice(index, 1)
+							this.tableDataSetup.splice(index + 1, 0, e)
+							update()
+						}, ".clickable"))
+			})
 		)
 	}
 
@@ -127,18 +187,20 @@ export class CollectionView extends Component {
 	}
 
 	getHeader() {
-		return this.shownData.map(e => l("th", {
-			onclick: () => {
-				if (!this.engine.sortingModel[e])
-					return
-				if (this.engine.sorting == e)
-					this.engine.reverseSort = !this.engine.reverseSort
-				this.engine.sorting = e
-				this.engine.updateFilteredCollection()
-				update()
-			},
-			style: { cursor: this.engine.sortingModel[e] ? "" : "default" }
-		}, this.dataEntries[e].title))
+		return this.tableDataSetup
+			.filter(e => e.shown)
+			.map(e => l("th", {
+				onclick: () => {
+					if (!this.engine.sortingModel[e.key])
+						return
+					if (this.engine.sorting == e.key)
+						this.engine.reverseSort = !this.engine.reverseSort
+					this.engine.sorting = e.key
+					this.engine.updateFilteredCollection()
+					update()
+				},
+				style: { cursor: this.engine.sortingModel[e.key] ? "" : "default" }
+			}, this.dataEntries[e.key].title))
 	}
 
 	getRows() {
@@ -147,16 +209,16 @@ export class CollectionView extends Component {
 	}
 
 	getRow(model) {
-		return this.shownData.map(e => l("th", this.dataEntries[e].valueFrom(model)))
+		return this.tableDataSetup
+			.filter(e => e.shown)
+			.map(e => l("th", this.dataEntries[e.key].valueFrom(model)))
 	}
 
 	setDataEntriesFromExample(source) {
 		this.dataEntries = {}
-		this.shownData = []
-		for (var key in source) {
+		for (var key in source)
 			this.dataEntries[key] = new DataEntry(key, key)
-			this.shownData.push(key)
-		}
+		this.tableDataSetupFrom(Object.keys(this.dataEntries))
 	}
 
 	setupFromCollection() {
@@ -176,7 +238,15 @@ export class CollectionView extends Component {
 		for (let key in sorting)
 			this.engine.sortingModel[key] = sorting[key]
 		this.dataEntries = dataEntries
-		this.shownData = defaultShownData || Object.keys(dataEntries)
+		this.tableDataSetupFrom(defaultShownData || Object.keys(dataEntries))
+	}
+
+	tableDataSetupFrom(shownData) {
+		this.tableDataSetup = shownData
+			.map(e => { return { shown: true, key: e, title: this.dataEntries[e].title } })
+		for (var key in this.dataEntries)
+			if (!this.tableDataSetup.find(e => e.key == key))
+				this.tableDataSetup.push({ shown: false, key: key, title: this.dataEntries[key].title })
 	}
 }
 
