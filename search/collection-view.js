@@ -56,7 +56,13 @@ export class CollectionView extends Component {
 				transition: "0.2s ease background"
 			},
 			th: {
-				"vertical-align": "middle"
+				verticalAlign: "middle",
+				cursor: "pointer",
+				transition: "0.3s ease"
+			},
+			"thead th:hover": {
+				backgroundColor: "rgba(130,130,130,0.5)",
+				transition: "0.3s ease"
 			},
 			"div.table-settings": {
 				display: "flex",
@@ -92,15 +98,15 @@ export class CollectionView extends Component {
 
 	tableSettings() {
 		return l("div.table-settings",
-			iconButton(barsIcon({filter:"invert(1)"}), () => {
+			iconButton(barsIcon({ filter: "invert(1)" }), () => {
 				this.showSettings = !this.showSettings
 				update()
 			}, ".table-settings.clickable" + (this.showSettings ? ".active" : "")),
-			iconButton(gridIcon({filter:"invert(1)"}), () => {
+			iconButton(gridIcon({ filter: "invert(1)" }), () => {
 				this.showSettings = !this.showSettings
 				update()
 			}, ".table-settings.clickable" + (this.showSettings ? ".active" : "")),
-			iconButton(gearIcon({filter:"invert(1)"}), () => {
+			iconButton(gearIcon({ filter: "invert(1)" }), () => {
 				this.showSettings = !this.showSettings
 				update()
 			}, ".table-settings.clickable" + (this.showSettings ? ".toggled" : ""))
@@ -121,7 +127,18 @@ export class CollectionView extends Component {
 	}
 
 	getHeader() {
-		return this.shownData.map(e => l("th", this.dataEntries[e].title))
+		return this.shownData.map(e => l("th", {
+			onclick: () => {
+				if (!this.engine.sortingModel[e])
+					return
+				if (this.engine.sorting == e)
+					this.engine.reverseSort = !this.engine.reverseSort
+				this.engine.sorting = e
+				this.engine.updateFilteredCollection()
+				update()
+			},
+			style: { cursor: this.engine.sortingModel[e] ? "" : "default" }
+		}, this.dataEntries[e].title))
 	}
 
 	getRows() {

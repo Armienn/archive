@@ -195,7 +195,6 @@ window.onload = function () {
 					id: new SortingType("Id", "id"),
 					name: new SortingType("Name", "name"),
 					form: new SortingType("Form", "form"),
-					classification: new SortingType("Classification", "classification"),
 					ability: new SortingType("Ability", "abilities", (a, b) => a.abilities[0] > b.abilities[0] ? 1 : a.abilities[0] < b.abilities[0] ? -1 : 0),
 					ratio: new SortingType("Gender Ratio", "ratio")
 				}
