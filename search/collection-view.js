@@ -30,6 +30,7 @@ export class CollectionView extends Component {
 	static styleThis() {
 		return {
 			"div.root": {
+				fontSize: "1rem",
 				width: "100%",
 				height: "100%",
 			},
@@ -38,7 +39,8 @@ export class CollectionView extends Component {
 				overflow: "auto"
 			},
 			table: {
-				width: "100%"
+				width: "100%",
+				fontSize: "0.8rem"
 			},
 			tr: {
 				height: "2rem",

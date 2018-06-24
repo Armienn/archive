@@ -24,6 +24,7 @@ export class SearchBar extends Component {
 	static styleThis() {
 		return {
 			".root": {
+				fontSize: "1em",
 				padding: "0.5em",
 			},
 			".root-row": {
