@@ -36,6 +36,7 @@ export class SearchBar extends Component {
 				display: "flex",
 				width: "100%",
 				maxWidth: "50em",
+				border: "0.06125rem solid rgba(0,0,0,0.3)",
 				backgroundColor: "white"
 			},
 			".filters": {

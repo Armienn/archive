@@ -1,6 +1,7 @@
 ﻿input, select, button {
 	padding: 0.2em;
 	height: 1.5rem;
+	color: inherit;
 }
 
 button {
@@ -19,6 +20,16 @@ span.icon{
 
 html{
 	font-size: 16px;
+}
+
+.dark-text{
+	color: black;
+}
+.dark-symbol{
+	filter: invert(1)
+}
+.light-text{
+	color: white;
 }
 
 ::-webkit-scrollbar {

@@ -12,6 +12,7 @@ export class CollectionView extends Component {
 		this.tableDataSetup = []
 		this.mode = "table"
 		this.showSettings = false
+		this.dark = true
 	}
 
 	set collection(value) {
@@ -22,7 +23,7 @@ export class CollectionView extends Component {
 	}
 
 	renderThis() {
-		return l("div.root",
+		return l("div.root" + (this.dark ? ".light-text" : ".dark-text"),
 			l("div.search-section", this.searchBar),
 			l("div.table-section", this.viewSettings(), this.mode == "table" ? this.getTable() : this.getGrid())
 		)
@@ -72,7 +73,6 @@ export class CollectionView extends Component {
 			},
 			button: {
 				fontSize: "1rem",
-				color: "white"
 			},
 			"div.table-settings": {
 				display: "flex",
@@ -175,16 +175,16 @@ export class CollectionView extends Component {
 
 	viewSettings() {
 		return l("div.table-settings",
-			iconButton(barsIcon({ filter: "invert(1)" }), () => {
+			iconButton(barsIcon(this.dark ? { filter: "invert(1)" } : {}), () => {
 				this.mode = "table"
 				update()
 			}, ".table-settings.clickable" + (this.mode == "table" ? ".active" : "")),
-			iconButton(gridIcon({ filter: "invert(1)" }), () => {
+			iconButton(gridIcon(this.dark ? { filter: "invert(1)" } : {}), () => {
 				this.mode = "grid"
 				update()
 			}, ".table-settings.clickable" + (this.mode == "grid" ? ".active" : "")),
 			this.entryEditor(),
-			iconButton(gearIcon({ filter: "invert(1)" }), () => {
+			iconButton(gearIcon(this.dark ? { filter: "invert(1)" } : {}), () => {
 				this.showSettings = !this.showSettings
 				update()
 			}, ".table-settings.clickable" + (this.showSettings ? ".toggled" : ""))
@@ -196,7 +196,7 @@ export class CollectionView extends Component {
 		return l("div.entry-editor" + (this.showSettings ? "" : ".hidden"),
 			...currentSetup.map(e => {
 				return l("div.data-entry",
-					iconButton(arrowLeftIcon({ filter: "invert(1)" }),
+					iconButton(arrowLeftIcon(this.dark ? { filter: "invert(1)" } : {}),
 						() => {
 							const index = this.tableDataSetup.indexOf(e)
 							if (index == 0)
@@ -211,7 +211,7 @@ export class CollectionView extends Component {
 							update()
 						}
 					}, e.title),
-					iconButton(arrowRightIcon({ filter: "invert(1)" }),
+					iconButton(arrowRightIcon(this.dark ? { filter: "invert(1)" } : {}),
 						() => {
 							const index = this.tableDataSetup.indexOf(e)
 							if (index == this.tableDataSetup - 1)
