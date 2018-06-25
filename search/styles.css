@@ -22,13 +22,7 @@ html{
 	font-size: 16px;
 }
 
-@media (max-device-width: 720px){
-	html{
-		font-size: 48px;
-	}
-}
-
-@media (orientation: portrait) {
+@media (max-width: 720px), (orientation: portrait) {
 	div.layout {
 		grid-template-rows: 2.5rem calc(100vh - 2.5rem) 0 !important;
 		grid-template-columns: 0 100vw !important;

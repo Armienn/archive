@@ -26,6 +26,7 @@ export class SearchBar extends Component {
 			".root": {
 				fontSize: "1em",
 				padding: "0.5em",
+				color: "black"
 			},
 			".root-row": {
 				width: "100%",
