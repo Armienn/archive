@@ -1,7 +1,6 @@
 import { SectionHeader } from "./section-header.js"
 import { SectionNavigation } from "./section-navigation.js"
 import { SectionSelection } from "./section-selection.js"
-import { SectionFooter } from "./section-footer.js"
 import { Component, l, update } from "../arf/arf.js"
 import { CollectionView } from "./collection-view.js"
 
@@ -27,8 +26,7 @@ export class SearchSite extends Component {
 					this.sections.selection.clearSelection()
 				else
 					this.sections.selection.setSelection(model)
-			}, () => this.sections.selection.selection),
-			footer: new SectionFooter(this)
+			}, () => this.sections.selection.selection)
 		}
 	}
 
@@ -37,8 +35,7 @@ export class SearchSite extends Component {
 			l("section.header", this.sections.header),
 			l("section.navigation", this.sections.navigation),
 			l("section.content", this.sections.content),
-			l("section.selection", this.sections.selection),
-			l("section.footer", this.sections.footer)
+			l("section.selection", this.sections.selection)
 		)
 	}
 
@@ -63,8 +60,7 @@ export class SearchSite extends Component {
 			".navigation": { gridArea: "navigation" },
 			".search": { gridArea: "search" },
 			".content": { gridArea: "content" },
-			".selection": { gridArea: "selection" },
-			".footer": { gridArea: "footer" }
+			".selection": { gridArea: "selection" }
 		}
 	}
 
