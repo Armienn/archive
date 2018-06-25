@@ -24,7 +24,7 @@ export class CollectionView extends Component {
 	renderThis() {
 		return l("div.root",
 			l("div.search-section", this.searchBar),
-			l("div.table-section", this.viewSettings(), this.getTable())
+			l("div.table-section", this.viewSettings(), this.mode == "table" ? this.getTable() : this.getGrid())
 		)
 	}
 
@@ -50,15 +50,20 @@ export class CollectionView extends Component {
 			},
 			"tbody tr": {
 				cursor: "pointer",
-				transition: "0.2s ease background"
+				transition: "0.3s ease"
 			},
 			"tbody tr:hover": {
 				backgroundColor: "rgba(130,130,130,0.5)",
-				transition: "0.2s ease background"
+				transition: "0.3s ease"
 			},
 			th: {
 				verticalAlign: "middle",
 				cursor: "pointer",
+				transition: "0.3s ease"
+			},
+			"thead th": {
+				backgroundColor: "rgba(130,130,130,0.3)",
+				fontWeight: "bold",
 				transition: "0.3s ease"
 			},
 			"thead th:hover": {
@@ -118,7 +123,53 @@ export class CollectionView extends Component {
 			"button.clickable.active": {
 				transition: "0.5s ease",
 				opacity: "1"
-			}
+			},
+			"div.grid": {
+				display: "flex",
+				flexWrap: "wrap",
+				width: "100%"
+			},
+			"div.card": {
+				fontSize: "0.8rem",
+				maxWidth: "11rem",
+				height: "fit-content",
+				margin: ".25rem",
+				overflow: "hidden",
+				cursor: "pointer",
+				backgroundColor: "rgba(130,130,130,0.2)",
+				border: "1px solid rgba(130,130,130,0.5)",
+				transition: "0.3s ease"
+			},
+			"div.card:hover": {
+				backgroundColor: "rgba(130,130,130,0.5)",
+				transition: "0.3s ease"
+			},
+			"span.card": {
+				whiteSpace: "nowrap",
+				maxWidth: "100%",
+				height: "2rem",
+				float: "left",
+				position: "relative"
+			},
+			"label.card": {
+				position: "absolute",
+				cursor: "pointer",
+				top: "0",
+				left: "0.4rem",
+				fontSize: "0.6rem",
+				lineHeight: "0.6rem",
+				color: "rgb(130,130,130)"
+			},
+			"span.card-entry": {
+				zIndex: "2",
+				display: "block",
+				maxWidth: "100%",
+				lineHeight: "2rem",
+				overflow: "hidden",
+				height: "2rem",
+				textOverflow: "ellipsis",
+				padding: "0 0.5rem"
+			},
 		}
 	}
 
@@ -212,6 +263,19 @@ export class CollectionView extends Component {
 		return this.tableDataSetup
 			.filter(e => e.shown)
 			.map(e => l("th", this.dataEntries[e.key].valueFrom(model)))
+	}
+
+	getGrid() {
+		return l("div.grid", ...this.engine.filteredCollection.map(e => this.cardFrom(e)))
+	}
+
+	cardFrom(model) {
+		return l("div.card", ...this.tableDataSetup
+			.filter(e => e.shown)
+			.map(e => l("span.card",
+				l("label.card", this.dataEntries[e.key].title),
+				l("span.card-entry", this.dataEntries[e.key].valueFrom(model)))
+			))
 	}
 
 	setDataEntriesFromExample(source) {

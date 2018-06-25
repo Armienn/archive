@@ -20,3 +20,15 @@ span.icon{
 html{
 	font-size: 16px;
 }
+
+::-webkit-scrollbar {
+	height: 0.5rem;
+}
+ 
+::-webkit-scrollbar-track {
+	background-color: transparent;
+}
+ 
+::-webkit-scrollbar-thumb {
+	background-color: #555;
+}
