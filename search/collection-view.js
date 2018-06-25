@@ -2,6 +2,7 @@ import { Component, l, update } from "../arf/arf.js"
 import { SearchEngine } from "./search-engine.js"
 import { SearchBar } from "./search-bar.js"
 import iconButton, { barsIcon, gridIcon, gearIcon, arrowRightIcon, arrowLeftIcon } from "./icons.js"
+import { capitalise } from "./util.js"
 
 export class CollectionView extends Component {
 	constructor() {
@@ -281,7 +282,7 @@ export class CollectionView extends Component {
 	setDataEntriesFromExample(source) {
 		this.dataEntries = {}
 		for (var key in source)
-			this.dataEntries[key] = new DataEntry(key, key)
+			this.dataEntries[key] = new DataEntry(capitalise(key), key)
 		this.tableDataSetupFrom(Object.keys(this.dataEntries))
 	}
 

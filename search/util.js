@@ -79,3 +79,8 @@ function isBasicType(thing) {
 export function compareFit(a, b, query) {
 	return 0
 }
+
+export function capitalise(text) {
+	if (text.length)
+		return text[0].toUpperCase() + text.substr(1)
+}

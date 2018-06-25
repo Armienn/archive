@@ -1,4 +1,4 @@
-import { fitsNested, compareFit, parseQuery } from "./util.js"
+import { fitsNested, compareFit, parseQuery, capitalise } from "./util.js"
 
 export class SearchEngine {
 	constructor() {
@@ -37,9 +37,9 @@ export class SearchEngine {
 		this.resetFilterModel()
 		for (var key in source) {
 			if (source[key] === true || source[key] === false)
-				this.filterModel[key] = new FilterType(key, key, ["true", "false"], true)
+				this.filterModel[key] = new FilterType(capitalise(key), key, ["true", "false"], true)
 			else
-				this.filterModel[key] = new FilterType(key, key)
+				this.filterModel[key] = new FilterType(capitalise(key), key)
 		}
 	}
 
@@ -50,7 +50,7 @@ export class SearchEngine {
 	setSortingModelFromExample(source) {
 		this.resetSortingModel()
 		for (var key in source)
-			this.sortingModel[key] = new SortingType(key, key)
+			this.sortingModel[key] = new SortingType(capitalise(key), key)
 	}
 
 	setModelFromCollection() {
