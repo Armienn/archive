@@ -22,7 +22,11 @@ export class SearchSite extends Component {
 			header: new SectionHeader(this),
 			navigation: new SectionNavigation(this),
 			selection: new SectionSelection(this),
-			content: new CollectionView((model) => { this.sections.selection.selection = model; update() }),
+			content: new CollectionView((model) => {
+				if (this.sections.selection.selection == model)
+					this.sections.selection.clearSelection()
+				this.sections.selection.setSelection(model)
+			}),
 			footer: new SectionFooter(this)
 		}
 	}

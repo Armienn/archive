@@ -5,7 +5,7 @@ import iconButton, { barsIcon, gridIcon, gearIcon, arrowRightIcon, arrowLeftIcon
 import { capitalise } from "./util.js"
 
 export class CollectionView extends Component {
-	constructor(select) {
+	constructor(select, selected) {
 		super()
 		this.engine = new SearchEngine()
 		this.searchBar = new SearchBar(this.engine)
@@ -15,6 +15,7 @@ export class CollectionView extends Component {
 		this.showSettings = false
 		this.dark = true
 		this.select = select || (() => { })
+		this.selected = selected || (() => false)
 	}
 
 	set collection(value) {
@@ -174,6 +175,10 @@ export class CollectionView extends Component {
 				textOverflow: "ellipsis",
 				padding: "0 0.5rem"
 			},
+			".selected": {
+				backgroundColor: "rgba(130,130,130,0.7)",
+				transition: "0.3s ease"
+			},
 		}
 	}
 
@@ -260,7 +265,7 @@ export class CollectionView extends Component {
 
 	getRows() {
 		return this.engine.filteredCollection
-			.map((e, i) => l("tr" + (i % 2 ? ".odd" : ".even"),
+			.map((e, i) => l("tr" + (this.selected(e) ? ".selected" : ""),
 				{ onclick: () => this.select(e) }, ...this.getRow(this.engine.filteredCollection[i])))
 	}
 
@@ -275,12 +280,13 @@ export class CollectionView extends Component {
 	}
 
 	cardFrom(model) {
-		return l("div.card", { onclick: () => this.select(model) }, ...this.tableDataSetup
-			.filter(e => e.shown)
-			.map(e => l("span.card",
-				l("label.card", this.dataEntries[e.key].title),
-				l("span.card-entry", this.dataEntries[e.key].valueFrom(model)))
-			))
+		return l("div.card" + (this.selected(model) ? ".selected" : ""),
+			{ onclick: () => this.select(model) }, ...this.tableDataSetup
+				.filter(e => e.shown)
+				.map(e => l("span.card",
+					l("label.card", this.dataEntries[e.key].title),
+					l("span.card-entry", this.dataEntries[e.key].valueFrom(model)))
+				))
 	}
 
 	setDataEntriesFromExample(source) {

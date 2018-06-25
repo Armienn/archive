@@ -108,10 +108,7 @@ export class SectionSelection extends Component {
 				}
 			},
 			grabIcon(this.dark ? { filter: "invert(1)" } : {}),
-			iconButton(crossIcon(this.dark ? { filter: "invert(1)" } : {}), () => {
-				this.selection = null
-				update()
-			}, ".close-button"))
+			iconButton(crossIcon(this.dark ? { filter: "invert(1)" } : {}), this.clearSelection, ".close-button"))
 	}
 
 	selectionInfo() {
@@ -120,6 +117,18 @@ export class SectionSelection extends Component {
 		if (!this.dataEntries.length)
 			this.setDataEntriesFromExample(this.selection)
 		return l("div", ...this.dataEntries.map(e => e(this.selection)))
+	}
+
+	setSelection(selection, dataEntries) {
+		this.selection = selection
+		if (dataEntries)
+			this.dataEntries = dataEntries
+		update()
+	}
+
+	clearSelection() {
+		this.selection = null
+		update()
 	}
 
 	setDataEntriesFromExample(source) {

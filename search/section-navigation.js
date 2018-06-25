@@ -14,6 +14,9 @@ export class SectionNavigation extends Component {
 		return l("nav",
 			l("ul",
 				...this.navigationEntries
+			),
+			l("footer",
+				l("a", { href: "https://github.com/Armienn" }, "Design and code © Armienn, 2017-2018.")
 			)
 		)
 	}
@@ -21,11 +24,21 @@ export class SectionNavigation extends Component {
 	static styleThis() {
 		return {
 			nav: {
+				position: "relative",
 				backgroundColor: SearchSite.styling.headerBackground,
 				color: SearchSite.styling.headerText,
 				height: "100%",
 				overflowY: "auto",
 				fontWeight: "bold"
+			},
+			footer: {
+				position: "absolute",
+				fontWeight: "normal",
+				top: "calc(100% - 3rem)",
+				padding: "0.5rem",
+				textAlign: "center",
+				fontSize: "0.8rem",
+				backgroundColor: SearchSite.styling.headerBackground,
 			}
 		}
 	}
