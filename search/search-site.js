@@ -25,8 +25,9 @@ export class SearchSite extends Component {
 			content: new CollectionView((model) => {
 				if (this.sections.selection.selection == model)
 					this.sections.selection.clearSelection()
-				this.sections.selection.setSelection(model)
-			}),
+				else
+					this.sections.selection.setSelection(model)
+			}, () => this.sections.selection.selection),
 			footer: new SectionFooter(this)
 		}
 	}

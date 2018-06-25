@@ -108,7 +108,7 @@ export class SectionSelection extends Component {
 				}
 			},
 			grabIcon(this.dark ? { filter: "invert(1)" } : {}),
-			iconButton(crossIcon(this.dark ? { filter: "invert(1)" } : {}), this.clearSelection, ".close-button"))
+			iconButton(crossIcon(this.dark ? { filter: "invert(1)" } : {}), () => this.clearSelection(), ".close-button"))
 	}
 
 	selectionInfo() {

@@ -175,7 +175,7 @@ export class CollectionView extends Component {
 				textOverflow: "ellipsis",
 				padding: "0 0.5rem"
 			},
-			".selected": {
+			".selected, div.card.selected": {
 				backgroundColor: "rgba(130,130,130,0.7)",
 				transition: "0.3s ease"
 			},
@@ -265,7 +265,7 @@ export class CollectionView extends Component {
 
 	getRows() {
 		return this.engine.filteredCollection
-			.map((e, i) => l("tr" + (this.selected(e) ? ".selected" : ""),
+			.map((e, i) => l("tr" + (this.selected() == e ? ".selected" : ""),
 				{ onclick: () => this.select(e) }, ...this.getRow(this.engine.filteredCollection[i])))
 	}
 
@@ -280,7 +280,7 @@ export class CollectionView extends Component {
 	}
 
 	cardFrom(model) {
-		return l("div.card" + (this.selected(model) ? ".selected" : ""),
+		return l("div.card" + (this.selected() == model ? ".selected" : ""),
 			{ onclick: () => this.select(model) }, ...this.tableDataSetup
 				.filter(e => e.shown)
 				.map(e => l("span.card",
