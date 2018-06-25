@@ -24,12 +24,28 @@ html{
 
 @media (max-width: 720px), (orientation: portrait) {
 	div.layout {
-		grid-template-rows: 2.5rem calc(100vh - 2.5rem) 0 !important;
+		grid-template-rows: 3rem calc(100vh - 3rem) 0 !important;
 		grid-template-columns: 0 100vw !important;
 		grid-template-areas:
 			"navigation header"
 			"navigation content"
 			"navigation selection" !important;
+	}
+
+	nav.mobile-nav{
+		position: absolute;
+		padding-top: 3rem;
+		width: 12rem;
+	}
+	
+	button.mobile-menu-button {
+		display: unset;
+	}
+}
+
+@media (min-width: 721px) and (orientation: landscape) {
+	button.mobile-menu-button {
+		display: none;
 	}
 }
 

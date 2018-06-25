@@ -1,5 +1,6 @@
 import { SearchSite } from "./search-site.js"
-import { Component, l } from "../arf/arf.js"
+import { Component, l, update } from "../arf/arf.js"
+import iconButton, { menuIcon } from "./icons.js"
 
 
 export class SectionHeader extends Component {
@@ -7,11 +8,14 @@ export class SectionHeader extends Component {
 		super()
 		this.main = main
 		this.header = "header"
+		this.dark = true
 	}
 
 	renderThis() {
 		return l("header",
-			l("h1", this.header)
+			l("h1", this.header),
+			iconButton(menuIcon(this.dark ? { filter: "invert(1)" } : {}),
+				() => { this.main.sections.navigation.shown = true; update() }, ".mobile-menu-button")
 		)
 	}
 
@@ -26,6 +30,18 @@ export class SectionHeader extends Component {
 			},
 			h1: {
 				fontSize: "1.5rem",
+			},
+			button: {
+				position: "absolute",
+				fontSize: "1.5rem",
+				left: "0",
+				top: "0",
+				opacity: "0.5",
+				transition: "0.3s ease"
+			},
+			"button:hover": {
+				opacity: "1",
+				transition: "0.3s ease"
 			}
 		}
 	}

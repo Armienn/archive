@@ -13,8 +13,6 @@ export class SearchSite extends Component {
 			mainBackground: "#222",
 			mainText: "#eee",
 			inactiveText: "rgba(0,0,0,0.4)",
-			oddBackground: "rgba(180, 180, 180, 0.2)",
-			evenBackground: "rgba(80, 80, 80, 0.2)",
 			hoverBackground: "rgba(255, 255, 255, 0.35)"
 		}
 		this.sections = {

@@ -1,23 +1,28 @@
 import { SearchSite } from "./search-site.js"
-import { Component, l } from "../arf/arf.js"
+import { Component, l, update } from "../arf/arf.js"
+import iconButton, { arrowLeftIcon } from "./icons.js"
 
 export class SectionNavigation extends Component {
 	constructor(main) {
 		super()
 		this.main = main
+		this.shown = false
+		this.dark = true
 		this.navigationEntries = [
-			new SingleLineNavGroup(new NavEntry("nav 1", undefined, () => false), new NavEntry("nav 2")),
-			new NavGroup("blubl", new NavEntry("nav 1"), new NavEntry("nav 2"))]
+			new NavGroup("blubl", new NavEntry("nav 1"), new NavEntry("nav 2")),
+			new SingleLineNavGroup(new NavEntry("nav 1", undefined, () => false), new NavEntry("nav 2"))]
 	}
 
 	renderThis() {
-		return l("nav",
+		return l("nav" + (this.shown ? ".mobile-nav" : ""),
 			l("ul",
 				...this.navigationEntries
 			),
 			l("footer",
 				l("a", { href: "https://github.com/Armienn" }, "Design and code © Armienn, 2017-2018.")
-			)
+			),
+			iconButton(arrowLeftIcon(this.dark ? { filter: "invert(1)" } : {}),
+				() => {this.shown = false; update()}, ".mobile-menu-button")
 		)
 	}
 
@@ -39,6 +44,18 @@ export class SectionNavigation extends Component {
 				textAlign: "center",
 				fontSize: "0.8rem",
 				backgroundColor: SearchSite.styling.headerBackground,
+			},
+			".mobile-menu-button": {
+				position: "absolute",
+				fontSize: "1.5rem",
+				left: "0",
+				top: "0",
+				opacity: "0.5",
+				transition: "0.3s ease"
+			},
+			".menu-button:hover": {
+				opacity: "1",
+				transition: "0.3s ease"
 			}
 		}
 	}
