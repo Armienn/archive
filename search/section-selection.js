@@ -1,14 +1,12 @@
 import { Component, l, update } from "../arf/arf.js"
 import { SearchSite } from "./search-site.js"
 import iconButton, { grabIcon, crossIcon } from "./icons.js"
-import { capitalise } from "./util.js"
 
 export class SectionSelection extends Component {
 	constructor(main) {
 		super()
 		this.main = main
-		this.selection = null
-		this.dataEntries = []
+		this.content = null
 		this.top = 0
 		this.dark = true
 		this.grabbing = false
@@ -45,12 +43,17 @@ export class SectionSelection extends Component {
 			l("div.position-box",
 				{
 					style: {
-						top: this.selection ? (this.top ? this.top + "px" : "-50vh") : "0"
+						top: this.content ? (this.top ? this.top + "px" : "-50vh") : "0"
 					}
 				},
-				l("div.selection-box" + (this.selection ? ".show" : ""),
+				l("div.selection-box" + (this.content ? ".show" : ""),
 					this.grabBar(),
-					this.selectionInfo()
+					l("div.content",
+						{
+							style: {
+								height: this.top ? -this.top - 24 + "px" : "calc(50vh - 24px)"
+							}
+						}, this.content ? this.content() : "")
 				)
 			)
 		)
@@ -70,7 +73,7 @@ export class SectionSelection extends Component {
 				position: "absolute",
 				top: "100%",
 				width: "100%",
-				minHeight: "100vh",
+				height: "100%",
 				backgroundColor: SearchSite.styling.mainBackground,
 				borderTop: "1px solid rgba(130,130,130,0.5)",
 				transition: "0.3s ease"
@@ -78,6 +81,12 @@ export class SectionSelection extends Component {
 			"div.selection-box.show": {
 				top: "0",
 				transition: "0.3s ease"
+			},
+			"div.content": {
+				position: "absolute",
+				overflowY: "auto",
+				width: "100%",
+				height: "100%",
 			},
 			"div.grab": {
 				width: "100%",
@@ -111,31 +120,10 @@ export class SectionSelection extends Component {
 			iconButton(crossIcon(this.dark ? { filter: "invert(1)" } : {}), () => this.clearSelection(), ".close-button"))
 	}
 
-	selectionInfo() {
-		if (!this.selection)
-			return ""
-		if (!this.dataEntries.length)
-			this.setDataEntriesFromExample(this.selection)
-		return l("div", ...this.dataEntries.map(e => e(this.selection)))
-	}
-
-	setSelection(selection, dataEntries) {
-		this.selection = selection
-		if (dataEntries)
-			this.dataEntries = dataEntries
-		update()
-	}
-
 	clearSelection() {
-		this.selection = null
+		this.content = null
+		if (this.clear)
+			this.clear()
 		update()
-	}
-
-	setDataEntriesFromExample(source) {
-		this.dataEntries = []
-		for (let key in source)
-			this.dataEntries.push((model) => {
-				return l("div", { style: { padding: "0.5rem" } }, capitalise(key) + ": " + model[key])
-			})
 	}
 }

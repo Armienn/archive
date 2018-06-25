@@ -3,6 +3,7 @@ import { SectionNavigation } from "./section-navigation.js"
 import { SectionSelection } from "./section-selection.js"
 import { Component, l, update } from "../arf/arf.js"
 import { CollectionView } from "./collection-view.js"
+import { capitalise } from "./util.js"
 
 export class SearchSite extends Component {
 	constructor() {
@@ -20,12 +21,13 @@ export class SearchSite extends Component {
 			navigation: new SectionNavigation(this),
 			selection: new SectionSelection(this),
 			content: new CollectionView((model) => {
-				if (this.sections.selection.selection == model)
-					this.sections.selection.clearSelection()
+				if (this.selection == model)
+					this.clearSelection()
 				else
-					this.sections.selection.setSelection(model)
-			}, () => this.sections.selection.selection)
+					this.setSelection(model)
+			}, () => this.selection)
 		}
+		this.selection = null
 	}
 
 	renderThis() {
@@ -60,6 +62,30 @@ export class SearchSite extends Component {
 			".content": { gridArea: "content" },
 			".selection": { gridArea: "selection" }
 		}
+	}
+
+	setSelection(selection) {
+		this.selection = selection
+		var dataEntries = this.getDataEntriesFromExample(selection)
+		this.sections.selection.content = ()=>{
+			return l("div", ...dataEntries.map(e => e(this.selection)))
+		}
+		update()
+	}
+
+	clearSelection() {
+		this.selection = null
+		this.sections.selection.content = null
+		update()
+	}
+
+	getDataEntriesFromExample(source) {
+		var dataEntries = []
+		for (let key in source)
+			dataEntries.push((model) => {
+				return l("div", { style: { padding: "0.5rem" } }, capitalise(key) + ": " + model[key])
+			})
+		return dataEntries
 	}
 
 	update() {
