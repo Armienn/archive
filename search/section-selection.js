@@ -1,15 +1,30 @@
 import { Component, l, update } from "../arf/arf.js"
 import { SearchSite } from "./search-site.js"
 import iconButton, { grabIcon, crossIcon } from "./icons.js"
+import { capitalise } from "./util.js"
 
 export class SectionSelection extends Component {
 	constructor(main) {
 		super()
 		this.main = main
-		this.selection = true
+		this.selection = null
+		this.dataEntries = []
 		this.top = 0
 		this.dark = true
 		this.grabbing = false
+		window.addEventListener("touchmove", (event) => {
+			if (this.grabbing) {
+				this.top = -(window.innerHeight - event.targetTouches[0].clientY) - 10
+				if (this.top < -window.innerHeight)
+					this.top = -window.innerHeight
+				if (this.top > -24)
+					this.top = -24
+				update()
+			}
+		})
+		window.addEventListener("touchend", () => {
+			this.grabbing = false
+		})
 		window.addEventListener("mousemove", (event) => {
 			if (this.grabbing) {
 				this.top = -(window.innerHeight - event.clientY) - 10
@@ -18,7 +33,6 @@ export class SectionSelection extends Component {
 				if (this.top > -24)
 					this.top = -24
 				update()
-				event.preventDefault()
 			}
 		})
 		window.addEventListener("mouseup", () => {
@@ -35,7 +49,7 @@ export class SectionSelection extends Component {
 					}
 				},
 				this.grabBar(),
-				l("p", "selection info")
+				this.selectionInfo()
 			)
 		)
 	}
@@ -50,19 +64,20 @@ export class SectionSelection extends Component {
 				width: "100%",
 				minHeight: "100vh",
 				backgroundColor: SearchSite.styling.mainBackground,
+				borderTop: "1px solid rgba(130,130,130,0.5)"
 			},
 			"div.grab": {
 				width: "100%",
 				height: "1.5rem",
 				cursor: "n-resize"
 			},
-			".close-button":{
+			".close-button": {
 				position: "absolute",
 				right: "0",
 				opacity: "0.5",
 				transition: "0.3s ease"
 			},
-			".close-button:hover":{
+			".close-button:hover": {
 				opacity: "1",
 				transition: "0.3s ease"
 			}
@@ -70,9 +85,12 @@ export class SectionSelection extends Component {
 	}
 
 	grabBar() {
-		return l("div.grab"
-			, {
+		return l("div.grab",
+			{
 				onmousedown: () => {
+					this.grabbing = true
+				},
+				ontouchstart: () => {
 					this.grabbing = true
 				}
 			},
@@ -81,5 +99,21 @@ export class SectionSelection extends Component {
 				this.selection = null
 				update()
 			}, ".close-button"))
+	}
+
+	selectionInfo() {
+		if (!this.selection)
+			return ""
+		if (!this.dataEntries.length)
+			this.setDataEntriesFromExample(this.selection)
+		return l("div", ...this.dataEntries.map(e => e(this.selection)))
+	}
+
+	setDataEntriesFromExample(source) {
+		this.dataEntries = []
+		for (let key in source)
+			this.dataEntries.push((model) => {
+				return l("div", { style: { padding: "0.5rem" } }, capitalise(key) + ": " + model[key])
+			})
 	}
 }
