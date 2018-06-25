@@ -22,18 +22,18 @@ export class SearchSite extends Component {
 			header: new SectionHeader(this),
 			navigation: new SectionNavigation(this),
 			selection: new SectionSelection(this),
-			content: new CollectionView(),
+			content: new CollectionView((model) => { this.sections.selection.selection = model; update() }),
 			footer: new SectionFooter(this)
 		}
 	}
 
 	renderThis() {
 		return l("div", {},
-			l("section.header",this.sections.header),
-			l("section.navigation",this.sections.navigation),
-			l("section.selection",this.sections.selection),
-			l("section.content",this.sections.content),
-			l("section.footer",this.sections.footer)
+			l("section.header", this.sections.header),
+			l("section.navigation", this.sections.navigation),
+			l("section.content", this.sections.content),
+			l("section.selection", this.sections.selection),
+			l("section.footer", this.sections.footer)
 		)
 	}
 
@@ -47,24 +47,24 @@ export class SearchSite extends Component {
 				height: "100vh",
 				overflow: "hidden",
 				display: "grid",
-				gridTemplateRows: "0 4rem calc(100vh - 7rem) 3rem",
+				gridTemplateRows: "4rem calc(100vh - 7rem) 3rem 0",
 				gridTemplateColumns: "12rem minmax(auto, calc(100vw - 12rem))",
 				gridTemplateAreas: `
-				"header selection"
 				"header content"
 				"navigation content"
-				"footer content"`
+				"footer content"
+				"footer selection"`
 			},
-			".header":{ gridArea:"header"	},
-			".navigation":{ gridArea:"navigation"	},
-			".search":{ gridArea:"search"	},
-			".selection":{ gridArea:"selection"	},
-			".content":{ gridArea:"content"	},
-			".footer":{ gridArea:"footer"	}
+			".header": { gridArea: "header" },
+			".navigation": { gridArea: "navigation" },
+			".search": { gridArea: "search" },
+			".content": { gridArea: "content" },
+			".selection": { gridArea: "selection" },
+			".footer": { gridArea: "footer" }
 		}
 	}
 
-	update(){
+	update() {
 		update()
 	}
 }

@@ -5,7 +5,7 @@ import iconButton, { barsIcon, gridIcon, gearIcon, arrowRightIcon, arrowLeftIcon
 import { capitalise } from "./util.js"
 
 export class CollectionView extends Component {
-	constructor() {
+	constructor(select) {
 		super()
 		this.engine = new SearchEngine()
 		this.searchBar = new SearchBar(this.engine)
@@ -14,6 +14,7 @@ export class CollectionView extends Component {
 		this.mode = "table"
 		this.showSettings = false
 		this.dark = true
+		this.select = select || (() => { })
 	}
 
 	set collection(value) {
@@ -257,7 +258,7 @@ export class CollectionView extends Component {
 
 	getRows() {
 		return this.engine.filteredCollection
-			.map((e, i) => l("tr" + (i % 2 ? ".odd" : ".even"), ...this.getRow(this.engine.filteredCollection[i])))
+			.map((e, i) => l("tr" + (i % 2 ? ".odd" : ".even"), { onclick: () => this.select(e) }, ...this.getRow(this.engine.filteredCollection[i])))
 	}
 
 	getRow(model) {
@@ -271,7 +272,7 @@ export class CollectionView extends Component {
 	}
 
 	cardFrom(model) {
-		return l("div.card", ...this.tableDataSetup
+		return l("div.card", { onclick: () => this.select(model) }, ...this.tableDataSetup
 			.filter(e => e.shown)
 			.map(e => l("span.card",
 				l("label.card", this.dataEntries[e.key].title),

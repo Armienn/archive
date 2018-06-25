@@ -104,3 +104,18 @@ export function gridIcon(style = {}) {
 	</svg>
 `})
 }
+
+export function grabIcon(style = {}) {
+	return l("span.icon", {
+		style: style, innerHTML: `
+	<svg width="1.5em" height="1.5em" viewBox="0 0 24 24">
+		<defs>
+			<path id="a" d="M0 0h24v24H0V0z"/>
+		</defs>
+		<clipPath id="b">
+			<use xlink:href="#a" overflow="visible"/>
+		</clipPath>
+		<path clip-path="url(#b)" d="M20 9H4v2h16V9zM4 15h16v-2H4v2z"/>
+	</svg>
+`})
+}
