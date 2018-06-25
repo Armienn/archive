@@ -70,6 +70,7 @@ export class SearchBar extends Component {
 				textAlignLast: "center"
 			},
 			"div.sort": {
+				zIndex: "1",
 				display: "flex",
 				width: "13em",
 				minWidth: "13em",

@@ -28,7 +28,7 @@ export class SearchSite extends Component {
 	}
 
 	renderThis() {
-		return l("div", {},
+		return l("div.layout", {},
 			l("section.header", this.sections.header),
 			l("section.navigation", this.sections.navigation),
 			l("section.content", this.sections.content),
@@ -39,7 +39,7 @@ export class SearchSite extends Component {
 
 	static styleThis() {
 		return {
-			div: {
+			"div.layout": {
 				backgroundColor: SearchSite.styling.mainBackground,
 				color: SearchSite.styling.mainText,
 				textAlign: "center",
@@ -47,13 +47,12 @@ export class SearchSite extends Component {
 				height: "100vh",
 				overflow: "hidden",
 				display: "grid",
-				gridTemplateRows: "4rem calc(100vh - 7rem) 3rem 0",
-				gridTemplateColumns: "12rem minmax(auto, calc(100vw - 12rem))",
+				gridTemplateRows: "4rem calc(100vh - 4rem) 0",
+				gridTemplateColumns: "12rem calc(100vw - 12rem)",
 				gridTemplateAreas: `
 				"header content"
 				"navigation content"
-				"footer content"
-				"footer selection"`
+				"navigation selection"`
 			},
 			".header": { gridArea: "header" },
 			".navigation": { gridArea: "navigation" },
