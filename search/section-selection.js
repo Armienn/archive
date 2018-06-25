@@ -42,14 +42,16 @@ export class SectionSelection extends Component {
 
 	renderThis() {
 		return l("section" + (this.dark ? ".light-text" : ".dark-text"),
-			l("div.selection-box",
+			l("div.position-box",
 				{
 					style: {
 						top: this.selection ? (this.top ? this.top + "px" : "-50vh") : "0"
 					}
 				},
-				this.grabBar(),
-				this.selectionInfo()
+				l("div.selection-box" + (this.selection ? ".show" : ""),
+					this.grabBar(),
+					this.selectionInfo()
+				)
 			)
 		)
 	}
@@ -59,12 +61,23 @@ export class SectionSelection extends Component {
 			section: {
 				position: "relative",
 			},
+			"div.position-box": {
+				position: "absolute",
+				width: "100%",
+				minHeight: "100vh"
+			},
 			"div.selection-box": {
 				position: "absolute",
+				top: "100%",
 				width: "100%",
 				minHeight: "100vh",
 				backgroundColor: SearchSite.styling.mainBackground,
-				borderTop: "1px solid rgba(130,130,130,0.5)"
+				borderTop: "1px solid rgba(130,130,130,0.5)",
+				transition: "0.3s ease"
+			},
+			"div.selection-box.show": {
+				top: "0",
+				transition: "0.3s ease"
 			},
 			"div.grab": {
 				width: "100%",

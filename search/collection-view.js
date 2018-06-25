@@ -27,7 +27,9 @@ export class CollectionView extends Component {
 	renderThis() {
 		return l("div.root" + (this.dark ? ".light-text" : ".dark-text"),
 			l("div.search-section", this.searchBar),
-			l("div.table-section", this.viewSettings(), this.mode == "table" ? this.getTable() : this.getGrid())
+			l("div.table-section",
+				this.viewSettings(),
+				this.mode == "table" ? this.getTable() : this.getGrid())
 		)
 	}
 
@@ -258,7 +260,8 @@ export class CollectionView extends Component {
 
 	getRows() {
 		return this.engine.filteredCollection
-			.map((e, i) => l("tr" + (i % 2 ? ".odd" : ".even"), { onclick: () => this.select(e) }, ...this.getRow(this.engine.filteredCollection[i])))
+			.map((e, i) => l("tr" + (i % 2 ? ".odd" : ".even"),
+				{ onclick: () => this.select(e) }, ...this.getRow(this.engine.filteredCollection[i])))
 	}
 
 	getRow(model) {
