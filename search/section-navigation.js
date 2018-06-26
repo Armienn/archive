@@ -8,21 +8,19 @@ export class SectionNavigation extends Component {
 		this.main = main
 		this.shown = false
 		this.dark = true
-		this.navigationEntries = [
-			new NavGroup("blubl", new NavEntry("nav 1"), new NavEntry("nav 2")),
-			new SingleLineNavGroup(new NavEntry("nav 1", undefined, () => false), new NavEntry("nav 2"))]
+		this.navigationEntries = () => [""]
 	}
 
 	renderThis() {
 		return l("nav" + (this.shown ? ".mobile-nav" : ""),
 			l("ul",
-				...this.navigationEntries
+				...this.navigationEntries()
 			),
 			l("footer",
 				l("a", { href: "https://github.com/Armienn" }, "Design and code © Armienn, 2017-2018.")
 			),
 			iconButton(arrowLeftIcon(this.dark ? { filter: "invert(1)" } : {}),
-				() => {this.shown = false; update()}, ".mobile-menu-button")
+				() => { this.shown = false; update() }, ".mobile-menu-button")
 		)
 	}
 

@@ -146,6 +146,7 @@ export class SearchBar extends Component {
 				padding: "0.5em",
 				margin: "0 0.25em",
 				transition: "0.5s ease",
+				color: "white",
 				cursor: "pointer",
 				backgroundColor: "rgba(0,0,0,0.3)"
 			},
@@ -215,10 +216,10 @@ export class SearchBar extends Component {
 			}, ".remove"),
 			l("select.filter.clickable", {
 				oninput: (event) => {
-					if (this.engine.currentFilterType().restrictToOptions)
+					if (this.engine.currentFilterType().restricted)
 						this.engine.filter.query = ""
 					this.engine.filter.type = event.target.value
-					if (this.engine.currentFilterType().restrictToOptions)
+					if (this.engine.currentFilterType().restricted)
 						this.engine.filter.query = ""
 					this.engine.updateFilteredCollection()
 					update()
@@ -241,7 +242,8 @@ export class SearchBar extends Component {
 		const parsedQuery = this.engine.currentParsedQuery()
 		if (current.restricted) {
 			return [l("div.options", ...current.options.map(e => {
-				const currentIndex = parsedQuery.findIndex(q => q.query == e)
+				const elower = e.toLowerCase()
+				const currentIndex = parsedQuery.findIndex(q => q.query == elower)
 				return l("button.search-input.clickable" + (currentIndex > -1 ? ".toggled" : ""), {
 					onclick: () => {
 						if (currentIndex > -1)

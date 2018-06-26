@@ -23,7 +23,7 @@ export class SearchSite extends Component {
 				if (this.selection == model)
 					this.clearSelection()
 				else
-					this.selectModel(model, setup)
+					this.showModel(model, setup)
 			}, () => this.selection)
 		}
 		this.selection = null
@@ -63,9 +63,15 @@ export class SearchSite extends Component {
 		}
 	}
 
-	selectModel(model, collectionSetup) {
+	showModel(model, collectionSetup) {
 		this.selection = model
 		this.sections.selection.content = () => collectionSetup.view(model)
+		update()
+	}
+
+	show(content) {
+		this.selection = null
+		this.sections.selection.content = content
 		update()
 	}
 

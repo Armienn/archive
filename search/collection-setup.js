@@ -2,7 +2,7 @@ import { capitalise } from "./util.js"
 import { l } from "../arf/arf.js"
 
 export class CollectionSetup {
-	constructor() {
+	constructor(source) {
 		// { [key]: string | VNode }
 		this.titles = {}
 		// { [key]: (model) => string | VNode }
@@ -16,6 +16,9 @@ export class CollectionSetup {
 		// { compact: boolean, entries: { key: string, shown: boolean }[] }
 		this.tableSetup = { compact: false, entries: [] }
 		this.gridSetup = { compact: false, entries: [] }
+		for (var i in source) {
+			this[i] = source[i]
+		}
 	}
 
 	title(key) {
@@ -61,10 +64,10 @@ export class CollectionSetup {
 				this.gridSetup.entries.push({ key: key, shown: false })
 	}
 
-	static fromExample(source) {
+	static fromExample(source, autoCapitalise = true) {
 		const setup = new CollectionSetup()
 		for (let key in source) {
-			setup.titles[key] = capitalise(key)
+			setup.titles[key] = autoCapitalise ? capitalise(key) : key
 			setup.entryModel[key] = (m) => "" + m[key]
 			setup.filterModel[key] = {}
 			setup.sortingModel[key] = {}

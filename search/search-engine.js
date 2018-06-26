@@ -51,7 +51,7 @@ export class SearchEngine {
 
 	addCurrentFilter() {
 		this.filters.push(this.filter)
-		this.filter = { type: "", query: "" }
+		this.filter = { type: "_anything_", query: "" }
 	}
 
 	updateFilteredCollection() {

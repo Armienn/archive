@@ -2,13 +2,14 @@ import { Component, l, update } from "../arf/arf.js"
 import { SearchEngine } from "./search-engine.js"
 import { SearchBar } from "./search-bar.js"
 import iconButton, { barsIcon, gridIcon, gearIcon, arrowRightIcon, arrowLeftIcon } from "./icons.js"
+import { CollectionSetup } from "./collection-setup.js"
 
 export class CollectionView extends Component {
 	constructor(select, selected) {
 		super()
 		this.engine = new SearchEngine()
 		this.searchBar = new SearchBar(this.engine)
-		this.collectionSetup = {}
+		this.collectionSetup = new CollectionSetup()
 		this.mode = "table"
 		this.showSettings = false
 		this.dark = true

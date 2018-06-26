@@ -74,6 +74,9 @@ a {
 input, select, button {
 	padding: 0.2em;
 	height: 1.5rem;
+}
+
+button {
 	color: inherit;
 }
 

@@ -1,74 +1,130 @@
 import { SearchSite } from "../search/search-site.js"
-import { update, setRenderFunction } from "../arf/arf.js"
+import { update, setRenderFunction, l, Component } from "../arf/arf.js"
 import { NavGroup, NavEntry } from "../search/section-navigation.js"
-import { FilterType, SortingType } from "../search/search-engine.js"
-import { DataEntry } from "../search/collection-view.js"
+import { CollectionSetup } from "../search/collection-setup.js"
 
 window.onload = function () {
 	var site = new SearchSite()
 	window.site = site
-	const pokemons = [
-		{"id":38,"name":"Ninetales","form":"Alolan","classification":"Fox Pokémon","abilities":["Snow Cloak",null,"Snow Warning"],"ratio":"1:3"},
-		{"id":39,"name":"Jigglypuff","form":"Base","classification":"Balloon Pokémon","abilities":["Cute Charm","Competitive","Friend Guard"],"ratio":"1:3"},
-	]
-	
-	site.sections.collection.collection = pokemons
-	site.sections.collection.setupFromCollection()
-
-	site.sections.navigation.navigationEntries.push(
-		new NavGroup("Test functions",
-			new NavEntry("Test auto", () => {
-				site.sections.collection.collection = pokemons
-				site.sections.collection.setupFromCollection()
-				update()
-			}),
-			new NavEntry("Test manual", () => {
-				site.sections.collection.collection = pokemons
-				const filters = {
-					id: new FilterType("Id", "id"),
-					name: new FilterType("Name", "name"),
-					form: new FilterType("Form", "form", ["base", "alolan", "mega"], true),
-					ability: new FilterType("Ability", "abilities"),
-					ratio: new FilterType("Gender Ratio", "ratio", ["1:1", "3:1", "1:3"], true)
-				}
-				const sorting = {
-					id: new SortingType("Id", "id"),
-					name: new SortingType("Name", "name"),
-					form: new SortingType("Form", "form"),
-					ability: new SortingType("Ability", "abilities", (a, b) => a.abilities[0] > b.abilities[0] ? 1 : a.abilities[0] < b.abilities[0] ? -1 : 0),
-					ratio: new SortingType("Gender Ratio", "ratio")
-				}
-				const dataEntries = {
-					id: new DataEntry("Id", "id"),
-					name: new DataEntry("Name", "name"),
-					form: new DataEntry("Form", "form"),
-					classification: new DataEntry("Classification", "classification"),
-					ability: new DataEntry("Ability", "abilities"),
-					ratio: new DataEntry("Gender Ratio", "ratio")
-				}
-				const defaultShown = ["id", "name", "classification", "ability", "ratio"]
-				site.sections.collection.setup(filters, sorting, dataEntries, defaultShown)
-
-				update()
-			})
-		)
-	)
+	var manager = new CollectionManager(site)
+	site.sections.navigation.navigationEntries = () => manager.navThing()
 	setRenderFunction(() => site.render())
 	update()
 }
 
-class CollectionManager{
-	constructor(){
-		this.collections = this.loadCollections()
+class CollectionManager {
+	constructor(site) {
+		this.site = site
+		this.editor = new ModelTypeEditor(this)
+		this.load()
 	}
-	
-	loadCollections() {
+
+	load() {
 		if (!(localStorage && localStorage.generalCollections))
-			return {}
-		return JSON.parse(localStorage.generalCollections)
+			return this.collections = []
+		this.collections = JSON.parse(localStorage.generalCollections)
+		for (var col of this.collections)
+			col.setup = new CollectionSetup(col.setup)
+	}
+
+	save() {
+		if (!localStorage)
+			return
+		localStorage.generalCollections = JSON.stringify(this.collections)
+	}
+
+	navThing() {
+		return [
+			new NavGroup("Collections",
+				...this.collections.map(e => {
+					return new NavEntry(e.title, () => {
+						this.site.setCollection(e.collection, e.setup)
+						update()
+					}, () => this.site.sections.collection.engine.collection == e.collection)
+				})
+			),
+			new NavGroup("Actions",
+				new NavEntry("New collection", () => {
+					this.editor.model = []
+					this.site.show(() => {
+						return this.editor
+					})
+					update()
+				})
+			)
+		]
 	}
 }
 
-[
-	{title: "", options: [], restricted: false}
-]
+class ModelTypeEditor extends Component {
+	constructor(manager) {
+		super()
+		this.manager = manager
+		this.model = []
+		this.collectionName = ""
+	}
+
+	renderThis() {
+		return l("div",
+			l("div",
+				l("input", {
+					placeholder: "Collection name",
+					oninput: (event) => { this.collectionName = event.target.value; update() },
+					value: this.collectionName
+				})
+			),
+			...this.inputs(),
+			l("div",
+				l("button", {
+					onclick: () => { this.model.push({ key: "", options: [], restricted: false }); update() }
+				}, "New field"),
+				l("button", {
+					onclick: () => {
+						var mod = {}
+						for (let thing of this.model)
+							mod[thing.key] = "bla"
+						const col = {
+							setup: CollectionSetup.fromExample(mod),
+							title: this.collectionName,
+							collection: []
+						}
+						for (let thing of this.model)
+							col.setup.filterModel[thing.key] = thing
+						this.manager.collections.push(col)
+						this.manager.save()
+						this.manager.site.setCollection(col.collection, col.setup)
+						update()
+					}
+				}, "Create collection")
+			)
+		)
+	}
+
+	static styleThis() {
+		return {
+			"input, button": {
+				margin: "0.25rem"
+			}
+		}
+	}
+
+	inputs() {
+		return this.model.map((e) => {
+			return l("div",
+				l("input", {
+					placeholder: "title",
+					oninput: (event) => { e.key = event.target.value; update() },
+					value: e.key
+				}),
+				l("input", {
+					placeholder: "options",
+					oninput: (event) => { e.options = event.target.value.split("|"); update() },
+					value: e.options.join("|")
+				}),
+				l("button", {
+					onclick: () => { e.restricted = !e.restricted; update() },
+				}, e.restricted ? "Restricted" : "Unrestricted")
+			)
+		})
+	}
+}
