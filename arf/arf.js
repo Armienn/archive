@@ -5,6 +5,8 @@ var vtree
 var rootNode
 var render
 export function update() {
+	if(!render)
+		return console.error("render has not yet been set")
 	currentRender = Date.now()
 	if (!vtree) {
 		vtree = render()

@@ -1,0 +1,58 @@
+import { capitalise } from "./util.js"
+import { l } from "../arf/arf.js"
+
+export class CollectionSetup {
+	constructor() {
+		// { [key]: string | VNode }
+		this.titles = {}
+		// { [key]: (model) => string | VNode }
+		this.entryModel = {}
+		// { [key]: { options?: string[], restricted?: boolean, filter?: (model, query) => boolean } }
+		this.filterModel = {}
+		// { [key]: { compare: (a,b) => number } }
+		this.sortingModel = {}
+		// (model) => string | VNode
+		this.view = this.defaultView()
+		// { compact: boolean, entries: { key: string, shown: boolean }[] }
+		this.tableSetup = { compact: false, entries: [] }
+		this.gridSetup  = { compact: false, entries: [] }
+	}
+
+	title(key) {
+		return this.titles[key] || key
+	}
+
+	entry(key, model) {
+		if (this.entryModel[key])
+			return this.entryModel[key](model)
+		return "" + model[key]
+	}
+
+	entries(mode) {
+		if (mode == "table")
+			return this.tableSetup.entries
+		return this.gridSetup.entries
+	}
+
+	static fromExample(source) {
+		const setup = new CollectionSetup()
+		for (let key in source) {
+			setup.titles[key] = capitalise(key)
+			setup.entryModel[key] = (m) => "" + m[key]
+			setup.filterModel[key] = {}
+			setup.sortingModel[key] = {}
+			setup.tableSetup.entries.push({ key: key, shown: true })
+			setup.gridSetup.entries.push({ key: key, shown: true })
+		}
+		return setup
+	}
+
+	defaultView() {
+		return (model) => {
+			var entries = []
+			for (var key in this.entryModel)
+				entries.push(l("span", this.titles[key] || key, ": ", this.entryModel[key](model)))
+			return l("div", ...entries)
+		}
+	}
+}

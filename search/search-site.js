@@ -3,7 +3,6 @@ import { SectionNavigation } from "./section-navigation.js"
 import { SectionSelection } from "./section-selection.js"
 import { Component, l, update } from "../arf/arf.js"
 import { CollectionView } from "./collection-view.js"
-import { capitalise } from "./util.js"
 
 export class SearchSite extends Component {
 	constructor() {
@@ -20,21 +19,22 @@ export class SearchSite extends Component {
 			header: new SectionHeader(this),
 			navigation: new SectionNavigation(this),
 			selection: new SectionSelection(this),
-			content: new CollectionView((model) => {
+			collection: new CollectionView((model, setup) => {
 				if (this.selection == model)
 					this.clearSelection()
 				else
-					this.setSelection(model)
+					this.selectModel(model, setup)
 			}, () => this.selection)
 		}
 		this.selection = null
+		this.collectionSetups = {}
 	}
 
 	renderThis() {
 		return l("div.layout", {},
 			l("section.header", this.sections.header),
 			l("section.navigation", this.sections.navigation),
-			l("section.content", this.sections.content),
+			l("section.collection", this.sections.collection),
 			l("section.selection", this.sections.selection)
 		)
 	}
@@ -52,24 +52,20 @@ export class SearchSite extends Component {
 				gridTemplateRows: "4rem calc(100vh - 4rem) 0",
 				gridTemplateColumns: "12rem calc(100vw - 12rem)",
 				gridTemplateAreas: `
-				"header content"
-				"navigation content"
+				"header collection"
+				"navigation collection"
 				"navigation selection"`
 			},
 			".header": { gridArea: "header" },
 			".navigation": { gridArea: "navigation" },
-			".search": { gridArea: "search" },
-			".content": { gridArea: "content" },
+			".collection": { gridArea: "collection" },
 			".selection": { gridArea: "selection" }
 		}
 	}
 
-	setSelection(selection) {
-		this.selection = selection
-		var dataEntries = this.getDataEntriesFromExample(selection)
-		this.sections.selection.content = ()=>{
-			return l("div", ...dataEntries.map(e => e(this.selection)))
-		}
+	selectModel(model, collectionSetup) {
+		this.selection = model
+		this.sections.selection.content = () => collectionSetup.view(model)
 		update()
 	}
 
@@ -79,13 +75,17 @@ export class SearchSite extends Component {
 		update()
 	}
 
-	getDataEntriesFromExample(source) {
-		var dataEntries = []
-		for (let key in source)
-			dataEntries.push((model) => {
-				return l("div", { style: { padding: "0.5rem" } }, capitalise(key) + ": " + model[key])
-			})
-		return dataEntries
+	addCollectionSetup(key, setup) {
+		this.collectionSetups[key] = setup
+	}
+
+	setCollection(collection, setup) {
+		this.sections.collection.collection = collection
+		this.sections.collection.setCollectionSetup(
+			typeof setup == "string" ?
+				this.collectionSetups[setup] :
+				setup)
+		update()
 	}
 
 	update() {

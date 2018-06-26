@@ -68,15 +68,78 @@ a {
 	text-decoration: none;
 	color: unset;
 }
-@media (max-device-width: 720px)
-    and (orientation: landscape){
-    html{
-        font-size: 20px;
-    }
+
+/****************************************/
+
+input, select, button {
+	padding: 0.2em;
+	height: 1.5rem;
+	color: inherit;
 }
-@media (max-device-width: 720px)
-    and (orientation: portrait){
-    html{
-        font-size: 28px;
-    }
+
+button {
+	background-color: transparent;
+}
+
+button.icon{
+	padding: 0.25em;
+	height: 2em;
+}
+
+span.icon{
+	position: relative;
+	height: 0;
+}
+
+html{
+	font-size: 16px;
+}
+
+@media (max-width: 720px), (orientation: portrait) {
+	div.layout {
+		grid-template-rows: 3rem calc(100vh - 3rem) 0 !important;
+		grid-template-columns: 0 100vw !important;
+		grid-template-areas:
+			"navigation header"
+			"navigation content"
+			"navigation selection" !important;
+	}
+
+	nav.mobile-nav{
+		position: absolute;
+		padding-top: 3rem;
+		width: 12rem;
+	}
+	
+	button.mobile-menu-button {
+		display: unset;
+	}
+}
+
+@media (min-width: 721px) and (orientation: landscape) {
+	button.mobile-menu-button {
+		display: none;
+	}
+}
+
+.dark-text{
+	color: black;
+}
+.dark-symbol{
+	filter: invert(1)
+}
+.light-text{
+	color: white;
+}
+
+::-webkit-scrollbar {
+	height: 0.5rem;
+}
+ 
+::-webkit-scrollbar-track {
+	background-color: transparent;
+}
+ 
+::-webkit-scrollbar-thumb {
+	background-color: #555;
 }

@@ -1,4 +1,4 @@
-import { fitsNested, compareFit, parseQuery, capitalise } from "./util.js"
+import { fitsNested, compareFit, parseQuery } from "./util.js"
 
 export class SearchEngine {
 	constructor() {
@@ -22,42 +22,31 @@ export class SearchEngine {
 	}
 
 	resetFilter() {
-		this.filter = { type: "", query: "" }
-	}
-
-	resetSorting() {
-		this.sorting = "bestfit"
+		this.filter = { type: "_anything_", query: "" }
 	}
 
 	resetFilterModel() {
-		this.filterModel = { "": new FilterType("Anything", "", [], false, fitsNested) }
+		this.filterModel = { "_anything_": { filter: fitsNested } }
 	}
 
-	setFilterModelFromExample(source) {
+	setFilterModel(filterModel) {
 		this.resetFilterModel()
-		for (var key in source) {
-			if (source[key] === true || source[key] === false)
-				this.filterModel[key] = new FilterType(capitalise(key), key, ["true", "false"], true)
-			else
-				this.filterModel[key] = new FilterType(capitalise(key), key)
-		}
+		for (let key in filterModel)
+			this.filterModel[key] = filterModel[key]
+	}
+
+	resetSorting() {
+		this.sorting = "_bestfit_"
 	}
 
 	resetSortingModel() {
-		this.sortingModel = { "bestfit": new SortingType("Best Fit", "", compareFit), "": new SortingType("Original", "original") }
+		this.sortingModel = { "_bestfit_": { compare: compareFit } }
 	}
 
-	setSortingModelFromExample(source) {
+	setSortingModel(sortingModel) {
 		this.resetSortingModel()
-		for (var key in source)
-			this.sortingModel[key] = new SortingType(capitalise(key), key)
-	}
-
-	setModelFromCollection() {
-		if (this.collection.length == 0)
-			return
-		this.setFilterModelFromExample(this.collection[0])
-		this.setSortingModelFromExample(this.collection[0])
+		for (let key in sortingModel)
+			this.sortingModel[key] = sortingModel[key]
 	}
 
 	addCurrentFilter() {
@@ -77,19 +66,35 @@ export class SearchEngine {
 			list = this.applyFilter(list, filter)
 		list = this.applyFilter(list, this.filter)
 		if (this.sorting)
-			list.sort(this.sortingModel[this.sorting].compare)
+			list.sort(this.compareMethod())
 		if (this.reverseSort)
 			list.reverse()
 		return list
 	}
 
-	applyFilter(list, filter) {
-		var filterType = this.filterModel[filter.type] || this.filterModel[""]
-		return list.filter(e => filterType.fits(e, filter.query))
+	compareMethod() {
+		if (this.sortingModel[this.sorting])
+			return this.sortingModel[this.sorting].compare || this.defaultCompare(this.sorting)
+		return this.defaultCompare(this.sorting)
 	}
 
-	filterTitle(filter) {
-		return (this.filterModel[filter.type] || this.filterModel[""]).title
+	applyFilter(list, filter) {
+		let filterFunction = this.defaultFilter(filter.type)
+		if (this.filterModel[filter.type])
+			filterFunction = this.filterModel[filter.type].filter || this.defaultFilter(filter.type)
+		return list.filter(e => filterFunction(e, filter.query))
+	}
+
+	defaultCompare(key) {
+		return (a, b) => {
+			return a[key] > b[key] ? 1 : a[key] < b[key] ? -1 : 0
+		}
+	}
+
+	defaultFilter(key) {
+		return (m, q) => {
+			return fitsNested(m[key], q)
+		}
 	}
 
 	currentFilterType() {
@@ -102,23 +107,5 @@ export class SearchEngine {
 
 	setCurrentQueryFrom(parsedQuery) {
 		this.filter.query = parsedQuery.map(e => e.type + e.query).join("|")
-	}
-}
-
-export class FilterType {
-	constructor(title, key, options = [], restrictToOptions = false, fits = null) {
-		this.title = title
-		this.key = key
-		this.options = options
-		this.restrictToOptions = restrictToOptions
-		this.fits = fits || ((m, q) => fitsNested(m[this.key], q))
-	}
-}
-
-export class SortingType {
-	constructor(title, key, compare = null) {
-		this.title = title
-		this.key = key
-		this.compare = compare || ((a, b) => a[key] > b[key] ? 1 : a[key] < b[key] ? -1 : 0)
 	}
 }

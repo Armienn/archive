@@ -5,6 +5,7 @@ export class SearchBar extends Component {
 	constructor(engine) {
 		super()
 		this.engine = engine
+		this.collectionSetup = {}
 		this.showSorting = false
 	}
 
@@ -176,10 +177,22 @@ export class SearchBar extends Component {
 						update()
 					}
 				},
-				l("span", this.engine.filterTitle(e)),
+				l("span", this.title(e.type)),
 				e.query
 			)
 		})
+	}
+
+	title(key) {
+		if (key === "_anything_")
+			return "Anything"
+		if (key === "_bestfit_")
+			return "Best Fit"
+		if (key === "")
+			return "Original"
+		if (this.collectionSetup.titles && this.collectionSetup.titles[key])
+			return this.collectionSetup.titles[key]
+		return key
 	}
 
 	searchThing() {
@@ -207,10 +220,19 @@ export class SearchBar extends Component {
 		)
 	}
 
+	filterOptions() {
+		const types = []
+		for (let key in this.engine.filterModel) {
+			const props = key == this.engine.filter.type ? { value: key, selected: true } : { value: key }
+			types.push(l("option", props, this.title(key)))
+		}
+		return types
+	}
+
 	searchInput() {
 		const current = this.engine.currentFilterType()
 		const parsedQuery = this.engine.currentParsedQuery()
-		if (current.restrictToOptions) {
+		if (current.restricted) {
 			return current.options.map(e => {
 				const currentIndex = parsedQuery.findIndex(q => q.query == e)
 				return l("button.search-input.clickable" + (currentIndex > -1 ? ".toggled" : ""), {
@@ -236,17 +258,8 @@ export class SearchBar extends Component {
 				attributes: { list: "search-input-datalist" },
 				value: this.engine.filter.query
 			}),
-			l("datalist#search-input-datalist", ...current.options.map(e => l("option", e)))]
+			l("datalist#search-input-datalist", ...(current.options || []).map(e => l("option", e)))]
 		}
-	}
-
-	filterOptions() {
-		const types = []
-		for (let key in this.engine.filterModel) {
-			const props = key == this.engine.filter.type ? { value: key, selected: true } : { value: key }
-			types.push(l("option", props, this.engine.filterModel[key].title))
-		}
-		return types
 	}
 
 	sortThing() {
@@ -277,7 +290,7 @@ export class SearchBar extends Component {
 		const types = []
 		for (let key in this.engine.sortingModel) {
 			const props = key == this.engine.sorting ? { value: key, selected: true } : { value: key }
-			types.push(l("option", props, this.engine.sortingModel[key].title))
+			types.push(l("option", props, this.title(key)))
 		}
 		return types
 	}
@@ -290,5 +303,11 @@ export class SearchBar extends Component {
 			},
 			".add.clickable",
 			{ disabled: !this.engine.filter.query })
+	}
+
+	setCollectionSetup(setup){
+		this.collectionSetup = setup
+		this.engine.setFilterModel(setup.filterModel)
+		this.engine.setSortingModel(setup.sortingModel)
 	}
 }

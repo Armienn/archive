@@ -2,15 +2,13 @@ import { Component, l, update } from "../arf/arf.js"
 import { SearchEngine } from "./search-engine.js"
 import { SearchBar } from "./search-bar.js"
 import iconButton, { barsIcon, gridIcon, gearIcon, arrowRightIcon, arrowLeftIcon } from "./icons.js"
-import { capitalise } from "./util.js"
 
 export class CollectionView extends Component {
 	constructor(select, selected) {
 		super()
 		this.engine = new SearchEngine()
 		this.searchBar = new SearchBar(this.engine)
-		this.dataEntries = {}
-		this.tableDataSetup = []
+		this.collectionSetup = {}
 		this.mode = "table"
 		this.showSettings = false
 		this.dark = true
@@ -201,17 +199,16 @@ export class CollectionView extends Component {
 	}
 
 	entryEditor() {
-		const currentSetup = this.mode == "table" ? this.tableDataSetup : this.tableDataSetup
 		return l("div.entry-editor" + (this.showSettings ? "" : ".hidden"),
-			...currentSetup.map(e => {
+			...this.collectionSetup.entries(this.mode).map(e => {
 				return l("div.data-entry",
 					iconButton(arrowLeftIcon(this.dark ? { filter: "invert(1)" } : {}),
 						() => {
-							const index = this.tableDataSetup.indexOf(e)
+							const index = this.collectionSetup.entries(this.mode).indexOf(e)
 							if (index == 0)
 								return
-							this.tableDataSetup.splice(index, 1)
-							this.tableDataSetup.splice(index - 1, 0, e)
+							this.collectionSetup.entries(this.mode).splice(index, 1)
+							this.collectionSetup.entries(this.mode).splice(index - 1, 0, e)
 							update()
 						}, ".clickable"),
 					l("button.label.clickable" + (e.shown ? ".active" : ""), {
@@ -219,14 +216,14 @@ export class CollectionView extends Component {
 							e.shown = !e.shown
 							update()
 						}
-					}, e.title),
+					}, this.collectionSetup.title(e.key)),
 					iconButton(arrowRightIcon(this.dark ? { filter: "invert(1)" } : {}),
 						() => {
-							const index = this.tableDataSetup.indexOf(e)
-							if (index == this.tableDataSetup - 1)
+							const index = this.collectionSetup.entries(this.mode).indexOf(e)
+							if (index == this.collectionSetup.entries(this.mode).length - 1)
 								return
-							this.tableDataSetup.splice(index, 1)
-							this.tableDataSetup.splice(index + 1, 0, e)
+							this.collectionSetup.entries(this.mode).splice(index, 1)
+							this.collectionSetup.entries(this.mode).splice(index + 1, 0, e)
 							update()
 						}, ".clickable"))
 			})
@@ -247,7 +244,7 @@ export class CollectionView extends Component {
 	}
 
 	getHeader() {
-		return this.tableDataSetup
+		return this.collectionSetup.entries(this.mode)
 			.filter(e => e.shown)
 			.map(e => l("th", {
 				onclick: () => {
@@ -260,19 +257,19 @@ export class CollectionView extends Component {
 					update()
 				},
 				style: { cursor: this.engine.sortingModel[e.key] ? "" : "default" }
-			}, this.dataEntries[e.key].title))
+			}, this.collectionSetup.title(e.key)))
 	}
 
 	getRows() {
 		return this.engine.filteredCollection
 			.map((e, i) => l("tr" + (this.selected() == e ? ".selected" : ""),
-				{ onclick: () => this.select(e) }, ...this.getRow(this.engine.filteredCollection[i])))
+				{ onclick: () => this.select(e, this.collectionSetup) }, ...this.getRow(this.engine.filteredCollection[i])))
 	}
 
 	getRow(model) {
-		return this.tableDataSetup
+		return this.collectionSetup.entries(this.mode)
 			.filter(e => e.shown)
-			.map(e => l("th", this.dataEntries[e.key].valueFrom(model)))
+			.map(e => l("th", this.collectionSetup.entry(e.key, model)))
 	}
 
 	getGrid() {
@@ -281,54 +278,16 @@ export class CollectionView extends Component {
 
 	cardFrom(model) {
 		return l("div.card" + (this.selected() == model ? ".selected" : ""),
-			{ onclick: () => this.select(model) }, ...this.tableDataSetup
+			{ onclick: () => this.select(model, this.collectionSetup) }, ...this.collectionSetup.entries(this.mode)
 				.filter(e => e.shown)
 				.map(e => l("span.card",
-					l("label.card", this.dataEntries[e.key].title),
-					l("span.card-entry", this.dataEntries[e.key].valueFrom(model)))
+					l("label.card", this.collectionSetup.title(e.key)),
+					l("span.card-entry", this.collectionSetup.entry(e.key, model)))
 				))
 	}
 
-	setDataEntriesFromExample(source) {
-		this.dataEntries = {}
-		for (var key in source)
-			this.dataEntries[key] = new DataEntry(capitalise(key), key)
-		this.tableDataSetupFrom(Object.keys(this.dataEntries))
-	}
-
-	setupFromCollection() {
-		if (this.engine.collection.length == 0)
-			return
-		this.setDataEntriesFromExample(this.engine.collection[0])
-		this.engine.setModelFromCollection()
-	}
-
-	setup(filters, sorting, dataEntries, defaultShownData = null) {
-		this.engine.resetFilter()
-		this.engine.resetFilterModel()
-		for (let key in filters)
-			this.engine.filterModel[key] = filters[key]
-		this.engine.resetSorting()
-		this.engine.resetSortingModel()
-		for (let key in sorting)
-			this.engine.sortingModel[key] = sorting[key]
-		this.dataEntries = dataEntries
-		this.tableDataSetupFrom(defaultShownData || Object.keys(dataEntries))
-	}
-
-	tableDataSetupFrom(shownData) {
-		this.tableDataSetup = shownData
-			.map(e => { return { shown: true, key: e, title: this.dataEntries[e].title } })
-		for (var key in this.dataEntries)
-			if (!this.tableDataSetup.find(e => e.key == key))
-				this.tableDataSetup.push({ shown: false, key: key, title: this.dataEntries[key].title })
-	}
-}
-
-export class DataEntry {
-	constructor(title, key, valueFrom = null) {
-		this.title = title
-		this.key = key
-		this.valueFrom = valueFrom || ((m) => "" + m[key])
+	setCollectionSetup(setup){
+		this.collectionSetup = setup
+		this.searchBar.setCollectionSetup(setup)
 	}
 }

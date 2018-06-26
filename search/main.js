@@ -1,8 +1,7 @@
 import { SearchSite } from "./search-site.js"
 import { update, setRenderFunction } from "../arf/arf.js"
 import { NavGroup, NavEntry } from "./section-navigation.js"
-import { FilterType, SortingType } from "./search-engine.js"
-import { DataEntry } from "./collection-view.js"
+import { CollectionSetup } from "./collection-setup.js"
 
 window.onload = function () {
 	var site = new SearchSite()
@@ -172,17 +171,17 @@ window.onload = function () {
 			WeeklyWorkhours: 40
 		}
 	]
-	site.sections.content.collection = pokemons
-	site.sections.content.setupFromCollection()
+	site.addCollectionSetup("pokemon", CollectionSetup.fromExample(pokemons[0]))
+	site.setCollection(pokemons, "pokemon")
 
 	site.sections.navigation.navigationEntries.push(
 		new NavGroup("Test functions",
 			new NavEntry("Test auto", () => {
-				site.sections.content.collection = pokemons
-				site.sections.content.setupFromCollection()
+				site.sections.collection.collection = pokemons
+				site.sections.collection.setupFromCollection()
 				update()
 			}),
-			new NavEntry("Test manual", () => {
+			/*new NavEntry("Test manual", () => {
 				site.sections.content.collection = pokemons
 				const filters = {
 					id: new FilterType("Id", "id"),
@@ -210,7 +209,7 @@ window.onload = function () {
 				site.sections.content.setup(filters, sorting, dataEntries, defaultShown)
 
 				update()
-			}),
+			}),*/
 			new NavEntry("Test staff auto", () => {
 				site.sections.content.collection = staffList
 				site.sections.content.setupFromCollection()
