@@ -64,11 +64,18 @@ export class SearchBar extends Component {
 				fontWeight: "bold",
 				color: "#888"
 			},
+			"div.options":{
+				overflowX: "auto",
+				overflowY: "hidden",
+				height: "2em",
+				display: "flex",
+				flexGrow: "1"
+			},
 			"select.filter": {
 				color: "#888",
-				flexGrow: "0",
-				width: "8em",
-				minWidth: "4em",
+				flexGrow: "1",
+				maxWidth: "8em",
+				width: "4rem",
 				textAlignLast: "center"
 			},
 			"div.sort": {
@@ -233,7 +240,7 @@ export class SearchBar extends Component {
 		const current = this.engine.currentFilterType()
 		const parsedQuery = this.engine.currentParsedQuery()
 		if (current.restricted) {
-			return current.options.map(e => {
+			return [l("div.options", ...current.options.map(e => {
 				const currentIndex = parsedQuery.findIndex(q => q.query == e)
 				return l("button.search-input.clickable" + (currentIndex > -1 ? ".toggled" : ""), {
 					onclick: () => {
@@ -246,7 +253,7 @@ export class SearchBar extends Component {
 						update()
 					},
 				}, e)
-			})
+			}))]
 		}
 		else {
 			return [l("input.search-input", {

@@ -177,42 +177,22 @@ window.onload = function () {
 	site.sections.navigation.navigationEntries.push(
 		new NavGroup("Test functions",
 			new NavEntry("Test auto", () => {
-				site.sections.collection.collection = pokemons
-				site.sections.collection.setupFromCollection()
+				site.setCollection(pokemons, "pokemon")
 				update()
 			}),
-			/*new NavEntry("Test manual", () => {
-				site.sections.content.collection = pokemons
-				const filters = {
-					id: new FilterType("Id", "id"),
-					name: new FilterType("Name", "name"),
-					form: new FilterType("Form", "form", ["base", "alolan", "mega"], true),
-					ability: new FilterType("Ability", "abilities"),
-					ratio: new FilterType("Gender Ratio", "ratio", ["1:1", "3:1", "1:3"], true)
-				}
-				const sorting = {
-					id: new SortingType("Id", "id"),
-					name: new SortingType("Name", "name"),
-					form: new SortingType("Form", "form"),
-					ability: new SortingType("Ability", "abilities", (a, b) => a.abilities[0] > b.abilities[0] ? 1 : a.abilities[0] < b.abilities[0] ? -1 : 0),
-					ratio: new SortingType("Gender Ratio", "ratio")
-				}
-				const dataEntries = {
-					id: new DataEntry("Id", "id"),
-					name: new DataEntry("Name", "name"),
-					form: new DataEntry("Form", "form"),
-					classification: new DataEntry("Classification", "classification"),
-					ability: new DataEntry("Ability", "abilities"),
-					ratio: new DataEntry("Gender Ratio", "ratio")
-				}
-				const defaultShown = ["id", "name", "classification", "ability", "ratio"]
-				site.sections.content.setup(filters, sorting, dataEntries, defaultShown)
-
+			new NavEntry("Test manual", () => {
+				var setup = CollectionSetup.fromExample(pokemons[0])
+				setup.filterModel.ratio.options = ["1:1", "3:1", "1:3"]
+				setup.filterModel.ratio.restricted = true
+				setup.filterModel.form.options = ["base", "alolan", "mega"]
+				setup.filterModel.form.restricted = true
+				setup.showTableEntries(["id", "name", "classification", "ability", "ratio"])
+				setup.showGridEntries(["id", "name"])
+				site.setCollection(pokemons, setup)
 				update()
-			}),*/
+			}),
 			new NavEntry("Test staff auto", () => {
-				site.sections.content.collection = staffList
-				site.sections.content.setupFromCollection()
+				site.setCollection(staffList, CollectionSetup.fromExample(staffList[0]))
 				update()
 			})
 		)

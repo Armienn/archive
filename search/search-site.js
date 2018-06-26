@@ -85,7 +85,6 @@ export class SearchSite extends Component {
 			typeof setup == "string" ?
 				this.collectionSetups[setup] :
 				setup)
-		update()
 	}
 
 	update() {

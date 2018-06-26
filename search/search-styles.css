@@ -101,7 +101,7 @@ html{
 		grid-template-columns: 0 100vw !important;
 		grid-template-areas:
 			"navigation header"
-			"navigation content"
+			"navigation collection"
 			"navigation selection" !important;
 	}
 
