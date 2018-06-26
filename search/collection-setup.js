@@ -68,7 +68,7 @@ export class CollectionSetup {
 		const setup = new CollectionSetup()
 		for (let key in source) {
 			setup.titles[key] = autoCapitalise ? capitalise(key) : key
-			setup.entryModel[key] = (m) => "" + m[key]
+			setup.entryModel[key] = null
 			setup.filterModel[key] = {}
 			setup.sortingModel[key] = {}
 			setup.tableSetup.entries.push({ key: key, shown: true })
