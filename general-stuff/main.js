@@ -5,6 +5,7 @@ import { CollectionSetup } from "../search/collection-setup.js"
 import { ModelTypeEditor } from "./model-type-editor.js"
 import { ModelEditor } from "./model-editor.js"
 import { ExportView } from "./export-view.js"
+import { ImportView } from "./import-view.js";
 
 window.onload = function () {
 	var site = new SearchSite()
@@ -71,6 +72,13 @@ class CollectionManager {
 					this.exportView = new ExportView(this)
 					this.site.show(() => {
 						return this.exportView
+					})
+					update()
+				}),
+				new NavEntry("Import", () => {
+					this.importView = new ImportView(this)
+					this.site.show(() => {
+						return this.importView
 					})
 					update()
 				})
