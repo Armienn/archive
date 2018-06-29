@@ -41,7 +41,7 @@ export class CollectionSetup {
 		return (model) => {
 			var entries = []
 			for (var key in this.entryModel)
-				entries.push(l("div", this.titles[key] || key, ": ", this.entryModel[key](model)))
+				entries.push(l("div", this.titles[key] || key, ": ", this.entry(key,model)))
 			return l("div", ...entries)
 		}
 	}
