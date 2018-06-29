@@ -206,26 +206,34 @@ export class SearchBar extends Component {
 	searchThing() {
 		return l("div.search-input-root",
 			...this.searchInput(),
-			iconButton(crossIcon(), () => {
-				if (this.engine.filter.query)
+			this.clearSearchButton(),
+			this.searchFilterBox()
+		)
+	}
+
+	clearSearchButton(){
+		return iconButton(crossIcon(), () => {
+			if (this.engine.filter.query)
+				this.engine.filter.query = ""
+			else
+				this.engine.filter.type = "_anything_"
+			this.engine.updateFilteredCollection()
+			update()
+		}, ".remove")
+	}
+
+	searchFilterBox(){
+		return l("select.filter.clickable", {
+			oninput: (event) => {
+				if (this.engine.currentFilterType().restricted)
 					this.engine.filter.query = ""
-				else
-					this.engine.filter.type = ""
+				this.engine.filter.type = event.target.value
+				if (this.engine.currentFilterType().restricted)
+					this.engine.filter.query = ""
 				this.engine.updateFilteredCollection()
 				update()
-			}, ".remove"),
-			l("select.filter.clickable", {
-				oninput: (event) => {
-					if (this.engine.currentFilterType().restricted)
-						this.engine.filter.query = ""
-					this.engine.filter.type = event.target.value
-					if (this.engine.currentFilterType().restricted)
-						this.engine.filter.query = ""
-					this.engine.updateFilteredCollection()
-					update()
-				}
-			}, ...this.filterOptions())
-		)
+			}
+		}, ...this.filterOptions())
 	}
 
 	filterOptions() {
