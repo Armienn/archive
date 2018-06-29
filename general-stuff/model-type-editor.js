@@ -37,7 +37,9 @@ export class ModelTypeEditor extends Component {
 							col.setup.filterModel[thing.key] = thing
 						this.manager.collections.push(col)
 						this.manager.save()
+						this.manager.currentSetup = col.setup
 						this.manager.site.setCollection(col.collection, col.setup)
+						this.manager.site.clearSelection()
 						update()
 					}
 				}, "Create collection")

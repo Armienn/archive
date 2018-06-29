@@ -30,6 +30,10 @@ export class SearchSite extends Component {
 		this.collectionSetups = {}
 	}
 
+	get engine(){
+		return this.sections.collection.engine
+	}
+
 	renderThis() {
 		return l("div.layout", {},
 			l("section.header", this.sections.header),

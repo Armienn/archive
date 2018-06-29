@@ -4,6 +4,7 @@ import { NavGroup, NavEntry } from "../search/section-navigation.js"
 import { CollectionSetup } from "../search/collection-setup.js"
 import { ModelTypeEditor } from "./model-type-editor.js"
 import { ModelEditor } from "./model-editor.js"
+import { ExportView } from "./export-view.js"
 
 window.onload = function () {
 	var site = new SearchSite()
@@ -63,6 +64,13 @@ class CollectionManager {
 					this.editor = new ModelEditor(this, this.currentSetup)
 					this.site.show(() => {
 						return this.editor
+					})
+					update()
+				}),
+				new NavEntry("Export", () => {
+					this.exportView = new ExportView(this)
+					this.site.show(() => {
+						return this.exportView
 					})
 					update()
 				})
