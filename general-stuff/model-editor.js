@@ -6,6 +6,11 @@ export class ModelEditor extends Component {
 		this.manager = manager
 		this.collection = collection
 		this.model = {}
+		for (let key in this.collection.setup.filterModel)
+			if (this.collection.setup.filterModel[key].restricted)
+				this.model[key] = this.collection.setup.filterModel[key].options[0] || ""
+			else
+				this.model[key] = ""
 	}
 
 	renderThis() {
