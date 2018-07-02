@@ -84,3 +84,11 @@ export function capitalise(text) {
 	if (text.length)
 		return text[0].toUpperCase() + text.substr(1)
 }
+
+export function stringFrom(source) {
+	if (source instanceof Array)
+		return source.map(e => stringFrom(e)).join(", ")
+	if (typeof source === "object")
+		return JSON.stringify(source)
+	return "" + source
+}

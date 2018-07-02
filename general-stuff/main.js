@@ -5,12 +5,13 @@ import { CollectionSetup } from "../search/collection-setup.js"
 import { ModelTypeEditor } from "./model-type-editor.js"
 import { ModelEditor } from "./model-editor.js"
 import { ExportView } from "./export-view.js"
-import { ImportView } from "./import-view.js";
+import { ImportView } from "./import-view.js"
 
 window.onload = function () {
 	var site = new SearchSite()
 	window.site = site
 	var manager = new CollectionManager(site)
+	window.manager = manager
 	site.sections.navigation.navigationEntries = () => manager.navThing()
 	setRenderFunction(() => site.render())
 	update()

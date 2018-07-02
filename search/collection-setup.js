@@ -1,4 +1,4 @@
-import { capitalise } from "./util.js"
+import { capitalise, stringFrom } from "./util.js"
 import { l } from "../arf/arf.js"
 
 export class CollectionSetup {
@@ -28,7 +28,7 @@ export class CollectionSetup {
 	entry(key, model) {
 		if (this.entryModel[key])
 			return this.entryModel[key](model)
-		return "" + model[key]
+		return stringFrom(model[key])
 	}
 
 	entries(mode) {

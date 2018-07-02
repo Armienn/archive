@@ -33,6 +33,8 @@ export class SearchEngine {
 		this.resetFilterModel()
 		for (let key in filterModel)
 			this.filterModel[key] = filterModel[key]
+		if (!Object.keys(filterModel).includes(this.filter.type))
+			this.resetFilter()
 	}
 
 	resetSorting() {
@@ -47,6 +49,8 @@ export class SearchEngine {
 		this.resetSortingModel()
 		for (let key in sortingModel)
 			this.sortingModel[key] = sortingModel[key]
+		if (!Object.keys(sortingModel).includes(this.sorting))
+			this.resetSorting()
 	}
 
 	addCurrentFilter() {

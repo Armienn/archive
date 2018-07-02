@@ -186,7 +186,7 @@ window.onload = function () {
 				setup.filterModel.ratio.restricted = true
 				setup.filterModel.form.options = ["Base", "Alolan", "Mega"]
 				setup.filterModel.form.restricted = true
-				setup.showTableEntries(["id", "name", "classification", "ability", "ratio"])
+				setup.showTableEntries(["id", "name", "classification", "abilities", "ratio"])
 				setup.showGridEntries(["id", "name"])
 				site.setCollection(pokemons, setup)
 				update()
