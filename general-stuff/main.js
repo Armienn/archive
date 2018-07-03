@@ -6,6 +6,7 @@ import { ModelTypeEditor } from "./model-type-editor.js"
 import { ModelEditor } from "./model-editor.js"
 import { ExportView } from "./export-view.js"
 import { ImportView } from "./import-view.js"
+import { DeleteView } from "./delete-view.js"
 
 window.onload = function () {
 	var site = new SearchSite()
@@ -61,31 +62,36 @@ class CollectionManager {
 			new NavGroup("Actions",
 				new NavEntry("New collection", () => {
 					this.showView(new ModelTypeEditor(this))
-				}),
-				new NavEntry("New entry", () => {
-					if (this.currentSetup)
-						this.showView(new ModelEditor(this, this.currentSetup))
-				}),
-				new NavEntry("Export", () => {
-					this.showView(new ExportView(this))
-				}),
-				new NavEntry("Import", () => {
-					this.showView(new ImportView(this))
 				})
 			),
-			new NavGroup("Edit",
-				this.currentSetup ?
-					new NavEntry("Edit " + this.currentSetup.title, () => {
+			this.currentSetup ?
+				new NavGroup(this.currentSetup.title,
+					new NavEntry("Edit collection", () => {
 						this.showView(new ModelTypeEditor(this, this.currentSetup))
-					}) :
-					undefined,
-				this.site.selection ?
-					new NavEntry("Edit entry", () => {
+					}),
+					new NavEntry("Export", () => {
+						this.showView(new ExportView(this))
+					}),
+					new NavEntry("Import", () => {
+						this.showView(new ImportView(this))
+					}),
+					new NavEntry("New entry", () => {
 						if (this.currentSetup)
-							this.showView(new ModelEditor(this, this.currentSetup, this.site.selection))
-					}) :
-					undefined
-			)
-		]
+							this.showView(new ModelEditor(this, this.currentSetup))
+					}),
+					this.site.selection ?
+						new NavEntry("Edit entry", () => {
+							if (this.currentSetup)
+								this.showView(new ModelEditor(this, this.currentSetup, this.site.selection))
+						}) :
+						undefined,
+					this.site.selection ?
+						new NavEntry("Delete entry", () => {
+							this.showView(new DeleteView(this, this.site.selection, this.currentSetup.collection))
+						}) :
+						undefined
+				) :
+				undefined
+		].filter(e => e)
 	}
 }
