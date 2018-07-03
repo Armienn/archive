@@ -1,6 +1,6 @@
 import { Component, l, update } from "../arf/arf.js"
-import { SearchSite } from "./search-site.js"
 import iconButton, { grabIcon, crossIcon } from "./icons.js"
+import { Styling } from "./styling.js"
 
 export class SectionSelection extends Component {
 	constructor(main) {
@@ -8,7 +8,6 @@ export class SectionSelection extends Component {
 		this.main = main
 		this.content = null
 		this.top = 0
-		this.dark = true
 		this.grabbing = false
 		window.addEventListener("touchmove", (event) => {
 			if (this.grabbing) {
@@ -43,7 +42,7 @@ export class SectionSelection extends Component {
 	}
 
 	renderThis() {
-		return l("section" + (this.dark ? ".light-text" : ".dark-text"),
+		return l("section",
 			l("div.position-box",
 				{
 					style: {
@@ -67,6 +66,7 @@ export class SectionSelection extends Component {
 		return {
 			section: {
 				position: "relative",
+				color: Styling.styling.mainText
 			},
 			"div.position-box": {
 				position: "absolute",
@@ -78,7 +78,7 @@ export class SectionSelection extends Component {
 				top: "100%",
 				width: "100%",
 				height: "100%",
-				backgroundColor: SearchSite.styling.mainBackground,
+				backgroundColor: Styling.styling.mainBackground,
 				borderTop: "1px solid rgba(130,130,130,0.5)",
 				transition: "0.3s ease"
 			},
@@ -120,8 +120,8 @@ export class SectionSelection extends Component {
 					this.grabbing = true
 				}
 			},
-			grabIcon(this.dark ? { filter: "invert(1)" } : {}),
-			iconButton(crossIcon(this.dark ? { filter: "invert(1)" } : {}), () => this.clearSelection(), ".close-button"))
+			grabIcon({ filter: Styling.styling.mainIconFilter }),
+			iconButton(crossIcon({ filter: Styling.styling.mainIconFilter }), () => this.clearSelection(), ".close-button"))
 	}
 
 	clearSelection() {

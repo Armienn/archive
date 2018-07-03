@@ -125,14 +125,8 @@ html{
 	}
 }
 
-.dark-text{
-	color: black;
-}
 .dark-symbol{
 	filter: invert(1)
-}
-.light-text{
-	color: white;
 }
 
 ::-webkit-scrollbar {

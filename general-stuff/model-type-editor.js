@@ -1,12 +1,12 @@
 import { Component, update, l } from "../arf/arf.js"
 import { CollectionSetup } from "../search/collection-setup.js"
-import iconButton, { crossIcon } from "../search/icons.js";
+import iconButton, { crossIcon } from "../search/icons.js"
+import { Styling } from "../search/styling.js"
 
 export class ModelTypeEditor extends Component {
 	constructor(manager, existingSetup) {
 		super()
 		this.manager = manager
-		this.dark = true
 		this.model = []
 		this.collectionName = ""
 		this.existingSetup = existingSetup
@@ -92,7 +92,7 @@ export class ModelTypeEditor extends Component {
 				l("button", {
 					onclick: () => { e.restricted = !e.restricted; update() },
 				}, e.restricted ? "Restricted" : "Unrestricted"),
-				iconButton(crossIcon(this.dark ? { filter: "invert(1)" } : {}), () => {
+				iconButton(crossIcon({ filter: Styling.styling.mainIconFilter }), () => {
 					this.model.splice(this.model.indexOf(e), 1)
 					update()
 				}, ".close-button")

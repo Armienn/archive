@@ -1,20 +1,13 @@
 import { SectionHeader } from "./section-header.js"
 import { SectionNavigation } from "./section-navigation.js"
 import { SectionSelection } from "./section-selection.js"
-import { Component, l, update } from "../arf/arf.js"
+import { Component, l, update, clearStylesheets } from "../arf/arf.js"
 import { CollectionView } from "./collection-view.js"
+import { Styling } from "./styling.js"
 
 export class SearchSite extends Component {
 	constructor() {
 		super()
-		this.constructor.styling = {
-			headerBackground: "#c00",
-			headerText: "#eee",
-			mainBackground: "#222",
-			mainText: "#eee",
-			inactiveText: "rgba(0,0,0,0.4)",
-			hoverBackground: "rgba(255, 255, 255, 0.35)"
-		}
 		this.sections = {
 			header: new SectionHeader(this),
 			navigation: new SectionNavigation(this),
@@ -34,6 +27,21 @@ export class SearchSite extends Component {
 		this.collectionSetups = {}
 	}
 
+	colorTest(style){
+		Styling.styling = style || {
+			headerBackground: "#aaf",
+			headerText: "#00f",
+			headerIconFilter: "",
+			mainBackground: "#afa",
+			mainText: "#0f0",
+			mainIconFilter: "",
+			inactiveText: "rgba(0,0,0,0.4)",
+			hoverBackground: "rgba(255, 255, 255, 0.35)"
+		}
+		clearStylesheets()
+		update()
+	}
+
 	get engine() {
 		return this.sections.collection.engine
 	}
@@ -50,8 +58,8 @@ export class SearchSite extends Component {
 	static styleThis() {
 		return {
 			"div.layout": {
-				backgroundColor: SearchSite.styling.mainBackground,
-				color: SearchSite.styling.mainText,
+				backgroundColor: Styling.styling.mainBackground,
+				color: Styling.styling.mainText,
 				textAlign: "center",
 				width: "100vw",
 				height: "100vh",
@@ -69,6 +77,10 @@ export class SearchSite extends Component {
 			".collection": { gridArea: "collection" },
 			".selection": { gridArea: "selection" }
 		}
+	}
+
+	clearStylesheets() {
+		clearStylesheets()
 	}
 
 	showModel(model, collectionSetup) {

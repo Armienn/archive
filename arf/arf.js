@@ -118,6 +118,12 @@ function insertRule(sheet, key, rule) {
 		sheet.cssRules[index].style[i] = rule[i]
 }
 
+export function clearStylesheets(){
+	for(var key in stylesheets)
+		document.head.removeChild(stylesheets[key])
+	stylesheets = {}
+}
+
 var stylesheets = {}
 var currentRender
 

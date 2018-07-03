@@ -1,6 +1,6 @@
-import { SearchSite } from "./search-site.js"
 import { Component, l, update } from "../arf/arf.js"
 import iconButton, { menuIcon } from "./icons.js"
+import { Styling } from "./styling.js"
 
 
 export class SectionHeader extends Component {
@@ -8,13 +8,12 @@ export class SectionHeader extends Component {
 		super()
 		this.main = main
 		this.header = "header"
-		this.dark = true
 	}
 
 	renderThis() {
 		return l("header",
 			l("h1", this.header),
-			iconButton(menuIcon(this.dark ? { filter: "invert(1)" } : {}),
+			iconButton(menuIcon({ filter: Styling.styling.headerIconFilter }),
 				() => { this.main.sections.navigation.shown = true; update() }, ".mobile-menu-button")
 		)
 	}
@@ -22,8 +21,8 @@ export class SectionHeader extends Component {
 	static styleThis() {
 		return {
 			header: {
-				backgroundColor: SearchSite.styling.headerBackground,
-				color: SearchSite.styling.headerText,
+				backgroundColor: Styling.styling.headerBackground,
+				color: Styling.styling.headerText,
 				height: "100%",
 				fontWeight: "bold",
 				padding: "0.5rem"

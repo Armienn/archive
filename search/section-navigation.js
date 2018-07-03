@@ -1,13 +1,12 @@
-import { SearchSite } from "./search-site.js"
 import { Component, l, update } from "../arf/arf.js"
 import iconButton, { arrowLeftIcon } from "./icons.js"
+import { Styling } from "./styling.js"
 
 export class SectionNavigation extends Component {
 	constructor(main) {
 		super()
 		this.main = main
 		this.shown = false
-		this.dark = true
 		this.navigationEntries = () => [""]
 	}
 
@@ -19,7 +18,7 @@ export class SectionNavigation extends Component {
 			l("footer",
 				l("a", { href: "https://github.com/Armienn" }, "Design and code © Armienn, 2017-2018.")
 			),
-			iconButton(arrowLeftIcon(this.dark ? { filter: "invert(1)" } : {}),
+			iconButton(arrowLeftIcon({ filter: Styling.styling.headerIconFilter }),
 				() => { this.shown = false; update() }, ".mobile-menu-button")
 		)
 	}
@@ -28,8 +27,8 @@ export class SectionNavigation extends Component {
 		return {
 			nav: {
 				position: "relative",
-				backgroundColor: SearchSite.styling.headerBackground,
-				color: SearchSite.styling.headerText,
+				backgroundColor: Styling.styling.headerBackground,
+				color: Styling.styling.headerText,
 				height: "100%",
 				overflowY: "auto",
 				fontWeight: "bold"
@@ -41,7 +40,7 @@ export class SectionNavigation extends Component {
 				padding: "0.5rem",
 				textAlign: "center",
 				fontSize: "0.8rem",
-				backgroundColor: SearchSite.styling.headerBackground,
+				backgroundColor: Styling.styling.headerBackground,
 			},
 			".mobile-menu-button": {
 				position: "absolute",
@@ -96,7 +95,7 @@ export class NavGroup extends Component {
 				color: "rgba(255,255,255,0.4)",
 			},
 			".unselected": {
-				color: SearchSite.styling.inactiveText,
+				color: Styling.styling.inactiveText,
 			}
 		}
 	}
@@ -131,7 +130,7 @@ export class SingleLineNavGroup extends Component {
 				color: "rgba(255,255,255,0.4)",
 			},
 			".unselected": {
-				color: SearchSite.styling.inactiveText,
+				color: Styling.styling.inactiveText,
 			}
 		}
 	}

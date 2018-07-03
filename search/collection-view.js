@@ -4,6 +4,7 @@ import { SearchBar } from "./search-bar.js"
 import iconButton, { barsIcon, gridIcon, gearIcon, arrowRightIcon, arrowLeftIcon } from "./icons.js"
 import { CollectionSetup } from "./collection-setup.js"
 import callOrReturn from "./util.js"
+import { Styling } from "./styling.js"
 
 export class CollectionView extends Component {
 	constructor(select, selected, hiddenByOverlay) {
@@ -13,7 +14,6 @@ export class CollectionView extends Component {
 		this.collectionSetup = new CollectionSetup()
 		this.mode = "table"
 		this.showSettings = false
-		this.dark = true
 		this.select = select || (() => { })
 		this.selected = selected || (() => false)
 		this.hiddenByOverlay = hiddenByOverlay
@@ -27,7 +27,7 @@ export class CollectionView extends Component {
 	}
 
 	renderThis() {
-		return l("div.root" + (this.dark ? ".light-text" : ".dark-text"),
+		return l("div.root",
 			{ style: { height: callOrReturn(this.hiddenByOverlay) ? "calc(100% - " + this.hiddenByOverlay() + ")" : "" } },
 			l("div.search-section", this.searchBar),
 			l("div.table-section",
@@ -42,6 +42,7 @@ export class CollectionView extends Component {
 				fontSize: "1rem",
 				width: "100%",
 				height: "100%",
+				color: Styling.styling.mainText
 			},
 			"div.table-section": {
 				height: "calc(100% - 3em)",
@@ -186,16 +187,16 @@ export class CollectionView extends Component {
 
 	viewSettings() {
 		return l("div.table-settings",
-			iconButton(barsIcon(this.dark ? { filter: "invert(1)" } : {}), () => {
+			iconButton(barsIcon({ filter: Styling.styling.mainIconFilter }), () => {
 				this.mode = "table"
 				update()
 			}, ".table-settings.clickable" + (this.mode == "table" ? ".active" : "")),
-			iconButton(gridIcon(this.dark ? { filter: "invert(1)" } : {}), () => {
+			iconButton(gridIcon({ filter: Styling.styling.mainIconFilter }), () => {
 				this.mode = "grid"
 				update()
 			}, ".table-settings.clickable" + (this.mode == "grid" ? ".active" : "")),
 			this.entryEditor(),
-			iconButton(gearIcon(this.dark ? { filter: "invert(1)" } : {}), () => {
+			iconButton(gearIcon({ filter: Styling.styling.mainIconFilter }), () => {
 				this.showSettings = !this.showSettings
 				update()
 			}, ".table-settings.clickable" + (this.showSettings ? ".toggled" : ""))
@@ -206,7 +207,7 @@ export class CollectionView extends Component {
 		return l("div.entry-editor" + (this.showSettings ? "" : ".hidden"),
 			...this.collectionSetup.entries(this.mode).map(e => {
 				return l("div.data-entry",
-					iconButton(arrowLeftIcon(this.dark ? { filter: "invert(1)" } : {}),
+					iconButton(arrowLeftIcon({ filter: Styling.styling.mainIconFilter }),
 						() => {
 							const index = this.collectionSetup.entries(this.mode).indexOf(e)
 							if (index == 0)
@@ -221,7 +222,7 @@ export class CollectionView extends Component {
 							update()
 						}
 					}, this.collectionSetup.title(e.key)),
-					iconButton(arrowRightIcon(this.dark ? { filter: "invert(1)" } : {}),
+					iconButton(arrowRightIcon({ filter: Styling.styling.mainIconFilter }),
 						() => {
 							const index = this.collectionSetup.entries(this.mode).indexOf(e)
 							if (index == this.collectionSetup.entries(this.mode).length - 1)
