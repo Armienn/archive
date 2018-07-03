@@ -3,7 +3,7 @@ import { SearchEngine } from "./search-engine.js"
 import { SearchBar } from "./search-bar.js"
 import iconButton, { barsIcon, gridIcon, gearIcon, arrowRightIcon, arrowLeftIcon } from "./icons.js"
 import { CollectionSetup } from "./collection-setup.js"
-import callOrReturn from "./util.js";
+import callOrReturn from "./util.js"
 
 export class CollectionView extends Component {
 	constructor(select, selected, hiddenByOverlay) {

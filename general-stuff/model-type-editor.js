@@ -1,14 +1,16 @@
 import { Component, update, l } from "../arf/arf.js"
 import { CollectionSetup } from "../search/collection-setup.js"
+import iconButton, { crossIcon } from "../search/icons.js";
 
 export class ModelTypeEditor extends Component {
 	constructor(manager, existingSetup) {
 		super()
 		this.manager = manager
+		this.dark = true
 		this.model = []
 		this.collectionName = ""
 		this.existingSetup = existingSetup
-		if(existingSetup){
+		if (existingSetup) {
 			this.modelFromSetup(existingSetup.setup)
 			this.collectionName = existingSetup.title
 		}
@@ -40,7 +42,7 @@ export class ModelTypeEditor extends Component {
 						}
 						for (let thing of this.model)
 							col.setup.filterModel[thing.key] = thing
-						if(this.existingSetup){
+						if (this.existingSetup) {
 							this.existingSetup.setup = col.setup
 							this.existingSetup.title = col.title
 						}
@@ -62,6 +64,14 @@ export class ModelTypeEditor extends Component {
 		return {
 			"input, button": {
 				margin: "0.25rem"
+			},
+			".close-button": {
+				opacity: "0.5",
+				transition: "0.3s ease"
+			},
+			".close-button:hover": {
+				opacity: "1",
+				transition: "0.3s ease"
 			}
 		}
 	}
@@ -81,14 +91,18 @@ export class ModelTypeEditor extends Component {
 				}),
 				l("button", {
 					onclick: () => { e.restricted = !e.restricted; update() },
-				}, e.restricted ? "Restricted" : "Unrestricted")
+				}, e.restricted ? "Restricted" : "Unrestricted"),
+				iconButton(crossIcon(this.dark ? { filter: "invert(1)" } : {}), () => {
+					this.model.splice(this.model.indexOf(e), 1)
+					update()
+				}, ".close-button")
 			)
 		})
 	}
 
-	modelFromSetup(existingSetup){
-		for(var key in existingSetup.filterModel){
-			this.model.push({key: key, options: existingSetup.filterModel[key].options, restricted: existingSetup.filterModel[key].restricted})
+	modelFromSetup(existingSetup) {
+		for (var key in existingSetup.filterModel) {
+			this.model.push({ key: key, options: existingSetup.filterModel[key].options, restricted: existingSetup.filterModel[key].restricted })
 		}
 	}
 }
