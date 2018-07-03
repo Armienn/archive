@@ -7,6 +7,7 @@ export function fitsFancy(thing, query) {
 	switch (query.type) {
 		case ">": return thing > query.query
 		case "<": return thing < query.query
+		case "=": return ("" + thing).toLowerCase().trim() === query.query
 		case "!":
 		case "":
 		default: return ("" + thing).toLowerCase().includes(query.query)
@@ -44,10 +45,11 @@ export function fitsNested(thing, query) {
 
 export function parseQuery(query) {
 	query = query.toLowerCase()
-	// split at single |, then merge || to |
-	return query.split(/(?<!\|)\|(?!\|)/g).map(e => e.replace(/\|\|/g, "|").trim())
+	return splitAtSingle(query, "|")
+		.map(e => e.replace(/\|\|/g, "|").trim())
+		.filter(e => e)
 		.map(e => {
-			var q = { query: e.trim(), type: "" }
+			var q = { query: e, type: "" }
 			if (e.startsWith(">")) {
 				q.query = e.substr(1)
 				if (!q.query.startsWith(">")) {
@@ -67,9 +69,27 @@ export function parseQuery(query) {
 				if (!q.query.startsWith("!"))
 					q.type = "!"
 			}
+			if (e.startsWith("=")) {
+				q.query = e.substr(1)
+				if (!q.query.startsWith("="))
+					q.type = "="
+			}
 			return q
 		})
 		.filter(e => e.query)
+}
+
+function splitAtSingle(text, separator) {
+	var result = []
+	var lastSplit = 0
+	for (var i = 0; i < text.length; i++) {
+		if (text[i] === separator && text[i - 1] !== separator && text[i + 1] !== separator) {
+			result.push(text.substring(lastSplit, i))
+			lastSplit = i + 1
+		}
+	}
+	result.push(text.substring(lastSplit, text.length))
+	return result
 }
 
 function isBasicType(thing) {
@@ -77,6 +97,7 @@ function isBasicType(thing) {
 }
 
 export function compareFit(a, b, query) {
+	a = query
 	return 0
 }
 
