@@ -1,7 +1,7 @@
 import { Component, update, l } from "../arf/arf.js"
 
 export class ModelEditor extends Component {
-	constructor(manager, collection) {
+	constructor(manager, collection, existingModel) {
 		super()
 		this.manager = manager
 		this.collection = collection
@@ -11,6 +11,9 @@ export class ModelEditor extends Component {
 				this.model[key] = this.collection.setup.filterModel[key].options[0] || ""
 			else
 				this.model[key] = ""
+		for (var key in existingModel)
+			this.model[key] = existingModel[key]
+		this.existingModel = existingModel
 	}
 
 	renderThis() {
@@ -19,13 +22,17 @@ export class ModelEditor extends Component {
 			l("div",
 				l("button", {
 					onclick: () => {
-						this.collection.collection.push(this.model)
+						if (this.existingModel)
+							for (var key in this.model)
+								this.existingModel[key] = this.model[key]
+						else
+							this.collection.collection.push(this.model)
 						this.manager.save()
 						this.manager.site.engine.updateFilteredCollection()
 						this.manager.site.clearSelection()
 						update()
 					}
-				}, "Add")
+				}, "Save entry")
 			)
 		)
 	}

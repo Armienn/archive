@@ -82,7 +82,7 @@ class CollectionManager {
 				this.site.selection ?
 					new NavEntry("Edit entry", () => {
 						if (this.currentSetup)
-							this.showView(new ModelEditor(this, this.currentSetup))
+							this.showView(new ModelEditor(this, this.currentSetup, this.site.selection))
 					}) :
 					undefined
 			)

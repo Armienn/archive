@@ -49,11 +49,11 @@ export class ModelTypeEditor extends Component {
 						}
 						this.manager.save()
 						this.manager.currentSetup = col
-						this.manager.site.setCollection(col.collection, col.setup)
+						this.manager.site.setCollection(this.existingSetup.collection, col.setup)
 						this.manager.site.clearSelection()
 						update()
 					}
-				}, "Create collection")
+				}, "Save collection")
 			)
 		)
 	}
