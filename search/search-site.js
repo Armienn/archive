@@ -19,18 +19,22 @@ export class SearchSite extends Component {
 			header: new SectionHeader(this),
 			navigation: new SectionNavigation(this),
 			selection: new SectionSelection(this),
-			collection: new CollectionView((model, setup) => {
-				if (this.selection == model)
-					this.clearSelection()
-				else
-					this.showModel(model, setup)
-			}, () => this.selection)
+			collection: new CollectionView(
+				(model, setup) => {
+					if (this.selection == model)
+						this.clearSelection()
+					else
+						this.showModel(model, setup)
+				},
+				() => this.selection,
+				() => this.sections.selection.getTop().substr(1)
+			)
 		}
 		this.selection = null
 		this.collectionSetups = {}
 	}
 
-	get engine(){
+	get engine() {
 		return this.sections.collection.engine
 	}
 

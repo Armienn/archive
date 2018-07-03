@@ -38,12 +38,16 @@ export class SectionSelection extends Component {
 		})
 	}
 
+	getTop(){
+		return this.content ? (this.top ? this.top + "px" : "-50vh") : "0"
+	}
+
 	renderThis() {
 		return l("section" + (this.dark ? ".light-text" : ".dark-text"),
 			l("div.position-box",
 				{
 					style: {
-						top: this.content ? (this.top ? this.top + "px" : "-50vh") : "0"
+						top: this.getTop()
 					}
 				},
 				l("div.selection-box" + (this.content ? ".show" : ""),

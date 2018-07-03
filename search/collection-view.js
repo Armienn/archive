@@ -5,7 +5,7 @@ import iconButton, { barsIcon, gridIcon, gearIcon, arrowRightIcon, arrowLeftIcon
 import { CollectionSetup } from "./collection-setup.js"
 
 export class CollectionView extends Component {
-	constructor(select, selected) {
+	constructor(select, selected, hiddenByOverlay) {
 		super()
 		this.engine = new SearchEngine()
 		this.searchBar = new SearchBar(this.engine)
@@ -15,6 +15,7 @@ export class CollectionView extends Component {
 		this.dark = true
 		this.select = select || (() => { })
 		this.selected = selected || (() => false)
+		this.hiddenByOverlay = hiddenByOverlay
 	}
 
 	set collection(value) {
@@ -26,6 +27,7 @@ export class CollectionView extends Component {
 
 	renderThis() {
 		return l("div.root" + (this.dark ? ".light-text" : ".dark-text"),
+			{ style: { height: this.hiddenByOverlay ? "calc(100% - " + this.hiddenByOverlay() + ")" : "" } },
 			l("div.search-section", this.searchBar),
 			l("div.table-section",
 				this.viewSettings(),
@@ -287,7 +289,7 @@ export class CollectionView extends Component {
 				))
 	}
 
-	setCollectionSetup(setup){
+	setCollectionSetup(setup) {
 		this.collectionSetup = setup
 		this.searchBar.setCollectionSetup(setup)
 	}
