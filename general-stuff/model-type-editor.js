@@ -2,11 +2,16 @@ import { Component, update, l } from "../arf/arf.js"
 import { CollectionSetup } from "../search/collection-setup.js"
 
 export class ModelTypeEditor extends Component {
-	constructor(manager) {
+	constructor(manager, existingSetup) {
 		super()
 		this.manager = manager
 		this.model = []
 		this.collectionName = ""
+		this.existingSetup = existingSetup
+		if(existingSetup){
+			this.modelFromSetup(existingSetup.setup)
+			this.collectionName = existingSetup.title
+		}
 	}
 
 	renderThis() {
@@ -35,9 +40,15 @@ export class ModelTypeEditor extends Component {
 						}
 						for (let thing of this.model)
 							col.setup.filterModel[thing.key] = thing
-						this.manager.collections.push(col)
+						if(this.existingSetup){
+							this.existingSetup.setup = col.setup
+							this.existingSetup.title = col.title
+						}
+						else {
+							this.manager.collections.push(col)
+						}
 						this.manager.save()
-						this.manager.currentSetup = col.setup
+						this.manager.currentSetup = col
 						this.manager.site.setCollection(col.collection, col.setup)
 						this.manager.site.clearSelection()
 						update()
@@ -73,5 +84,11 @@ export class ModelTypeEditor extends Component {
 				}, e.restricted ? "Restricted" : "Unrestricted")
 			)
 		})
+	}
+
+	modelFromSetup(existingSetup){
+		for(var key in existingSetup.filterModel){
+			this.model.push({key: key, options: existingSetup.filterModel[key].options, restricted: existingSetup.filterModel[key].restricted})
+		}
 	}
 }

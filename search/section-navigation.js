@@ -68,7 +68,7 @@ export class NavGroup extends Component {
 
 	renderThis() {
 		return l("ul", l("li.title", this.title),
-			...this.entries.map(this.entryElement))
+			...this.entries.filter(e => e).map(this.entryElement))
 	}
 
 	entryElement(e) {

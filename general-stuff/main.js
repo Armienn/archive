@@ -20,8 +20,7 @@ window.onload = function () {
 class CollectionManager {
 	constructor(site) {
 		this.site = site
-		this.typeEditor = new ModelTypeEditor(this)
-		this.editor
+		this.view
 		this.currentSetup
 		this.load()
 	}
@@ -40,6 +39,14 @@ class CollectionManager {
 		localStorage.generalCollections = JSON.stringify(this.collections)
 	}
 
+	showView(component) {
+		this.view = component
+		this.site.show(() => {
+			return this.view
+		})
+		update()
+	}
+
 	navThing() {
 		return [
 			new NavGroup("Collections",
@@ -53,36 +60,31 @@ class CollectionManager {
 			),
 			new NavGroup("Actions",
 				new NavEntry("New collection", () => {
-					this.typeEditor.model = []
-					this.typeEditor.collectionName = ""
-					this.site.show(() => {
-						return this.typeEditor
-					})
-					update()
+					this.showView(new ModelTypeEditor(this))
 				}),
 				new NavEntry("New entry", () => {
-					if (!this.currentSetup)
-						return
-					this.editor = new ModelEditor(this, this.currentSetup)
-					this.site.show(() => {
-						return this.editor
-					})
-					update()
+					if (this.currentSetup)
+						this.showView(new ModelEditor(this, this.currentSetup))
 				}),
 				new NavEntry("Export", () => {
-					this.exportView = new ExportView(this)
-					this.site.show(() => {
-						return this.exportView
-					})
-					update()
+					this.showView(new ExportView(this))
 				}),
 				new NavEntry("Import", () => {
-					this.importView = new ImportView(this)
-					this.site.show(() => {
-						return this.importView
-					})
-					update()
+					this.showView(new ImportView(this))
 				})
+			),
+			new NavGroup("Edit",
+				this.currentSetup ?
+					new NavEntry("Edit " + this.currentSetup.title, () => {
+						this.showView(new ModelTypeEditor(this, this.currentSetup))
+					}) :
+					undefined,
+				this.site.selection ?
+					new NavEntry("Edit entry", () => {
+						if (this.currentSetup)
+							this.showView(new ModelEditor(this, this.currentSetup))
+					}) :
+					undefined
 			)
 		]
 	}
