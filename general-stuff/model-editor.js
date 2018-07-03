@@ -59,7 +59,7 @@ export class ModelEditor extends Component {
 		if (current.restricted) {
 			return [l("select",
 				{ oninput: (event) => { this.model[key] = event.target.value; update() } },
-				...(current.options || []).map(e => l("option", e)))]
+				...(current.options || []).map(e => l("option", {selected: this.model[key] == e}, e)))]
 		}
 		else {
 			return [l("input", {

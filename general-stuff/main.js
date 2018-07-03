@@ -32,6 +32,10 @@ class CollectionManager {
 		this.collections = JSON.parse(localStorage.generalCollections)
 		for (var col of this.collections)
 			col.setup = new CollectionSetup(col.setup)
+		if(this.collections.length){
+			this.currentSetup = this.collections[0]
+			this.site.setCollection(this.currentSetup.collection, this.currentSetup.setup)
+		}
 	}
 
 	save() {
