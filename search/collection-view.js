@@ -3,6 +3,7 @@ import { SearchEngine } from "./search-engine.js"
 import { SearchBar } from "./search-bar.js"
 import iconButton, { barsIcon, gridIcon, gearIcon, arrowRightIcon, arrowLeftIcon } from "./icons.js"
 import { CollectionSetup } from "./collection-setup.js"
+import callOrReturn from "./util.js";
 
 export class CollectionView extends Component {
 	constructor(select, selected, hiddenByOverlay) {
@@ -27,7 +28,7 @@ export class CollectionView extends Component {
 
 	renderThis() {
 		return l("div.root" + (this.dark ? ".light-text" : ".dark-text"),
-			{ style: { height: this.hiddenByOverlay ? "calc(100% - " + this.hiddenByOverlay() + ")" : "" } },
+			{ style: { height: callOrReturn(this.hiddenByOverlay) ? "calc(100% - " + this.hiddenByOverlay() + ")" : "" } },
 			l("div.search-section", this.searchBar),
 			l("div.table-section",
 				this.viewSettings(),
