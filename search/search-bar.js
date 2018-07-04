@@ -58,7 +58,7 @@ export class SearchBar extends Component {
 			},
 			".search-input": {
 				flexGrow: "1",
-				minWidth: "4em",
+				minWidth: "auto",
 			},
 			"button.search-input": {
 				fontWeight: "bold",
