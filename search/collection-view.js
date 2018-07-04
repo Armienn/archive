@@ -54,15 +54,15 @@ export class CollectionView extends Component {
 			},
 			tr: {
 				height: "2rem",
-				backgroundColor: "rgba(130,130,130,0.2)",
-				borderBottom: "1px solid rgba(130,130,130,0.5)"
+				backgroundColor: "rgba("+Styling.styling.tableColor+",0.2)",
+				borderBottom: "1px solid rgba("+Styling.styling.tableColor+",0.5)"
 			},
 			"tbody tr": {
 				cursor: "pointer",
 				transition: "0.3s ease"
 			},
 			"tbody tr:hover": {
-				backgroundColor: "rgba(130,130,130,0.5)",
+				backgroundColor: "rgba("+Styling.styling.tableColor+",0.5)",
 				transition: "0.3s ease"
 			},
 			th: {
@@ -71,12 +71,12 @@ export class CollectionView extends Component {
 				transition: "0.3s ease"
 			},
 			"thead th": {
-				backgroundColor: "rgba(130,130,130,0.3)",
+				backgroundColor: "rgba("+Styling.styling.tableColor+",0.3)",
 				fontWeight: "bold",
 				transition: "0.3s ease"
 			},
 			"thead th:hover": {
-				backgroundColor: "rgba(130,130,130,0.5)",
+				backgroundColor: "rgba("+Styling.styling.tableColor+",0.5)",
 				transition: "0.3s ease"
 			},
 			button: {
@@ -144,12 +144,12 @@ export class CollectionView extends Component {
 				margin: ".25rem",
 				overflow: "hidden",
 				cursor: "pointer",
-				backgroundColor: "rgba(130,130,130,0.2)",
-				border: "1px solid rgba(130,130,130,0.5)",
+				backgroundColor: "rgba("+Styling.styling.tableColor+",0.2)",
+				border: "1px solid rgba("+Styling.styling.tableColor+",0.5)",
 				transition: "0.3s ease"
 			},
 			"div.card:hover": {
-				backgroundColor: "rgba(130,130,130,0.5)",
+				backgroundColor: "rgba("+Styling.styling.tableColor+",0.5)",
 				transition: "0.3s ease"
 			},
 			"span.card": {
@@ -166,7 +166,7 @@ export class CollectionView extends Component {
 				left: "0.4rem",
 				fontSize: "0.6rem",
 				lineHeight: "0.6rem",
-				color: "rgb(130,130,130)"
+				color: "rgb("+Styling.styling.tableColor+")"
 			},
 			"span.card-entry": {
 				zIndex: "2",
@@ -179,7 +179,7 @@ export class CollectionView extends Component {
 				padding: "0 0.5rem"
 			},
 			".selected, div.card.selected": {
-				backgroundColor: "rgba(130,130,130,0.7)",
+				backgroundColor: "rgba("+Styling.styling.tableColor+",0.7)",
 				transition: "0.3s ease"
 			},
 		}

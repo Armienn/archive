@@ -6,7 +6,8 @@ var styling = {
 	mainText: "#eee",
 	mainIconFilter: "invert(1)",
 	inactiveText: "rgba(0,0,0,0.4)",
-	hoverBackground: "rgba(255, 255, 255, 0.35)"
+	hoverBackground: "rgba(255, 255, 255, 0.35)",
+	tableColor: "130,130,130"
 }
 
 export class Styling {

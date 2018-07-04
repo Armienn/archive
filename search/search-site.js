@@ -29,14 +29,15 @@ export class SearchSite extends Component {
 
 	colorTest(style){
 		Styling.styling = style || {
-			headerBackground: "#aaf",
-			headerText: "#00f",
+			headerBackground: "#111155",
+			headerText: "#fff",
 			headerIconFilter: "",
-			mainBackground: "#afa",
-			mainText: "#0f0",
+			mainBackground: "#bbddff",
+			mainText: "#222",
 			mainIconFilter: "",
-			inactiveText: "rgba(0,0,0,0.4)",
-			hoverBackground: "rgba(255, 255, 255, 0.35)"
+			inactiveText: "rgba(120,120,120,0.4)",
+			hoverBackground: "rgba(255, 255, 255, 0.35)",
+			tableColor: "130,160,200"
 		}
 		clearStylesheets()
 		update()
