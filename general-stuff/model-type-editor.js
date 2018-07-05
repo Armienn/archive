@@ -102,7 +102,7 @@ export class ModelTypeEditor extends Component {
 
 	modelFromSetup(existingSetup) {
 		for (var key in existingSetup.filterModel) {
-			this.model.push({ key: key, options: existingSetup.filterModel[key].options, restricted: existingSetup.filterModel[key].restricted })
+			this.model.push({ key: key, options: existingSetup.filterModel[key].options || [], restricted: existingSetup.filterModel[key].restricted || false })
 		}
 	}
 }

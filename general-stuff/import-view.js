@@ -38,6 +38,7 @@ export class ImportView extends Component {
 					this.manager.collections.push(setup)
 					this.manager.site.setCollection(setup.collection, setup.setup)
 					this.manager.currentSetup = setup
+					this.manager.site.clearSelection()
 					this.manager.save()
 					update()
 				}

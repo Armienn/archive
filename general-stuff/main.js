@@ -85,6 +85,11 @@ class CollectionManager {
 					new NavEntry("Delete collection", () => {
 						this.showView(new DeleteCollectionView(this, this.currentSetup))
 					}),
+					this.currentSetup.title != "Imported" && this.collections.find(e=>e.title == "Imported") ?
+						new NavEntry("Insert Imported", () => {
+							this.insertImported()
+						}) :
+						undefined,
 					new NavEntry("New entry", () => {
 						if (this.currentSetup)
 							this.showView(new ModelEditor(this, this.currentSetup))
@@ -103,5 +108,14 @@ class CollectionManager {
 				) :
 				undefined
 		].filter(e => e)
+	}
+
+	insertImported(){
+		var index = this.collections.findIndex(e=>e.title == "Imported")
+		this.currentSetup.collection.push(...this.collections[index].collection)
+		this.collections.splice(index, 1)
+		this.site.engine.updateFilteredCollection()
+		this.save()
+		update()
 	}
 }
