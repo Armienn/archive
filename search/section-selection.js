@@ -80,11 +80,11 @@ export class SectionSelection extends Component {
 				height: "100%",
 				backgroundColor: Styling.styling.mainBackground,
 				borderTop: "1px solid rgba(130,130,130,0.5)",
-				transition: "0.3s ease"
+				transition: "0.3s"
 			},
 			"div.selection-box.show": {
 				top: "0",
-				transition: "0.3s ease"
+				transition: "0.3s"
 			},
 			"div.content": {
 				position: "absolute",

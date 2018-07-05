@@ -3,7 +3,6 @@ import { SearchEngine } from "./search-engine.js"
 import { SearchBar } from "./search-bar.js"
 import iconButton, { barsIcon, gridIcon, gearIcon, arrowRightIcon, arrowLeftIcon } from "./icons.js"
 import { CollectionSetup } from "./collection-setup.js"
-import callOrReturn from "./util.js"
 import { Styling } from "./styling.js"
 
 export class CollectionView extends Component {
@@ -29,9 +28,9 @@ export class CollectionView extends Component {
 
 	renderThis() {
 		return l("div.root",
-			{ style: { height: callOrReturn(this.hiddenByOverlay) ? "calc(100% - " + this.hiddenByOverlay() + ")" : "" } },
+			{ style: { height: this.hiddenByOverlay ? "calc(100% - " + this.hiddenByOverlay() + ")" : "" } },
 			l("div.search-section", this.searchBar),
-			l("div.table-section" + (this.currentCompact() ? ".compact" : ""),
+			l("div.table-section" + (this.currentCompact() ? ".compact" : "") + (this.hiddenByOverlay && !this.hiddenByOverlay() ? ".overlayable" : ""),
 				this.viewSettings(),
 				this.mode == "table" ? this.getTable() : this.getGrid())
 		)
@@ -53,7 +52,12 @@ export class CollectionView extends Component {
 			},
 			"div.table-section": {
 				height: "calc(100% - 3em)",
-				overflow: "auto"
+				overflow: "auto",
+				transition: "0.3s"
+			},
+			"div.table-section.overlayable": {
+				height: "calc(100vh - 3em)",
+				transition: "0.3s"
 			},
 			table: {
 				width: "100%",
