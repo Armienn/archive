@@ -7,6 +7,7 @@ import { ModelEditor } from "./model-editor.js"
 import { ExportView } from "./export-view.js"
 import { ImportView } from "./import-view.js"
 import { DeleteView } from "./delete-view.js"
+import { DeleteCollectionView } from "./delete-collection-view.js"
 
 window.onload = function () {
 	var site = new SearchSite()
@@ -80,6 +81,9 @@ class CollectionManager {
 				new NavGroup(this.currentSetup.title,
 					new NavEntry("Edit collection", () => {
 						this.showView(new ModelTypeEditor(this, this.currentSetup))
+					}),
+					new NavEntry("Delete collection", () => {
+						this.showView(new DeleteCollectionView(this, this.currentSetup))
 					}),
 					new NavEntry("New entry", () => {
 						if (this.currentSetup)
