@@ -11,13 +11,13 @@ export class ExportView extends Component {
 	renderThis() {
 		return l("div",
 			l("div",
-				l("button", {
+				l("button" + (this.dataToExport == "raw" ? "" : ".inactive"), {
 					onclick: () => {
 						this.dataToExport = "raw"
 						update()
 					}
 				}, "Raw data"),
-				l("button", {
+				l("button" + (this.dataToExport == "table" ? "" : ".inactive"), {
 					onclick: () => {
 						this.dataToExport = "table"
 						update()
@@ -25,25 +25,25 @@ export class ExportView extends Component {
 				}, "Table data")
 			),
 			l("div",
-				l("button", {
+				l("button" + (this.type == "JSON" ? "" : ".inactive"), {
 					onclick: () => {
 						this.type = "JSON"
 						update()
 					}
 				}, "JSON"),
-				l("button", {
+				l("button" + (this.type == "CSV" ? "" : ".inactive"), {
 					onclick: () => {
 						this.type = "CSV"
 						update()
 					}
 				}, "CSV"),
-				l("button", {
+				l("button" + (this.type == "TSV" ? "" : ".inactive"), {
 					onclick: () => {
 						this.type = "TSV"
 						update()
 					}
 				}, "TSV"),
-				l("button", {
+				l("button" + (this.type == "Markdown" ? "" : ".inactive"), {
 					onclick: () => {
 						this.type = "Markdown"
 						update()

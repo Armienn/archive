@@ -78,10 +78,26 @@ input, select, button {
 
 button {
 	color: inherit;
+	background-color: transparent;
+	transition: 0.3s ease;
 }
 
-button {
-	background-color: transparent;
+button:hover {
+	background-color: rgba(255,255,255,0.3);
+	transition: 0.3s ease;
+}
+
+.active{
+	opacity: 1;
+	transition: 0.3s ease;
+}
+.inactive{
+	opacity: 0.5;
+	transition: 0.3s ease;
+}
+.inactive:hover{
+	opacity: 0.8;
+	transition: 0.3s ease;
 }
 
 button.icon{
@@ -123,10 +139,6 @@ html{
 	button.mobile-menu-button {
 		display: none;
 	}
-}
-
-.dark-symbol{
-	filter: invert(1)
 }
 
 ::-webkit-scrollbar {

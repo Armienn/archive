@@ -71,7 +71,7 @@ export class NavGroup extends Component {
 	}
 
 	entryElement(e) {
-		return l("li.entry" + (e.selected() ? "" : ".unselected"), { onclick: e.onclick }, e.content)
+		return l("li.entry" + (e.selected() ? "" : ".inactive"), { onclick: e.onclick }, e.content)
 	}
 
 	static styleThis() {
@@ -92,10 +92,7 @@ export class NavGroup extends Component {
 				transition: "0.5s ease"
 			},
 			"li.entry:hover": {
-				color: "rgba(255,255,255,0.4)",
-			},
-			".unselected": {
-				color: Styling.styling.inactiveText,
+				backgroundColor: "rgba(255,255,255,0.3)"
 			}
 		}
 	}
