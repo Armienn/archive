@@ -71,7 +71,7 @@ export class ImportView extends Component {
 		if (lines.length < 2)
 			return this.type = "nothing"
 		var onEveryLine = { "|": true, "\t": true, ",": true }
-		for (var line of lines) {
+		for (var line of lines.splice(0, 10)) {
 			onEveryLine["|"] &= line.includes("|")
 			onEveryLine["\t"] &= line.includes("\t")
 			onEveryLine[","] &= line.includes(",")

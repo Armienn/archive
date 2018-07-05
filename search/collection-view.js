@@ -113,7 +113,8 @@ export class CollectionView extends Component {
 				height: "2em"
 			},
 			"button.label": {
-				height: "2em"
+				fontSize: "0.8em",
+				height: "2.5em"
 			},
 			".clickable": {
 				transition: "0.5s ease",

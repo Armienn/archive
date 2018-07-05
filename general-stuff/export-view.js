@@ -5,10 +5,25 @@ export class ExportView extends Component {
 		super()
 		this.manager = manager
 		this.type = "JSON"
+		this.dataToExport = "table"
 	}
 
 	renderThis() {
 		return l("div",
+			l("div",
+				l("button", {
+					onclick: () => {
+						this.dataToExport = "raw"
+						update()
+					}
+				}, "Raw data"),
+				l("button", {
+					onclick: () => {
+						this.dataToExport = "table"
+						update()
+					}
+				}, "Table data")
+			),
 			l("div",
 				l("button", {
 					onclick: () => {
@@ -49,26 +64,46 @@ export class ExportView extends Component {
 	}
 
 	exportedCollection() {
-		var collection = this.manager.site.engine.filteredCollection
 		switch (this.type) {
-			case "JSON": return this.toJSON(collection.map(e => this.tableDataFor(e)))
-			case "CSV": return this.toXSV(collection.map(e => this.tableDataFor(e, true)), ",")
-			case "TSV": return this.toXSV(collection.map(e => this.tableDataFor(e, true)), "\t")
-			case "Markdown": return this.toMarkdown(collection.map(e => this.tableDataFor(e, true)))
+			case "JSON": return this.toJSON(this.collectionToExport())
+			case "CSV": return this.toXSV(this.collectionToExport(true), ",")
+			case "TSV": return this.toXSV(this.collectionToExport(true), "\t")
+			case "Markdown": return this.toMarkdown(this.collectionToExport(true))
 		}
+	}
+
+	collectionToExport(fillMissing = false) {
+		if (this.dataToExport == "raw") {
+			if (!fillMissing)
+				return this.manager.site.engine.filteredCollection
+			var keys = this.allKeys(this.manager.site.engine.filteredCollection)
+			return this.manager.site.engine.filteredCollection.map(e => {
+				var entry = {}
+				for (var key of keys)
+					entry[key] = e[key] || ""
+				return entry
+			})
+		}
+		return this.manager.site.engine.filteredCollection.map(e => this.tableDataFor(e, fillMissing))
+	}
+
+	allKeys(collection) {
+		var keys = {}
+		for (var entry of collection)
+			for (var key in entry)
+				keys[key] = true
+		return Object.keys(keys)
 	}
 
 	tableDataFor(entry, fillMissing = false) {
 		var tableEntry = {}
-		for (var e of this.manager.currentSetup.setup.tableSetup.entries) {
-			if (e.shown) {
-				if (entry[e.key] !== undefined)
-					tableEntry[e.key] = entry[e.key]
-				else if (typeof this.manager.currentSetup.setup.entry(e.key, entry) === "string")
-					tableEntry[e.key] = this.manager.currentSetup.setup.entry(e.key, entry)
-				else if (fillMissing)
-					tableEntry[e.key] = ""
-			}
+		for (var e of this.manager.currentSetup.setup.tableSetup.entries.filter(e => e.shown)) {
+			if (entry[e.key] !== undefined)
+				tableEntry[e.key] = entry[e.key]
+			else if (typeof this.manager.currentSetup.setup.entry(e.key, entry) === "string")
+				tableEntry[e.key] = this.manager.currentSetup.setup.entry(e.key, entry)
+			else if (fillMissing)
+				tableEntry[e.key] = ""
 		}
 		return tableEntry
 	}
@@ -107,7 +142,7 @@ export class ExportView extends Component {
 		return table
 	}
 
-	toMarkdown(collection){
+	toMarkdown(collection) {
 		if (!collection.length)
 			return ""
 		var sub = {}
