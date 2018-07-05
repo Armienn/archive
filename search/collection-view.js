@@ -17,7 +17,7 @@ export class CollectionView extends Component {
 		this.select = select || (() => { })
 		this.selected = selected || (() => false)
 		this.hiddenByOverlay = hiddenByOverlay
-		this.save = ()=>{}
+		this.save = () => { }
 	}
 
 	set collection(value) {
@@ -31,10 +31,16 @@ export class CollectionView extends Component {
 		return l("div.root",
 			{ style: { height: callOrReturn(this.hiddenByOverlay) ? "calc(100% - " + this.hiddenByOverlay() + ")" : "" } },
 			l("div.search-section", this.searchBar),
-			l("div.table-section",
+			l("div.table-section" + (this.currentCompact() ? ".compact" : ""),
 				this.viewSettings(),
 				this.mode == "table" ? this.getTable() : this.getGrid())
 		)
+	}
+
+	currentCompact() {
+		if (this.mode == "table")
+			return this.collectionSetup.tableSetup.compact
+		return this.collectionSetup.gridSetup.compact
 	}
 
 	static styleThis() {
@@ -53,17 +59,20 @@ export class CollectionView extends Component {
 				width: "100%",
 				fontSize: "0.8rem"
 			},
-			tr: {
+			"tr": {
 				height: "2rem",
-				backgroundColor: "rgba("+Styling.styling.tableColor+",0.2)",
-				borderBottom: "1px solid rgba("+Styling.styling.tableColor+",0.5)"
+				backgroundColor: "rgba(" + Styling.styling.tableColor + ",0.2)",
+				borderBottom: "1px solid rgba(" + Styling.styling.tableColor + ",0.5)"
+			},
+			".compact tr": {
+				height: "unset"
 			},
 			"tbody tr": {
 				cursor: "pointer",
 				transition: "0.3s ease"
 			},
 			"tbody tr:hover": {
-				backgroundColor: "rgba("+Styling.styling.tableColor+",0.5)",
+				backgroundColor: "rgba(" + Styling.styling.tableColor + ",0.5)",
 				transition: "0.3s ease"
 			},
 			th: {
@@ -72,12 +81,12 @@ export class CollectionView extends Component {
 				transition: "0.3s ease"
 			},
 			"thead th": {
-				backgroundColor: "rgba("+Styling.styling.tableColor+",0.3)",
+				backgroundColor: "rgba(" + Styling.styling.tableColor + ",0.3)",
 				fontWeight: "bold",
 				transition: "0.3s ease"
 			},
 			"thead th:hover": {
-				backgroundColor: "rgba("+Styling.styling.tableColor+",0.5)",
+				backgroundColor: "rgba(" + Styling.styling.tableColor + ",0.5)",
 				transition: "0.3s ease"
 			},
 			button: {
@@ -146,12 +155,15 @@ export class CollectionView extends Component {
 				margin: ".25rem",
 				overflow: "hidden",
 				cursor: "pointer",
-				backgroundColor: "rgba("+Styling.styling.tableColor+",0.2)",
-				border: "1px solid rgba("+Styling.styling.tableColor+",0.5)",
+				backgroundColor: "rgba(" + Styling.styling.tableColor + ",0.2)",
+				border: "1px solid rgba(" + Styling.styling.tableColor + ",0.5)",
 				transition: "0.3s ease"
 			},
+			".compact div.card": {
+				margin: "unset",
+			},
 			"div.card:hover": {
-				backgroundColor: "rgba("+Styling.styling.tableColor+",0.5)",
+				backgroundColor: "rgba(" + Styling.styling.tableColor + ",0.5)",
 				transition: "0.3s ease"
 			},
 			"span.card": {
@@ -161,6 +173,9 @@ export class CollectionView extends Component {
 				float: "left",
 				position: "relative"
 			},
+			".compact span.card": {
+				height: "unset",
+			},
 			"label.card": {
 				position: "absolute",
 				cursor: "pointer",
@@ -168,7 +183,10 @@ export class CollectionView extends Component {
 				left: "0.4rem",
 				fontSize: "0.6rem",
 				lineHeight: "0.6rem",
-				color: "rgb("+Styling.styling.tableColor+")"
+				color: "rgb(" + Styling.styling.tableColor + ")"
+			},
+			".compact label.card": {
+				display: "none"
 			},
 			"span.card-entry": {
 				zIndex: "2",
@@ -180,8 +198,12 @@ export class CollectionView extends Component {
 				textOverflow: "ellipsis",
 				padding: "0 0.5rem"
 			},
+			".compact span.card-entry": {
+				height: "unset",
+				lineHeight: "unset"
+			},
 			".selected, div.card.selected": {
-				backgroundColor: "rgba("+Styling.styling.tableColor+",0.7)",
+				backgroundColor: "rgba(" + Styling.styling.tableColor + ",0.7)",
 				transition: "0.3s ease"
 			},
 		}
@@ -189,6 +211,15 @@ export class CollectionView extends Component {
 
 	viewSettings() {
 		return l("div.table-settings",
+			l("button.label" + (this.currentCompact() ? ".active" : ".inactive"), {
+				onclick: () => {
+					if (this.mode == "table")
+						this.collectionSetup.tableSetup.compact = !this.collectionSetup.tableSetup.compact
+					else
+						this.collectionSetup.gridSetup.compact = !this.collectionSetup.gridSetup.compact
+					update()
+				}
+			}, "Compact"),
 			iconButton(barsIcon({ filter: Styling.styling.mainIconFilter }), () => {
 				this.mode = "table"
 				update()
