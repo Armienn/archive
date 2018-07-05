@@ -13,6 +13,7 @@ window.onload = function () {
 	window.site = site
 	var manager = new CollectionManager(site)
 	window.manager = manager
+	site.sections.header.header = "Stuff"
 	site.sections.navigation.navigationEntries = () => manager.navThing()
 	setRenderFunction(() => site.render())
 	update()
