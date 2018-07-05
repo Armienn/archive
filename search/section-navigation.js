@@ -31,7 +31,8 @@ export class SectionNavigation extends Component {
 				color: Styling.styling.headerText,
 				height: "100%",
 				overflowY: "auto",
-				fontWeight: "bold"
+				fontWeight: "bold",
+				zIndex: "1"
 			},
 			footer: {
 				position: "absolute",

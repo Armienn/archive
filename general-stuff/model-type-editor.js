@@ -35,7 +35,7 @@ export class ModelTypeEditor extends Component {
 						var mod = {}
 						for (let thing of this.model)
 							mod[thing.key] = "bla"
-						const col = {
+						let col = {
 							setup: CollectionSetup.fromExample(mod),
 							title: this.collectionName,
 							collection: []
@@ -45,13 +45,14 @@ export class ModelTypeEditor extends Component {
 						if (this.existingSetup) {
 							this.existingSetup.setup = col.setup
 							this.existingSetup.title = col.title
+							col = this.existingSetup
 						}
 						else {
 							this.manager.collections.push(col)
 						}
 						this.manager.save()
 						this.manager.currentSetup = col
-						this.manager.site.setCollection(this.existingSetup.collection, col.setup)
+						this.manager.site.setCollection(col.collection, col.setup)
 						this.manager.site.clearSelection()
 						update()
 					}
