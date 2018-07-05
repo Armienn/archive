@@ -1,4 +1,5 @@
 import { Component, l, update } from "../arf/arf.js"
+import { stringFrom } from "../search/util.js"
 
 export class ExportView extends Component {
 	constructor(manager) {
@@ -99,7 +100,7 @@ export class ExportView extends Component {
 		var tableEntry = {}
 		for (var e of this.manager.currentSetup.setup.tableSetup.entries.filter(e => e.shown)) {
 			if (entry[e.key] !== undefined)
-				tableEntry[e.key] = entry[e.key]
+				tableEntry[e.key] = fillMissing ? stringFrom(entry[e.key]) : entry[e.key]
 			else if (typeof this.manager.currentSetup.setup.entry(e.key, entry) === "string")
 				tableEntry[e.key] = this.manager.currentSetup.setup.entry(e.key, entry)
 			else if (fillMissing)
