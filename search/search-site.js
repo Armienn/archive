@@ -27,7 +27,15 @@ export class SearchSite extends Component {
 		this.collectionSetups = {}
 	}
 
-	colorTest(style){
+	set saveFunction(func) {
+		this.sections.collection.save = func
+	}
+
+	set header(header) {
+		this.sections.header.header = header
+	}
+
+	colorTest(style) {
 		Styling.styling = style || {
 			headerBackground: "#111155",
 			headerText: "#fff",

@@ -13,7 +13,8 @@ window.onload = function () {
 	window.site = site
 	var manager = new CollectionManager(site)
 	window.manager = manager
-	site.sections.header.header = "Stuff"
+	site.header = "Stuff"
+	site.saveFunction = () => { manager.save() }
 	site.sections.navigation.navigationEntries = () => manager.navThing()
 	setRenderFunction(() => site.render())
 	update()
@@ -33,7 +34,7 @@ class CollectionManager {
 		this.collections = JSON.parse(localStorage.generalCollections)
 		for (var col of this.collections)
 			col.setup = new CollectionSetup(col.setup)
-		if(this.collections.length){
+		if (this.collections.length) {
 			this.currentSetup = this.collections[0]
 			this.site.setCollection(this.currentSetup.collection, this.currentSetup.setup)
 		}
@@ -67,18 +68,18 @@ class CollectionManager {
 			new NavGroup("Actions",
 				new NavEntry("New collection", () => {
 					this.showView(new ModelTypeEditor(this))
+				}),
+				new NavEntry("Export", () => {
+					this.showView(new ExportView(this))
+				}),
+				new NavEntry("Import", () => {
+					this.showView(new ImportView(this))
 				})
 			),
 			this.currentSetup ?
 				new NavGroup(this.currentSetup.title,
 					new NavEntry("Edit collection", () => {
 						this.showView(new ModelTypeEditor(this, this.currentSetup))
-					}),
-					new NavEntry("Export", () => {
-						this.showView(new ExportView(this))
-					}),
-					new NavEntry("Import", () => {
-						this.showView(new ImportView(this))
 					}),
 					new NavEntry("New entry", () => {
 						if (this.currentSetup)

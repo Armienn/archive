@@ -17,6 +17,7 @@ export class CollectionView extends Component {
 		this.select = select || (() => { })
 		this.selected = selected || (() => false)
 		this.hiddenByOverlay = hiddenByOverlay
+		this.save = ()=>{}
 	}
 
 	set collection(value) {
@@ -214,11 +215,13 @@ export class CollectionView extends Component {
 								return
 							this.collectionSetup.entries(this.mode).splice(index, 1)
 							this.collectionSetup.entries(this.mode).splice(index - 1, 0, e)
+							this.save()
 							update()
 						}, ".clickable"),
 					l("button.label.clickable" + (e.shown ? ".active" : ""), {
 						onclick: () => {
 							e.shown = !e.shown
+							this.save()
 							update()
 						}
 					}, this.collectionSetup.title(e.key)),
@@ -229,6 +232,7 @@ export class CollectionView extends Component {
 								return
 							this.collectionSetup.entries(this.mode).splice(index, 1)
 							this.collectionSetup.entries(this.mode).splice(index + 1, 0, e)
+							this.save()
 							update()
 						}, ".clickable"))
 			})
