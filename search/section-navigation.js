@@ -83,13 +83,16 @@ export class NavGroup extends Component {
 			"li.title": {
 				padding: "0.25rem",
 				width: "100%",
+				fontSize: "1rem",
 				backgroundColor: "rgba(0,0,0,0.3)"
 			},
 			"li.entry": {
 				cursor: "pointer",
-				padding: "0.25rem",
+				padding: "0 0.25rem",
 				width: "100%",
-				transition: "0.5s ease"
+				height: "2em",
+				lineHeight: "2em",
+				transition: "0.3s ease"
 			},
 			"li.entry:hover": {
 				backgroundColor: "rgba(255,255,255,0.3)"

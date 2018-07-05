@@ -39,7 +39,7 @@ export class SearchSite extends Component {
 		Styling.styling = style || {
 			headerBackground: "#111155",
 			headerText: "#fff",
-			headerIconFilter: "",
+			headerIconFilter: "invert(1)",
 			mainBackground: "#bbddff",
 			mainText: "#222",
 			mainIconFilter: "",
