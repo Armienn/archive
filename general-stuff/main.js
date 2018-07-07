@@ -4,8 +4,8 @@ import { NavGroup, NavEntry } from "../search/section-navigation.js"
 import { CollectionSetup } from "../search/collection-setup.js"
 import { ModelTypeEditor } from "./model-type-editor.js"
 import { ModelEditor } from "./model-editor.js"
-import { ExportView } from "./export-view.js"
-import { ImportView } from "./import-view.js"
+import { ExportView } from "../search/export-view.js"
+import { ImportView } from "../search/import-view.js"
 import { DeleteView } from "./delete-view.js"
 import { DeleteCollectionView } from "./delete-collection-view.js"
 
@@ -71,10 +71,25 @@ class CollectionManager {
 					this.showView(new ModelTypeEditor(this))
 				}),
 				new NavEntry("Export", () => {
-					this.showView(new ExportView(this))
+					this.showView(new ExportView(this.site))
 				}),
 				new NavEntry("Import", () => {
-					this.showView(new ImportView(this))
+					this.showView(new ImportView((collection)=>{
+						var setup = {
+							collection: collection,
+							setup: CollectionSetup.fromExample(collection[0]),
+							title: "Imported"
+						}
+						var index = this.collections.findIndex(e => e.title == "Imported")
+						if (index >= 0)
+							this.collections.splice(index, 1)
+						this.collections.push(setup)
+						this.site.setCollection(setup.collection, setup.setup)
+						this.currentSetup = setup
+						this.site.clearSelection()
+						this.save()
+						update()
+					}))
 				})
 			),
 			this.currentSetup ?

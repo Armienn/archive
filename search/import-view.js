@@ -1,10 +1,9 @@
 import { Component, l, update } from "../arf/arf.js"
-import { CollectionSetup } from "../search/collection-setup.js"
 
 export class ImportView extends Component {
-	constructor(manager) {
+	constructor(onImport) {
 		super()
-		this.manager = manager
+		this.onImport = onImport
 		this.importBlob = ""
 		this.type = "nothing"
 	}
@@ -27,20 +26,7 @@ export class ImportView extends Component {
 					var collection = this.importedCollection()
 					if (!collection.length)
 						return
-					var setup = {
-						collection: collection,
-						setup: CollectionSetup.fromExample(collection[0]),
-						title: "Imported"
-					}
-					var index = this.manager.collections.findIndex(e => e.title == "Imported")
-					if (index >= 0)
-						this.manager.collections.splice(index, 1)
-					this.manager.collections.push(setup)
-					this.manager.site.setCollection(setup.collection, setup.setup)
-					this.manager.currentSetup = setup
-					this.manager.site.clearSelection()
-					this.manager.save()
-					update()
+					this.onImport(collection)
 				}
 			}, "Import")
 		)
@@ -105,6 +91,6 @@ export class ImportView extends Component {
 
 	fromMarkdown(data) {
 		// regex to remove the ---|---|--- line if it exists
-		return this.fromXSV(data.replace(/\n\s*[-|]+\s*\n/, "\n"), "|")
+		return this.fromXSV(data.replace(/\n\s*[-:|]+\s*\n/, "\n"), "|")
 	}
 }
