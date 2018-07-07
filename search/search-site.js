@@ -4,7 +4,7 @@ import { SectionSelection } from "./section-selection.js"
 import { Component, l, update, clearStylesheets } from "../arf/arf.js"
 import { CollectionView } from "./collection-view.js"
 import { Styling } from "./styling.js"
-import toJSON, { toMarkdown, toXSV } from "./porting.js"
+import { toJSON, toMarkdown, toXSV, fromJSON, fromXSV, fromMarkdown, detectJSON, detectXSV } from "./porting.js"
 
 export class SearchSite extends Component {
 	constructor() {
@@ -31,6 +31,18 @@ export class SearchSite extends Component {
 			CSV: (collection, fields) => toXSV(collection, fields, ","),
 			TSV: (collection, fields) => toXSV(collection, fields, "\t"),
 			Markdown: toMarkdown
+		}
+		this.importMethods = {
+			JSON: fromJSON,
+			CSV: (data) => fromXSV(data, ","),
+			TSV: (data) => fromXSV(data, "\t"),
+			Markdown: fromMarkdown
+		}
+		this.detectMethods = {
+			JSON: detectJSON,
+			Markdown: (data, lines) => detectXSV(data, lines, "|"),
+			TSV: (data, lines) => detectXSV(data, lines, "\t"),
+			CSV: (data, lines) => detectXSV(data, lines, ",")
 		}
 	}
 

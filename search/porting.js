@@ -13,7 +13,7 @@ export function tableFrom(collection, fields) {
 	return table
 }
 
-export default function toJSON(collection, fields) {
+export function toJSON(collection, fields) {
 	var lines = []
 	for (let entry of collection) {
 		let thisEntry = {}
@@ -22,6 +22,14 @@ export default function toJSON(collection, fields) {
 		lines.push(JSON.stringify(thisEntry))
 	}
 	return "[\n" + lines.join(",\n") + "\n]"
+}
+
+export function fromJSON(data) {
+	return JSON.parse(data)
+}
+
+export function detectJSON(data) {
+	return data[0] == "[" && data[data.length - 1] == "]"
 }
 
 export function toXSV(collection, fields, separator) {
@@ -39,6 +47,30 @@ export function toXSV(collection, fields, separator) {
 	return table
 }
 
+export function fromXSV(data, separator) {
+	var rows = data.trim().split("\n")
+	var table = []
+	for (let i in rows)
+		table.push(rows[i].split(separator).map(e => e.trim()))
+	var collection = []
+	for (var i = 1; i < table.length; i++) {
+		var entry = {}
+		collection.push(entry)
+		for (var j in table[0])
+			entry[table[0][j]] = table[i][j]
+	}
+	return collection
+}
+
+export function detectXSV(data, lines, separator) {
+	if (lines.length < 2)
+		return false
+	for (var line of lines)
+		if (!line.includes(separator))
+			return false
+	return true
+}
+
 export function toMarkdown(collection, fields) {
 	if (!collection.length)
 		return ""
@@ -46,4 +78,9 @@ export function toMarkdown(collection, fields) {
 	for (let key in fields)
 		sub[key] = "-".repeat(fields[key].title.length)
 	return toXSV([sub, ...collection], fields, "|")
+}
+
+export function fromMarkdown(data) {
+	// regex to remove the ---|---|--- line if it exists
+	return this.fromXSV(data.replace(/\n\s*[-:|]+\s*\n/, "\n"), "|")
 }

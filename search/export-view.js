@@ -46,7 +46,8 @@ export class ExportView extends Component {
 		return {
 			textarea: {
 				width: "100%",
-				height: "10rem"
+				height: "10rem",
+				whiteSpace: "nowrap"
 			}
 		}
 	}

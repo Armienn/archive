@@ -74,7 +74,7 @@ class CollectionManager {
 					this.showView(new ExportView(this.site))
 				}),
 				new NavEntry("Import", () => {
-					this.showView(new ImportView((collection)=>{
+					this.showView(new ImportView(this.site, (collection)=>{
 						var setup = {
 							collection: collection,
 							setup: CollectionSetup.fromExample(collection[0]),

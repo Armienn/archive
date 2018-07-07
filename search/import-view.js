@@ -1,8 +1,9 @@
 import { Component, l, update } from "../arf/arf.js"
 
 export class ImportView extends Component {
-	constructor(onImport) {
+	constructor(site, onImport) {
 		super()
+		this.site = site
 		this.onImport = onImport
 		this.importBlob = ""
 		this.type = "nothing"
@@ -14,7 +15,7 @@ export class ImportView extends Component {
 				placeholder: "Data to import",
 				oninput: (event) => {
 					this.importBlob = event.target.value
-					this.detectType()
+					this.type = this.detectType()
 					update()
 				}
 			}, this.importBlob),
@@ -23,7 +24,7 @@ export class ImportView extends Component {
 				onclick: () => {
 					if (this.type == "nothing")
 						return
-					var collection = this.importedCollection()
+					var collection = this.site.importMethods[this.type](this.importBlob)
 					if (!collection.length)
 						return
 					this.onImport(collection)
@@ -36,61 +37,21 @@ export class ImportView extends Component {
 		return {
 			textarea: {
 				width: "100%",
-				height: "10rem"
+				height: "10rem",
+				whiteSpace: "nowrap"
 			}
-		}
-	}
-
-	importedCollection() {
-		switch (this.type) {
-			case "JSON": return this.fromJSON(this.importBlob)
-			case "CSV": return this.fromXSV(this.importBlob, ",")
-			case "TSV": return this.fromXSV(this.importBlob, "\t")
-			case "Markdown": return this.fromMarkdown(this.importBlob)
 		}
 	}
 
 	detectType() {
 		var data = this.importBlob.trim()
-		if (data[0] == "[" && data[data.length - 1] == "]")
-			return this.type = "JSON"
-		var lines = data.split("\n")
+		var lines = data.split("\n").splice(0, 10)
+		for(var type in this.site.detectMethods){
+			if(this.site.detectMethods[type](data, lines))
+				return type
+		}
 		if (lines.length < 2)
-			return this.type = "nothing"
-		var onEveryLine = { "|": true, "\t": true, ",": true }
-		for (var line of lines.splice(0, 10)) {
-			onEveryLine["|"] &= line.includes("|")
-			onEveryLine["\t"] &= line.includes("\t")
-			onEveryLine[","] &= line.includes(",")
-		}
-		if (onEveryLine["\t"])
-			return this.type = "TSV"
-		if (onEveryLine["|"])
-			return this.type = "Markdown"
-		return this.type = "CSV"
-	}
-
-	fromJSON(data) {
-		return JSON.parse(data)
-	}
-
-	fromXSV(data, separator) {
-		var rows = data.trim().split("\n")
-		var table = []
-		for (let i in rows)
-			table.push(rows[i].split(separator).map(e => e.trim()))
-		var collection = []
-		for (var i = 1; i < table.length; i++) {
-			var entry = {}
-			collection.push(entry)
-			for (var j in table[0])
-				entry[table[0][j]] = table[i][j]
-		}
-		return collection
-	}
-
-	fromMarkdown(data) {
-		// regex to remove the ---|---|--- line if it exists
-		return this.fromXSV(data.replace(/\n\s*[-:|]+\s*\n/, "\n"), "|")
+			return "nothing"
+		return "CSV"
 	}
 }
