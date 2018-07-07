@@ -47,14 +47,6 @@ class CollectionManager {
 		localStorage.generalCollections = JSON.stringify(this.collections)
 	}
 
-	showView(component) {
-		this.view = component
-		this.site.show(() => {
-			return this.view
-		})
-		update()
-	}
-
 	navThing() {
 		return [
 			new NavGroup("Collections",
@@ -68,13 +60,13 @@ class CollectionManager {
 			),
 			new NavGroup("Actions",
 				new NavEntry("New collection", () => {
-					this.showView(new ModelTypeEditor(this))
+					this.site.show(new ModelTypeEditor(this))
 				}),
 				new NavEntry("Export", () => {
-					this.showView(new ExportView(this.site))
+					this.site.show(new ExportView(this.site))
 				}),
 				new NavEntry("Import", () => {
-					this.showView(new ImportView(this.site, (collection)=>{
+					this.site.show(new ImportView(this.site, (collection)=>{
 						var setup = {
 							collection: collection,
 							setup: CollectionSetup.fromExample(collection[0]),
@@ -95,10 +87,10 @@ class CollectionManager {
 			this.currentSetup ?
 				new NavGroup(this.currentSetup.title,
 					new NavEntry("Edit collection", () => {
-						this.showView(new ModelTypeEditor(this, this.currentSetup))
+						this.site.show(new ModelTypeEditor(this, this.currentSetup))
 					}),
 					new NavEntry("Delete collection", () => {
-						this.showView(new DeleteCollectionView(this, this.currentSetup))
+						this.site.show(new DeleteCollectionView(this, this.currentSetup))
 					}),
 					this.currentSetup.title != "Imported" && this.collections.find(e=>e.title == "Imported") ?
 						new NavEntry("Insert Imported", () => {
@@ -107,17 +99,17 @@ class CollectionManager {
 						undefined,
 					new NavEntry("New entry", () => {
 						if (this.currentSetup)
-							this.showView(new ModelEditor(this, this.currentSetup))
+							this.site.show(new ModelEditor(this, this.currentSetup))
 					}),
 					this.site.selection ?
 						new NavEntry("Edit entry", () => {
 							if (this.currentSetup)
-								this.showView(new ModelEditor(this, this.currentSetup, this.site.selection))
+								this.site.show(new ModelEditor(this, this.currentSetup, this.site.selection))
 						}) :
 						undefined,
 					this.site.selection ?
 						new NavEntry("Delete entry", () => {
-							this.showView(new DeleteView(this, this.site.selection, this.currentSetup.collection))
+							this.site.show(new DeleteView(this, this.site.selection, this.currentSetup.collection))
 						}) :
 						undefined
 				) :

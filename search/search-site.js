@@ -25,6 +25,7 @@ export class SearchSite extends Component {
 			)
 		}
 		this.selection = null
+		this.shownView = null
 		this.collectionSetups = {}
 		this.exportMethods = {
 			JSON: toJSON,
@@ -52,22 +53,6 @@ export class SearchSite extends Component {
 
 	set header(header) {
 		this.sections.header.header = header
-	}
-
-	colorTest(style) {
-		Styling.styling = style || {
-			headerBackground: "#111155",
-			headerText: "#fff",
-			headerIconFilter: "invert(1)",
-			mainBackground: "#bbddff",
-			mainText: "#222",
-			mainIconFilter: "",
-			inactiveText: "rgba(120,120,120,0.4)",
-			hoverBackground: "rgba(255, 255, 255, 0.35)",
-			tableColor: "130,160,200"
-		}
-		clearStylesheets()
-		update()
 	}
 
 	get engine() {
@@ -107,10 +92,6 @@ export class SearchSite extends Component {
 		}
 	}
 
-	clearStylesheets() {
-		clearStylesheets()
-	}
-
 	showModel(model, collectionSetup) {
 		this.selection = model
 		this.sections.selection.content = () => collectionSetup.view(model)
@@ -141,7 +122,27 @@ export class SearchSite extends Component {
 				setup)
 	}
 
+	clearStylesheets() {
+		clearStylesheets()
+	}
+
 	update() {
+		update()
+	}
+
+	colorTest(style) {
+		Styling.styling = style || {
+			headerBackground: "#111155",
+			headerText: "#fff",
+			headerIconFilter: "invert(1)",
+			mainBackground: "#bbddff",
+			mainText: "#222",
+			mainIconFilter: "",
+			inactiveText: "rgba(120,120,120,0.4)",
+			hoverBackground: "rgba(255, 255, 255, 0.35)",
+			tableColor: "130,160,200"
+		}
+		clearStylesheets()
 		update()
 	}
 }

@@ -1,6 +1,7 @@
 import { Component, l, update } from "../arf/arf.js"
 import iconButton, { grabIcon, crossIcon } from "./icons.js"
 import { Styling } from "./styling.js"
+import callOrReturn from "./util.js"
 
 export class SectionSelection extends Component {
 	constructor(main) {
@@ -56,7 +57,7 @@ export class SectionSelection extends Component {
 							style: {
 								height: this.top ? -this.top - 24 + "px" : "calc(50vh - 24px)"
 							}
-						}, this.content ? this.content() : "")
+						}, this.content ? callOrReturn(this.content) : "")
 				)
 			)
 		)
