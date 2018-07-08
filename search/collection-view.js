@@ -296,11 +296,14 @@ export class CollectionView extends Component {
 			.filter(e => e.shown)
 			.map(e => l("th", {
 				onclick: () => {
-					if (!(e.key in this.engine.sortingModel))
+					if (!(e.key in this.collectionSetup.sortingModel))
 						return
-					if (this.engine.sorting == e.key)
+					let key = e.key
+					if(typeof this.collectionSetup.sortingModel[key] === "string")
+						key = this.collectionSetup.sortingModel[key]
+					if (this.engine.sorting == key)
 						this.engine.reverseSort = !this.engine.reverseSort
-					this.engine.sorting = e.key
+					this.engine.sorting = key
 					this.engine.updateFilteredCollection()
 					update()
 				},

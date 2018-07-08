@@ -66,7 +66,7 @@ export class SearchBar extends Component {
 				fontWeight: "bold",
 				color: "#888"
 			},
-			"div.options":{
+			"div.options": {
 				overflowX: "auto",
 				overflowY: "hidden",
 				height: "2em",
@@ -211,7 +211,7 @@ export class SearchBar extends Component {
 		)
 	}
 
-	clearSearchButton(){
+	clearSearchButton() {
 		return iconButton(crossIcon(), () => {
 			if (this.engine.filter.query)
 				this.engine.filter.query = ""
@@ -222,7 +222,7 @@ export class SearchBar extends Component {
 		}, ".remove")
 	}
 
-	searchFilterBox(){
+	searchFilterBox() {
 		return l("select.filter.clickable", {
 			oninput: (event) => {
 				if (this.engine.currentFilterType().restricted)
@@ -305,7 +305,9 @@ export class SearchBar extends Component {
 
 	sortOptions() {
 		const types = []
-		for (let key in this.engine.sortingModel) {
+		for (let key in this.collectionSetup.sortingModel) {
+			if (typeof this.collectionSetup.sortingModel[key] === "string")
+				continue
 			const props = key == this.engine.sorting ? { value: key, selected: true } : { value: key }
 			types.push(l("option", props, this.title(key)))
 		}
@@ -322,7 +324,7 @@ export class SearchBar extends Component {
 			{ disabled: !this.engine.filter.query })
 	}
 
-	setCollectionSetup(setup){
+	setCollectionSetup(setup) {
 		this.collectionSetup = setup
 		this.engine.setFilterModel(setup.filterModel)
 		this.engine.setSortingModel(setup.sortingModel)

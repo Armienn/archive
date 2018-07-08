@@ -48,7 +48,8 @@ export class SearchEngine {
 	setSortingModel(sortingModel) {
 		this.resetSortingModel()
 		for (let key in sortingModel)
-			this.sortingModel[key] = sortingModel[key]
+			if (!(typeof sortingModel[key] === "string"))
+				this.sortingModel[key] = sortingModel[key]
 		if (!Object.keys(sortingModel).includes(this.sorting))
 			this.resetSorting()
 	}
