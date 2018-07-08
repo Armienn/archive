@@ -187,7 +187,7 @@ export class SearchBar extends Component {
 					}
 				},
 				l("span", this.title(e.type)),
-				e.query
+				e.query || "Anything"
 			)
 		})
 	}
@@ -211,7 +211,7 @@ export class SearchBar extends Component {
 			if (this.engine.filter.query)
 				this.engine.filter.query = ""
 			else
-				this.engine.filter.type = "_anything_"
+				this.engine.filter.type = ""
 			this.engine.updateFilteredCollection()
 			update()
 		}, ".remove")

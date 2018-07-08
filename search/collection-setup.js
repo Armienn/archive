@@ -88,6 +88,15 @@ export class CollectionSetup {
 				this.gridSetup.entries.push({ key: key, shown: false })
 	}
 
+	add(key, title, entryModel = {}, filterModel = {}, sortingModel = null) {
+		this.titles[key] = title
+		this.entryModel[key] = entryModel
+		if (filterModel)
+			this.filterModel[key] = filterModel
+		if (sortingModel !== false)
+			this.sortingModel[key] = sortingModel
+	}
+
 	static fromExample(source, autoCapitalise = true) {
 		const setup = new CollectionSetup()
 		for (let key in source) {
