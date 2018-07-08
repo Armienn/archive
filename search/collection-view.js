@@ -61,7 +61,8 @@ export class CollectionView extends Component {
 			},
 			table: {
 				width: "100%",
-				fontSize: "0.8rem"
+				fontSize: "0.8rem",
+				marginBottom: "3em"
 			},
 			"tr": {
 				height: "2rem",
@@ -150,7 +151,8 @@ export class CollectionView extends Component {
 			"div.grid": {
 				display: "flex",
 				flexWrap: "wrap",
-				width: "100%"
+				width: "100%",
+				marginBottom: "3em"
 			},
 			"div.card": {
 				fontSize: "0.8rem",
@@ -204,7 +206,8 @@ export class CollectionView extends Component {
 			},
 			".compact span.card-entry": {
 				height: "unset",
-				lineHeight: "unset"
+				lineHeight: "unset",
+				padding: "0"
 			},
 			".selected, div.card.selected": {
 				backgroundColor: "rgba(" + Styling.styling.tableColor + ",0.7)",
