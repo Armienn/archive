@@ -307,7 +307,7 @@ export class CollectionView extends Component {
 					this.engine.updateFilteredCollection()
 					update()
 				},
-				style: { cursor: this.engine.sortingModel[e.key] ? "" : "default" }
+				style: { cursor: this.collectionSetup.sortingModel[e.key] ? "" : "default" }
 			}, this.collectionSetup.title(e.key)))
 	}
 
@@ -339,6 +339,6 @@ export class CollectionView extends Component {
 
 	setCollectionSetup(setup) {
 		this.collectionSetup = setup
-		this.searchBar.setCollectionSetup(setup)
+		this.engine.setCollectionSetup(setup)
 	}
 }

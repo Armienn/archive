@@ -5,7 +5,6 @@ export class SearchBar extends Component {
 	constructor(engine) {
 		super()
 		this.engine = engine
-		this.collectionSetup = {}
 		this.showSorting = false
 	}
 
@@ -194,12 +193,8 @@ export class SearchBar extends Component {
 	}
 
 	title(key) {
-		if (key === "_anything_")
-			return "Anything"
-		if (key === "" || key === "_original_")
-			return "Original"
-		if (this.collectionSetup.titles && this.collectionSetup.titles[key])
-			return this.collectionSetup.titles[key]
+		if (this.engine.collectionSetup.titles && this.engine.collectionSetup.titles[key])
+			return this.engine.collectionSetup.titles[key]
 		return key
 	}
 
@@ -237,8 +232,8 @@ export class SearchBar extends Component {
 	}
 
 	filterOptions() {
-		const types = []
-		for (let key in this.engine.filterModel) {
+		const types = [l("option", this.engine.filter.type ? { value: "", selected: true } : { value: "" }, "Anything")]
+		for (let key in this.engine.collectionSetup.filterModel) {
 			const props = key == this.engine.filter.type ? { value: key, selected: true } : { value: key }
 			types.push(l("option", props, this.title(key)))
 		}
@@ -304,9 +299,9 @@ export class SearchBar extends Component {
 	}
 
 	sortOptions() {
-		const types = []
-		for (let key in this.collectionSetup.sortingModel) {
-			if (typeof this.collectionSetup.sortingModel[key] === "string")
+		const types = [l("option", this.engine.sorting ? { value: "", selected: true } : { value: "" }, "Original")]
+		for (let key in this.engine.collectionSetup.sortingModel) {
+			if (typeof this.engine.collectionSetup.sortingModel[key] === "string")
 				continue
 			const props = key == this.engine.sorting ? { value: key, selected: true } : { value: key }
 			types.push(l("option", props, this.title(key)))
@@ -322,11 +317,5 @@ export class SearchBar extends Component {
 			},
 			".add.clickable",
 			{ disabled: !this.engine.filter.query })
-	}
-
-	setCollectionSetup(setup) {
-		this.collectionSetup = setup
-		this.engine.setFilterModel(setup.filterModel)
-		this.engine.setSortingModel(setup.sortingModel)
 	}
 }

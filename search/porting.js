@@ -74,10 +74,10 @@ export function detectXSV(data, lines, separator) {
 export function toMarkdown(collection, fields) {
 	if (!collection.length)
 		return ""
-	var sub = {}
+	var sub = []
 	for (let key in fields)
-		sub[key] = "-".repeat(fields[key].title.length)
-	return toXSV([sub, ...collection], fields, "|")
+		sub.push("-".repeat(fields[key].title.length))
+	return toXSV(collection, fields, "|").replace("\n", "\n" + sub.join("|") + "\n")
 }
 
 export function fromMarkdown(data) {

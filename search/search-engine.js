@@ -1,14 +1,14 @@
 import { fitsNested, parseQuery } from "./util.js"
+import { CollectionSetup } from "./collection-setup.js"
 
 export class SearchEngine {
 	constructor() {
+		this.collectionSetup = new CollectionSetup()
 		this._collection = []
 		this.filteredCollection = []
 		this.filters = []
 		this.resetFilter()
-		this.resetFilterModel()
 		this.resetSorting()
-		this.resetSortingModel()
 		this.reverseSort = false
 	}
 
@@ -22,41 +22,24 @@ export class SearchEngine {
 	}
 
 	resetFilter() {
-		this.filter = { type: "_anything_", query: "" }
-	}
-
-	resetFilterModel() {
-		this.filterModel = { "_anything_": { filter: fitsNested } }
-	}
-
-	setFilterModel(filterModel) {
-		this.resetFilterModel()
-		for (let key in filterModel)
-			this.filterModel[key] = filterModel[key]
-		if (!Object.keys(filterModel).includes(this.filter.type))
-			this.resetFilter()
+		this.filter = { type: "", query: "" }
 	}
 
 	resetSorting() {
-		this.sorting = "_original_"
+		this.sorting = ""
 	}
 
-	resetSortingModel() {
-		this.sortingModel = { "_original_": () => 0 }
-	}
-
-	setSortingModel(sortingModel) {
-		this.resetSortingModel()
-		for (let key in sortingModel)
-			if (!(typeof sortingModel[key] === "string"))
-				this.sortingModel[key] = sortingModel[key]
-		if (!Object.keys(sortingModel).includes(this.sorting))
+	setCollectionSetup(setup) {
+		this.collectionSetup = setup
+		if (!Object.keys(setup.sortingModel).includes(this.sorting))
 			this.resetSorting()
+		if (!Object.keys(setup.filterModel).includes(this.filter.type))
+			this.resetFilter()
 	}
 
 	addCurrentFilter() {
 		this.filters.push(this.filter)
-		this.filter = { type: "_anything_", query: "" }
+		this.resetFilter()
 	}
 
 	updateFilteredCollection() {
@@ -70,8 +53,8 @@ export class SearchEngine {
 		for (let filter of this.filters)
 			list = this.applyFilter(list, filter)
 		list = this.applyFilter(list, this.filter)
-		if (this.sorting && this.sorting != "_original_")
-			list.sort(this.sortingModel[this.sorting] || this.defaultCompare(this.sorting))
+		if (this.sorting)
+			list.sort(this.collectionSetup.sortingMethod(this.sorting) || this.defaultCompare(this.sorting))
 		if (this.reverseSort)
 			list.reverse()
 		return list
@@ -79,25 +62,29 @@ export class SearchEngine {
 
 	applyFilter(list, filter) {
 		let filterFunction = this.defaultFilter(filter.type)
-		if (this.filterModel[filter.type])
-			filterFunction = this.filterModel[filter.type].filter || this.defaultFilter(filter.type)
+		if (!filter.type)
+			filterFunction = fitsNested
+		if (this.collectionSetup.filterModel[filter.type])
+			filterFunction = this.collectionSetup.filterModel[filter.type].filter || this.defaultFilter(filter.type)
 		return list.filter(e => filterFunction(e, filter.query))
 	}
 
 	defaultCompare(key) {
 		return (a, b) => {
-			return a[key] > b[key] ? 1 : a[key] < b[key] ? -1 : 0
+			const A = this.collectionSetup.entryData(key, a)
+			const B = this.collectionSetup.entryData(key, b)
+			return A > B ? 1 : A < B ? -1 : 0
 		}
 	}
 
 	defaultFilter(key) {
 		return (m, q) => {
-			return fitsNested(m[key], q)
+			return fitsNested(this.collectionSetup.entryData(key, m), q)
 		}
 	}
 
 	currentFilterType() {
-		return this.filterModel[this.filter.type] || this.filterModel[""]
+		return this.collectionSetup.filterModel[this.filter.type] || { filter: fitsNested }
 	}
 
 	currentParsedQuery() {

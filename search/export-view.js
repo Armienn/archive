@@ -84,18 +84,10 @@ export class ExportView extends Component {
 	}
 
 	dataFor(entry, key) {
-		if (entry[key] !== undefined)
-			return entry[key]
-		else if (typeof this.site.sections.collection.collectionSetup.entry(key, entry) === "string")
-			return this.site.sections.collection.collectionSetup.entry(key, entry)
-		return undefined
+		return this.site.engine.collectionSetup.entryData(key, entry, true)
 	}
 
 	stringifiedDataFor(entry, key) {
-		if (entry[key] !== undefined)
-			return stringFrom(entry[key])
-		else if (typeof this.site.sections.collection.collectionSetup.entry(key, entry) === "string")
-			return this.site.sections.collection.collectionSetup.entry(key, entry)
-		return ""
+		return stringFrom(this.site.engine.collectionSetup.entryData(key, entry))
 	}
 }

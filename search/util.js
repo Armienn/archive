@@ -102,6 +102,8 @@ export function capitalise(text) {
 }
 
 export function stringFrom(source) {
+	if (source === undefined)
+		return ""
 	if (source instanceof Array)
 		return source.map(e => stringFrom(e)).join(", ")
 	if (typeof source === "object")
