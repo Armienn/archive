@@ -176,18 +176,16 @@ export class SearchBar extends Component {
 	}
 
 	filters() {
-		return this.engine.filters.map(e => {
+		return this.engine.filters.map(filter => {
 			return l("div.filter-tag",
 				{
 					onclick: () => {
-						this.engine.filters.splice(this.engine.filters.indexOf(e), 1)
-						this.engine.filter = e
-						this.engine.updateFilteredCollection()
+						this.engine.selectFilter(filter)
 						update()
 					}
 				},
-				l("span", this.title(e.type)),
-				e.query || "Anything"
+				l("span", filter.type ? this.title(filter.type) : "Anything"),
+				filter.query
 			)
 		})
 	}
@@ -209,10 +207,9 @@ export class SearchBar extends Component {
 	clearSearchButton() {
 		return iconButton(crossIcon(), () => {
 			if (this.engine.filter.query)
-				this.engine.filter.query = ""
+				this.engine.query = ""
 			else
-				this.engine.filter.type = ""
-			this.engine.updateFilteredCollection()
+				this.engine.type = ""
 			update()
 		}, ".remove")
 	}
@@ -221,20 +218,19 @@ export class SearchBar extends Component {
 		return l("select.filter.clickable", {
 			oninput: (event) => {
 				if (this.engine.currentFilterType().restricted)
-					this.engine.filter.query = ""
-				this.engine.filter.type = event.target.value
+					this.engine.query = ""
+				this.engine.type = event.target.value
 				if (this.engine.currentFilterType().restricted)
-					this.engine.filter.query = ""
-				this.engine.updateFilteredCollection()
+					this.engine.query = ""
 				update()
 			}
 		}, ...this.filterOptions())
 	}
 
 	filterOptions() {
-		const types = [l("option", this.engine.filter.type ? { value: "", selected: true } : { value: "" }, "Anything")]
+		const types = [l("option", this.engine.type ? { value: "", selected: true } : { value: "" }, "Anything")]
 		for (let key in this.engine.collectionSetup.filterModel) {
-			const props = key == this.engine.filter.type ? { value: key, selected: true } : { value: key }
+			const props = key == this.engine.type ? { value: key, selected: true } : { value: key }
 			types.push(l("option", props, this.title(key)))
 		}
 		return types
@@ -254,7 +250,6 @@ export class SearchBar extends Component {
 						else
 							parsedQuery.push({ type: "", query: e })
 						this.engine.setCurrentQueryFrom(parsedQuery)
-						this.engine.updateFilteredCollection()
 						update()
 					},
 				}, e)
@@ -263,12 +258,11 @@ export class SearchBar extends Component {
 		else {
 			return [l("input.search-input", {
 				placeholder: "Search", oninput: (event) => {
-					this.engine.filter.query = event.target.value
-					this.engine.updateFilteredCollection()
+					this.engine.query = event.target.value
 					update()
 				},
 				attributes: { list: "search-input-datalist" },
-				value: this.engine.filter.query
+				value: this.engine.query
 			}),
 			l("datalist#search-input-datalist", ...(current.options || []).map(e => l("option", e)))]
 		}
@@ -280,14 +274,12 @@ export class SearchBar extends Component {
 			l("select.clickable", {
 				oninput: (event) => {
 					this.engine.sorting = event.target.value
-					this.engine.updateFilteredCollection()
 					update()
 				}
 			}, ...this.sortOptions()),
 			iconButton(this.engine.reverseSort ? arrowUpIcon({ opacity: "0.6" }) : arrowDownIcon({ opacity: "0.6" }),
 				() => {
 					this.engine.reverseSort = !this.engine.reverseSort
-					this.engine.updateFilteredCollection()
 					update()
 				}, ".sortOrder.clickable")
 		),

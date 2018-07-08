@@ -45,6 +45,10 @@ export class SearchSite extends Component {
 			TSV: (data, lines) => detectXSV(data, lines, "\t"),
 			CSV: (data, lines) => detectXSV(data, lines, ",")
 		}
+		this.engine.onChange = serialisedFilters => {
+			if (serialisedFilters)
+				window.location.hash = serialisedFilters
+		}
 	}
 
 	set saveFunction(func) {
@@ -57,6 +61,10 @@ export class SearchSite extends Component {
 
 	get engine() {
 		return this.sections.collection.engine
+	}
+
+	setFiltersFromLocation() {
+		this.engine.setFiltersFrom(decodeURI(window.location.hash.substr(1)))
 	}
 
 	renderThis() {

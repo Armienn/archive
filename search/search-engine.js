@@ -7,26 +7,89 @@ export class SearchEngine {
 		this._collection = []
 		this.filteredCollection = []
 		this.filters = []
-		this.resetFilter()
-		this.resetSorting()
-		this.reverseSort = false
+		this.filter = { type: "", query: "" }
+		this._sorting = ""
+		this._reverseSort = false
+		this.onChange = () => { }
 	}
 
 	set collection(value) {
+		if (this._collection === value)
+			return
 		this._collection = value
-		this.updateFilteredCollection()
+		this.changed()
+		//this.updateFilteredCollection()
 	}
 
 	get collection() {
 		return this._collection
 	}
 
+	set query(value) {
+		if (this.filter.query === value)
+			return
+		this.filter.query = value
+		this.changed()
+	}
+
+	get query() {
+		return this.filter.query
+	}
+
+	set type(value) {
+		if (this.filter.type === value)
+			return
+		this.filter.type = value
+		if(this.filter.query)
+			this.changed()
+	}
+
+	get type() {
+		return this.filter.type
+	}
+
+	set sorting(value) {
+		if (this._sorting === value)
+			return
+		this._sorting = value
+		this.changed()
+	}
+
+	get sorting() {
+		return this._sorting
+	}
+
+	set reverseSort(value) {
+		if (this._reverse === value)
+			return
+		this._reverse = value
+		this.changed()
+	}
+
+	get reverseSort() {
+		return this._reverse
+	}
+
+	selectFilter(filter) {
+		const current = this.filter
+		this.filter = filter
+		this.filters.splice(this.filters.indexOf(filter), 1)
+		if (!(current.type == "" && current.query == ""))
+			this.changed()
+	}
+
 	resetFilter() {
+		const current = this.filter
 		this.filter = { type: "", query: "" }
+		if (!(current.type == "" && current.query == ""))
+			this.changed()
 	}
 
 	resetSorting() {
+		const current = this.sorting
 		this.sorting = ""
+		if (current != "")
+			this.changed()
 	}
 
 	setCollectionSetup(setup) {
@@ -40,6 +103,20 @@ export class SearchEngine {
 	addCurrentFilter() {
 		this.filters.push(this.filter)
 		this.resetFilter()
+	}
+
+	changed() {
+		this.onChange(this.serializeFilters())
+		this.updateFilteredCollection()
+	}
+
+	serializeFilters() {
+		if (this.type == "" && this.query == "" && !this.filters.length)
+			return ""
+		return [this.filter, ...this.filters]
+			.filter(f => f.query)
+			.map(f => f.type.replace(/[:;]/g, "") + ":" + f.query.replace(/[:;]/g, ""))
+			.join(";")
 	}
 
 	updateFilteredCollection() {
@@ -92,6 +169,16 @@ export class SearchEngine {
 	}
 
 	setCurrentQueryFrom(parsedQuery) {
-		this.filter.query = parsedQuery.map(e => e.type + e.query).join("|")
+		this.query = parsedQuery.map(e => e.type + e.query).join("|")
+	}
+
+	setFiltersFrom(serializeFilters) {
+		var parts = serializeFilters.split(";")
+		this.filters = parts.map(p => {
+			var blob = p.split(":")
+			return { type: blob.length > 1 ? blob[0] : "", query: blob.length > 1 ? blob[1] : blob[0] }
+		})
+		this.resetFilter()
+		this.changed()
 	}
 }
