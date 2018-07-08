@@ -296,7 +296,7 @@ export class CollectionView extends Component {
 			.filter(e => e.shown)
 			.map(e => l("th", {
 				onclick: () => {
-					if (!this.engine.sortingModel[e.key])
+					if (!(e.key in this.engine.sortingModel))
 						return
 					if (this.engine.sorting == e.key)
 						this.engine.reverseSort = !this.engine.reverseSort

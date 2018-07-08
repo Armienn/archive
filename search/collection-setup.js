@@ -9,7 +9,7 @@ export class CollectionSetup {
 		this.entryModel = {}
 		// { [key]: { options?: string[], restricted?: boolean, filter?: (model, query) => boolean } }
 		this.filterModel = {}
-		// { [key]: { compare: (a,b) => number } }
+		// { [key]: (a,b) => number
 		this.sortingModel = {}
 		// (model) => string | VNode
 		this.view = this.defaultView()
@@ -35,6 +35,12 @@ export class CollectionSetup {
 		if (mode == "table")
 			return this.tableSetup.entries
 		return this.gridSetup.entries
+	}
+
+	compact(mode) {
+		if (mode == "table")
+			return this.tableSetup.compact
+		return this.gridSetup.compact
 	}
 
 	defaultView() {
@@ -70,7 +76,7 @@ export class CollectionSetup {
 			setup.titles[key] = autoCapitalise ? capitalise(key) : key
 			setup.entryModel[key] = null
 			setup.filterModel[key] = {}
-			setup.sortingModel[key] = {}
+			setup.sortingModel[key] = null
 			setup.tableSetup.entries.push({ key: key, shown: true })
 			setup.gridSetup.entries.push({ key: key, shown: true })
 		}

@@ -80,6 +80,7 @@ button {
 	color: inherit;
 	background-color: transparent;
 	transition: 0.3s ease;
+	white-space: nowrap;
 }
 
 button:hover {

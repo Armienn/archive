@@ -196,9 +196,7 @@ export class SearchBar extends Component {
 	title(key) {
 		if (key === "_anything_")
 			return "Anything"
-		if (key === "_bestfit_")
-			return "Best Fit"
-		if (key === "")
+		if (key === "" || key === "_original_")
 			return "Original"
 		if (this.collectionSetup.titles && this.collectionSetup.titles[key])
 			return this.collectionSetup.titles[key]

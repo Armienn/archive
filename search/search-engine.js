@@ -1,4 +1,4 @@
-import { fitsNested, compareFit, parseQuery } from "./util.js"
+import { fitsNested, parseQuery } from "./util.js"
 
 export class SearchEngine {
 	constructor() {
@@ -38,11 +38,11 @@ export class SearchEngine {
 	}
 
 	resetSorting() {
-		this.sorting = "_bestfit_"
+		this.sorting = "_original_"
 	}
 
 	resetSortingModel() {
-		this.sortingModel = { "_bestfit_": { compare: compareFit } }
+		this.sortingModel = { "_original_": () => 0 }
 	}
 
 	setSortingModel(sortingModel) {
@@ -69,17 +69,11 @@ export class SearchEngine {
 		for (let filter of this.filters)
 			list = this.applyFilter(list, filter)
 		list = this.applyFilter(list, this.filter)
-		if (this.sorting)
-			list.sort(this.compareMethod())
+		if (this.sorting && this.sorting != "_original_")
+			list.sort(this.sortingModel[this.sorting] || this.defaultCompare(this.sorting))
 		if (this.reverseSort)
 			list.reverse()
 		return list
-	}
-
-	compareMethod() {
-		if (this.sortingModel[this.sorting])
-			return this.sortingModel[this.sorting].compare || this.defaultCompare(this.sorting)
-		return this.defaultCompare(this.sorting)
 	}
 
 	applyFilter(list, filter) {

@@ -96,11 +96,6 @@ function isBasicType(thing) {
 	return typeof thing === "string" || typeof thing === "number" || typeof thing === "boolean"
 }
 
-export function compareFit(a, b, query) {
-	a = query
-	return 0
-}
-
 export function capitalise(text) {
 	if (text.length)
 		return text[0].toUpperCase() + text.substr(1)
