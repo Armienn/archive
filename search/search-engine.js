@@ -10,7 +10,11 @@ export class SearchEngine {
 		this.filter = { type: "", query: "" }
 		this._sorting = ""
 		this._reverseSort = false
-		this.onChange = () => { }
+		this._onChange = []
+	}
+
+	set onChange(value) {
+		this._onChange.push(value)
 	}
 
 	set collection(value) {
@@ -40,7 +44,7 @@ export class SearchEngine {
 		if (this.filter.type === value)
 			return
 		this.filter.type = value
-		if(this.filter.query)
+		if (this.filter.query)
 			this.changed()
 	}
 
@@ -106,7 +110,8 @@ export class SearchEngine {
 	}
 
 	changed() {
-		this.onChange(this.serializeFilters())
+		for (var callback of this._onChange)
+			callback(this.serializeFilters())
 		this.updateFilteredCollection()
 	}
 
