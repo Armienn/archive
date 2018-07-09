@@ -6,9 +6,11 @@ export class CollectionComponent extends Component {
 		super()
 		this.collectionView = collectionView
 		this.hasChanged = true
-		this.engine.onChange = ()=>{
+		this.engine.onChange = () => {
 			this.hasChanged = true
 		}
+		this.cachedSetup = ""
+		this.cachedEntries = new Map()
 	}
 
 	get mode() {
@@ -27,7 +29,7 @@ export class CollectionComponent extends Component {
 		return this.collectionView.selected
 	}
 
-	renderHasChanged(){
+	renderHasChanged() {
 		const current = this.hasChanged
 		this.hasChanged = false
 		return current
@@ -151,6 +153,12 @@ export class CollectionComponent extends Component {
 		}
 	}
 
+	currentSetup() {
+		if (this.mode == "table")
+			return "table" + JSON.stringify(this.collectionSetup.tableSetup.entries)
+		return "grid" + JSON.stringify(this.collectionSetup.gridSetup.entries)
+	}
+
 	getTable() {
 		return l("table" + (this.collectionSetup.tableSetup.compact ? ".compact" : ""),
 			l("thead",
@@ -159,7 +167,7 @@ export class CollectionComponent extends Component {
 				)
 			),
 			l("tbody",
-				...this.getRows()
+				...this.getEntries(e=>this.getRow(e))
 			)
 		)
 	}
@@ -184,21 +192,33 @@ export class CollectionComponent extends Component {
 			}, this.collectionSetup.title(e.key)))
 	}
 
-	getRows() {
-		return this.engine.filteredCollection
-			.map((e, i) => l("tr" + (this.selected() == e ? ".selected" : ""),
-				{ onclick: () => this.select(e, this.collectionSetup) }, ...this.getRow(this.engine.filteredCollection[i])))
+	getEntries(getEntry) {
+		const currentSetup = this.currentSetup()
+		let useCache = false
+		if (this.cachedSetup === currentSetup)
+			useCache = true
+		this.cachedSetup = currentSetup
+		return this.engine.filteredCollection.map(e => {
+			let cachedEntry = this.cachedEntries.get(e)
+			if (!useCache || !cachedEntry) {
+				cachedEntry = getEntry(e)
+				this.cachedEntries.set(e, cachedEntry)
+			}
+			return cachedEntry
+		})
 	}
 
 	getRow(model) {
-		return this.collectionSetup.entries(this.mode)
-			.filter(e => e.shown)
-			.map(e => l("th", this.collectionSetup.entry(e.key, model)))
+		return l("tr" + (this.selected() == model ? ".selected" : ""),
+			{ onclick: () => this.select(model, this.collectionSetup) }, ...this.collectionSetup.entries(this.mode)
+				.filter(e => e.shown)
+				.map(e => l("th", this.collectionSetup.entry(e.key, model)))
+		)
 	}
 
 	getGrid() {
 		return l("div.grid" + (this.collectionSetup.gridSetup.compact ? ".compact" : ""),
-			...this.engine.filteredCollection.map(e => this.cardFrom(e)))
+			...this.getEntries(e => this.cardFrom(e)))
 	}
 
 	cardFrom(model) {
