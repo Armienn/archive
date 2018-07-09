@@ -1,5 +1,6 @@
 import { fitsNested, parseQuery } from "./util.js"
 import { CollectionSetup } from "./collection-setup.js"
+import { update } from "../arf/arf.js"
 
 export class SearchEngine {
 	constructor() {
@@ -11,6 +12,7 @@ export class SearchEngine {
 		this._sorting = ""
 		this._reverseSort = false
 		this._onChange = []
+		this.scheduledUpdate
 	}
 
 	set onChange(value) {
@@ -21,8 +23,7 @@ export class SearchEngine {
 		if (this._collection === value)
 			return
 		this._collection = value
-		this.changed()
-		//this.updateFilteredCollection()
+		this.changed(true)
 	}
 
 	get collection() {
@@ -56,7 +57,7 @@ export class SearchEngine {
 		if (this._sorting === value)
 			return
 		this._sorting = value
-		this.changed()
+		this.changed(true)
 	}
 
 	get sorting() {
@@ -67,7 +68,7 @@ export class SearchEngine {
 		if (this._reverse === value)
 			return
 		this._reverse = value
-		this.changed()
+		this.changed(true)
 	}
 
 	get reverseSort() {
@@ -109,10 +110,16 @@ export class SearchEngine {
 		this.resetFilter()
 	}
 
-	changed() {
-		for (var callback of this._onChange)
-			callback(this.serializeFilters())
-		this.updateFilteredCollection()
+	changed(updateImmediately) {
+		if (this.scheduledUpdate)
+			return
+		this.scheduledUpdate = setTimeout(() => {
+			for (var callback of this._onChange)
+				callback(this.serializeFilters())
+			this.scheduledUpdate = false
+			this.updateFilteredCollection()
+			update()
+		}, updateImmediately ? 50 : 1000)
 	}
 
 	serializeFilters() {

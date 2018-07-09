@@ -45,8 +45,9 @@ export class SearchSite extends Component {
 			TSV: (data, lines) => detectXSV(data, lines, "\t"),
 			CSV: (data, lines) => detectXSV(data, lines, ",")
 		}
+		this.hasSetFiltersFromHash = false
 		this.engine.onChange = serialisedFilters => {
-			if (serialisedFilters)
+			if (this.hasSetFiltersFromHash && serialisedFilters != window.location.hash.substr(1))
 				window.location.hash = serialisedFilters
 		}
 	}
@@ -65,6 +66,7 @@ export class SearchSite extends Component {
 
 	setFiltersFromLocation() {
 		this.engine.setFiltersFrom(decodeURI(window.location.hash.substr(1)))
+		this.hasSetFiltersFromHash = true
 	}
 
 	renderThis() {
