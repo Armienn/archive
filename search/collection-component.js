@@ -88,6 +88,7 @@ export class CollectionComponent extends Component {
 			"div.grid": {
 				display: "flex",
 				flexWrap: "wrap",
+				justifyContent: "center",
 				width: "100%",
 				marginBottom: "3em"
 			},
@@ -194,13 +195,12 @@ export class CollectionComponent extends Component {
 
 	getEntries(getEntry) {
 		const currentSetup = this.currentSetup()
-		let useCache = false
-		if (this.cachedSetup === currentSetup)
-			useCache = true
+		if (this.cachedSetup !== currentSetup)
+			this.cachedEntries = new Map()
 		this.cachedSetup = currentSetup
 		return this.engine.filteredCollection.map(e => {
 			let cachedEntry = this.cachedEntries.get(e)
-			if (!useCache || !cachedEntry) {
+			if (!cachedEntry) {
 				cachedEntry = getEntry(e)
 				this.cachedEntries.set(e, cachedEntry)
 			}

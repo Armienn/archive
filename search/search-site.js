@@ -65,7 +65,8 @@ export class SearchSite extends Component {
 	}
 
 	setFiltersFromLocation() {
-		this.engine.setFiltersFrom(decodeURI(window.location.hash.substr(1)))
+		if (window.location.hash.length > 1)
+			this.engine.setFiltersFrom(decodeURI(window.location.hash.substr(1)))
 	}
 
 	renderThis() {
@@ -103,7 +104,7 @@ export class SearchSite extends Component {
 
 	showModel(model, collectionSetup) {
 		this.selection = model
-		this.sections.selection.content = () => collectionSetup.view(model)
+		this.sections.selection.content = collectionSetup.view(model)
 		update()
 	}
 

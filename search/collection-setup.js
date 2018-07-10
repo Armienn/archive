@@ -1,5 +1,5 @@
 import { capitalise, stringFrom } from "./util.js"
-import { l } from "../arf/arf.js"
+import { SelectionView } from "./selection-view.js"
 
 export class CollectionSetup {
 	constructor(source) {
@@ -64,9 +64,12 @@ export class CollectionSetup {
 	defaultView() {
 		return (model) => {
 			var entries = []
-			for (var key in this.entryModel)
-				entries.push(l("div", this.titles[key] || key, ": ", this.entry(key, model)))
-			return l("div", ...entries)
+			for (var key in this.entryModel || model) {
+				entries.push(this.titles[key] || key)
+				entries.push(this.entry(key, model))
+			}
+			const options = { gridContent: () => [...SelectionView.entries(6, ...entries)] }
+			return new SelectionView(model, options)
 		}
 	}
 
