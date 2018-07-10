@@ -103,18 +103,25 @@ export class SearchSite extends Component {
 	}
 
 	showModel(model, collectionSetup) {
+		this.sections.collection.collectionComponent.cachedEntries.delete(this.selection)
+		this.sections.collection.collectionComponent.cachedEntries.delete(model)
+		this.sections.collection.collectionComponent.hasChanged = true
 		this.selection = model
 		this.sections.selection.content = collectionSetup.view(model)
 		update()
 	}
 
 	show(content) {
+		this.sections.collection.collectionComponent.cachedEntries.delete(this.selection)
+		this.sections.collection.collectionComponent.hasChanged = true
 		this.selection = null
 		this.sections.selection.content = content
 		update()
 	}
 
 	clearSelection() {
+		this.sections.collection.collectionComponent.cachedEntries.delete(this.selection)
+		this.sections.collection.collectionComponent.hasChanged = true
 		this.selection = null
 		this.sections.selection.content = null
 		update()
