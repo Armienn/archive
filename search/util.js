@@ -14,13 +14,13 @@ export function fitsFancy(thing, query) {
 	}
 }
 
-export function fitsNested(thing, query) {
+export function fitsNested(thing, query, specialQueries) {
 	if (!query)
 		return true
 	if (typeof query === "string") {
 		const parsed = parseQuery(query)
 		for (let q of parsed)
-			if (q.type == "!" ? !fitsNested(thing, q) : fitsNested(thing, q))
+			if (q.type == "!" ? !fitsNested(thing, q, specialQueries) : fitsNested(thing, q, specialQueries))
 				return true
 		if (parsed.length == 0)
 			return true
@@ -29,6 +29,8 @@ export function fitsNested(thing, query) {
 	thing = callOrReturn(thing)
 	if (thing == null)
 		return false
+	if(specialQueries && Object.keys(specialQueries).includes(query.query))
+		return specialQueries[query.query](thing)
 	if (isBasicType(thing)) {
 		return fitsFancy(thing, query)
 	} else if (typeof thing[Symbol.iterator] === "function") {

@@ -153,8 +153,9 @@ export class SearchEngine {
 		let filterFunction = this.defaultFilter(filter.type)
 		if (!filter.type)
 			filterFunction = fitsNested
-		if (this.collectionSetup.filterModel[filter.type])
-			filterFunction = this.collectionSetup.filterModel[filter.type].filter || this.defaultFilter(filter.type)
+		const filterModelEntry = this.collectionSetup.filterModel[filter.type]
+		if (filterModelEntry)
+			filterFunction = filterModelEntry.filter || this.defaultFilter(filter.type, filterModelEntry.specialQueries)
 		return list.filter(e => filterFunction(e, filter.query))
 	}
 
@@ -166,9 +167,9 @@ export class SearchEngine {
 		}
 	}
 
-	defaultFilter(key) {
+	defaultFilter(key, specialQueries) {
 		return (m, q) => {
-			return fitsNested(this.collectionSetup.entryData(key, m), q)
+			return fitsNested(this.collectionSetup.entryData(key, m), q, specialQueries)
 		}
 	}
 

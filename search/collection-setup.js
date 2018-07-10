@@ -7,7 +7,7 @@ export class CollectionSetup {
 		this.titles = {}
 		// { [key]: {value: (model) => string | VNode, data?: (model) => string}}
 		this.entryModel = {}
-		// { [key]: { options?: string[], restricted?: boolean, filter?: (model, query) => boolean } }
+		// { [key]: { options?: string[], restricted?: boolean, filter?: (model, query) => boolean, specialQueries?: {[key]: (value) => boolean } }
 		this.filterModel = {}
 		// { [key]: string | (a,b) => number
 		this.sortingModel = {}
