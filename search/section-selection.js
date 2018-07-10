@@ -52,6 +52,7 @@ export class SectionSelection extends Component {
 				},
 				l("div.selection-box" + (this.content ? ".show" : ""),
 					this.grabBar(),
+					...[this.content && this.content.header ? this.content.header() : undefined].filter(e=>e),
 					l("div.content",
 						{
 							style: {
@@ -86,6 +87,12 @@ export class SectionSelection extends Component {
 			"div.selection-box.show": {
 				top: "0",
 				transition: "0.3s"
+			},
+			header: {
+				fontSize: "1.5rem",
+				fontWeight: "bold",
+				height: "3rem",
+				lineHeight: "3rem"
 			},
 			"div.content": {
 				position: "absolute",

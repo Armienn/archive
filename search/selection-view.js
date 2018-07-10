@@ -4,7 +4,7 @@ export class SelectionView extends Component {
 	constructor(model, parts) {
 		super()
 		this.model = model
-		if(!parts){
+		if (!parts) {
 			var entries = []
 			for (var key in model) {
 				entries.push(key)
@@ -18,7 +18,6 @@ export class SelectionView extends Component {
 
 	renderThis() {
 		return l("div",
-			this.parts.header ? this.header() : "",
 			l("div", ...(this.parts.upperContent || (() => []))(this.model).filter(e => e)),
 			l("div.grid", ...(this.parts.gridContent || (() => []))(this.model).filter(e => e)),
 			l("div", ...(this.parts.lowerContent || (() => []))(this.model).filter(e => e))
@@ -58,9 +57,9 @@ export class SelectionView extends Component {
 	}
 
 	header() {
-		return l("header", { style: { background: this.headerBackground() } },
-			this.parts.header.content(this.model)
-		)
+		return this.parts.header ?
+			l("header", { style: { background: this.headerBackground() } }, this.parts.header.content(this.model)) :
+			undefined
 	}
 
 	headerBackground() {
