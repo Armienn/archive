@@ -94,6 +94,12 @@ export class SectionSelection extends Component {
 				height: "3rem",
 				lineHeight: "3rem"
 			},
+			"header button": {
+				height: "2.5rem",
+				width: "2.5rem",
+				margin: "0.25rem",
+				float: "right"
+			},
 			"div.content": {
 				position: "absolute",
 				overflowY: "auto",

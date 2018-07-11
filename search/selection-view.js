@@ -1,25 +1,27 @@
-import { Component, l } from "../arf/arf.js"
+import { Component, l, update } from "../arf/arf.js"
+import iconButton, { editIcon, crossIcon, deleteIcon, acceptIcon } from "./icons.js"
 
 export class SelectionView extends Component {
-	constructor(model, parts) {
+	constructor(model, setup, editSetup) {
 		super()
 		this.model = model
-		if (!parts) {
+		if (!setup) {
 			var entries = []
 			for (var key in model) {
 				entries.push(key)
 				entries.push(model[key])
 			}
-			parts = { gridContent: () => [...SelectionView.entries({}, ...entries)] }
+			setup = { gridContent: () => [...SelectionView.entries({}, ...entries)] }
 		}
-		this.parts = parts
+		this.setup = setup
+		this.editSetup = editSetup
 	}
 
 	renderThis() {
 		return l("div",
-			l("div", ...(this.parts.upperContent || (() => []))(this.model).filter(e => e)),
-			l("div.grid", ...(this.parts.gridContent || (() => []))(this.model).filter(e => e)),
-			l("div", ...(this.parts.lowerContent || (() => []))(this.model).filter(e => e))
+			l("div", ...(this.setup.upperContent || (() => []))(this.model).filter(e => e)),
+			l("div.grid", ...(this.setup.gridContent || (() => []))(this.model).filter(e => e)),
+			l("div", ...(this.setup.lowerContent || (() => []))(this.model).filter(e => e))
 		)
 	}
 
@@ -57,13 +59,37 @@ export class SelectionView extends Component {
 	}
 
 	header() {
-		return this.parts.header ?
-			l("header", { style: { background: this.headerBackground() } }, this.parts.header.content(this.model)) :
-			undefined
+		if (!this.setup.header)
+			return
+		var editIcons = []
+		if (this.editing)
+			editIcons.push(
+				iconButton(acceptIcon({ filter: "invert(1)" }), () => {
+					this.editing = false
+					update()
+				}),
+				iconButton(crossIcon({ filter: "invert(1)" }), () => {
+					this.editing = false
+					update()
+				}),
+				iconButton(deleteIcon({ filter: "invert(1)" }), () => {
+					this.editing = false
+					update()
+				})
+			)
+		else if (this.editSetup && this.editSetup.editable(this.model))
+			editIcons.push(iconButton(editIcon({ filter: "invert(1)" }), () => {
+				this.editing = true
+				update()
+			}))
+		return l("header", { style: { background: this.headerBackground() } },
+			this.setup.header.content(this.model),
+			...editIcons
+		)
 	}
 
 	headerBackground() {
-		var colors = this.parts.header.colors(this.model) || ["transparent"]
+		var colors = this.setup.header.colors(this.model) || ["transparent"]
 		if (colors.length > 1)
 			return "linear-gradient(to right, " + colors[0] + ", " + (colors[1] || colors[0]) + ")"
 		return colors[0] || ""
@@ -75,7 +101,7 @@ export class SelectionView extends Component {
 			rows: 6,
 			span: 6
 		}
-		if(_setup.span)
+		if (_setup.span)
 			setup.rows = _setup.span
 		for (var key in _setup)
 			setup[key] = _setup[key]
