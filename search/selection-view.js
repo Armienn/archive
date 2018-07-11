@@ -42,11 +42,13 @@ export class SelectionView extends Component {
 				color: "#888",
 				textAlign: "right",
 				marginRight: "0.5rem",
-				lineHeight: "2rem"
+				lineHeight: "2rem",
+				whiteSpace: "nowrap"
 			},
 			".content": {
 				textAlign: "left",
-				lineHeight: "2rem"
+				lineHeight: "2rem",
+				whiteSpace: "nowrap"
 			},
 			".section": {
 				display: "grid",
