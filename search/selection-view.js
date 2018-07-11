@@ -72,14 +72,19 @@ export class SelectionView extends Component {
 	}
 
 	static entries(span, ...entries) {
+		const columns = span[1] || 2
+		span = span[0] || span
 		var sections = []
-		for (let i = 0; i < entries.length; i += 2 * span)
-			sections.push(entries.slice(i, i + 2 * span))
+		for (let i = 0; i < entries.length; i += columns * span)
+			sections.push(entries.slice(i, i + columns * span))
+		const sectionStyle = { style: { 
+			gridArea: "span " + span,
+			gridTemplateColumns: "auto " + "min-content ".repeat(columns-2) + "auto" } }
 		return sections.map(section => {
-			var count = 0
-			return l("div.section", { style: { gridArea: "span " + span } }, ...section.map(e => {
+			var count = -1
+			return l("div.section", sectionStyle, ...section.map(e => {
 				count++
-				return count % 2 ? l("span.title", e + " | ") : l("span.content", e)
+				return count % columns ? l("span.content", e) : l("span.title", e + " | ")
 			}))
 		})
 	}
