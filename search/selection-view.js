@@ -10,10 +10,9 @@ export class SelectionView extends Component {
 				entries.push(key)
 				entries.push(model[key])
 			}
-			parts = { gridContent: () => [...SelectionView.entries(6, ...entries)] }
+			parts = { gridContent: () => [...SelectionView.entries({}, ...entries)] }
 		}
 		this.parts = parts
-		this.span = parts.span || 6
 	}
 
 	renderThis() {
@@ -42,18 +41,17 @@ export class SelectionView extends Component {
 				color: "#888",
 				textAlign: "right",
 				marginRight: "0.5rem",
-				lineHeight: "2rem",
 				whiteSpace: "nowrap"
 			},
 			".content": {
 				textAlign: "left",
-				lineHeight: "2rem",
 				whiteSpace: "nowrap"
 			},
 			".section": {
 				display: "grid",
 				gridTemplateColumns: "auto auto",
-				gridAutoRows: "2rem"
+				gridAutoRows: "2rem",
+				lineHeight: "2rem"
 			}
 		}
 	}
@@ -71,20 +69,32 @@ export class SelectionView extends Component {
 		return colors[0] || ""
 	}
 
-	static entries(span, ...entries) {
-		const columns = span[1] || 2
-		span = span[0] || span
+	static entries(_setup, ...entries) {
+		const setup = {
+			columns: "auto auto",
+			rows: 6,
+			span: 6
+		}
+		if(_setup.span)
+			setup.rows = _setup.span
+		for (var key in _setup)
+			setup[key] = _setup[key]
+		const columns = setup.columns.split(" ").length
 		var sections = []
-		for (let i = 0; i < entries.length; i += columns * span)
-			sections.push(entries.slice(i, i + columns * span))
-		const sectionStyle = { style: { 
-			gridArea: "span " + span,
-			gridTemplateColumns: "auto " + "min-content ".repeat(columns-2) + "auto" } }
+		for (let i = 0; i < entries.length; i += columns * setup.rows)
+			sections.push(entries.slice(i, i + columns * setup.rows))
 		return sections.map(section => {
 			var count = -1
-			return l("div.section", sectionStyle, ...section.map(e => {
+			return l("div.section", {
+				style: {
+					gridArea: "span " + setup.span,
+					gridTemplateColumns: setup.columns,
+					gridAutoRows: setup.rowHeight || "",
+					lineHeight: setup.rowHeight || ""
+				}
+			}, ...section.map(e => {
 				count++
-				return count % columns ? l("span.content", e) : l("span.title", e + " | ")
+				return count % columns ? l("span.content", e) : l("span.title", e, " | ")
 			}))
 		})
 	}
