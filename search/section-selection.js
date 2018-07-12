@@ -99,6 +99,7 @@ export class SectionSelection extends Component {
 			"header button": {
 				height: "2.5rem",
 				width: "2.5rem",
+				padding: "0.5rem",
 				margin: "0.25rem"
 			},
 			".header-area": {
@@ -121,6 +122,8 @@ export class SectionSelection extends Component {
 			},
 			".close-button": {
 				position: "absolute",
+				fontSize: "0.75rem",
+				width: "2rem",
 				right: "0",
 				opacity: "0.5",
 				transition: "0.3s ease"

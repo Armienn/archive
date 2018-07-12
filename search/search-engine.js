@@ -23,6 +23,7 @@ export class SearchEngine {
 		if (this._collection === value)
 			return
 		this._collection = value
+		this.filteredCollection = value
 		this.changed(true)
 	}
 
