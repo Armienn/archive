@@ -22,11 +22,10 @@ export function update() {
 }
 
 export function l(tag, options, ...children) {
-	if (!(typeof options === "object" && !(typeof options === "string" ||
-		options instanceof virtualDom.VNode ||
-		options instanceof virtualDom.VText ||
-		options instanceof Component
-	))) {
+	if (!(typeof options === "object" &&
+		!(typeof options === "string" ||
+			isArfElement(options)))
+	) {
 		children.unshift(options)
 		options = {}
 	}
@@ -35,10 +34,7 @@ export function l(tag, options, ...children) {
 			children.splice(i, 1, ...children[i])
 	children = children.filter(e => e !== undefined && e !== null)
 		.map(e => {
-			if (typeof e === "string" ||
-				e instanceof virtualDom.VNode ||
-				e instanceof virtualDom.VText ||
-				e instanceof Component)
+			if (typeof e === "string" || isArfElement(e))
 				return e
 			else
 				return "" + e
@@ -50,6 +46,12 @@ export function l(tag, options, ...children) {
 			children[i] = node
 		}
 	return virtualDom.h(tag, options, children)
+}
+
+export function isArfElement(element) {
+	return element instanceof virtualDom.VNode ||
+		element instanceof virtualDom.VText ||
+		element instanceof Component
 }
 
 export function elementFunction(tag) {
