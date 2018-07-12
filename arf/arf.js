@@ -24,6 +24,7 @@ export function update() {
 export function l(tag, options, ...children) {
 	if (!(typeof options === "object" &&
 		!(typeof options === "string" ||
+			options instanceof Array ||
 			isArfElement(options)))
 	) {
 		children.unshift(options)

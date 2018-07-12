@@ -58,7 +58,7 @@ export class SelectionView extends Component {
 				gridAutoRows: "2rem",
 				lineHeight: "2rem"
 			},
-			"input": {
+			"input, select": {
 				margin: "0.25rem"
 			}
 		}
@@ -96,8 +96,8 @@ export class SelectionView extends Component {
 				update()
 			}))
 		return l("header", { style: { background: this.headerBackground() } },
-			this.setup.header.content(this.model),
-			...editIcons
+			l("div.header-area", this.setup.header.content(this.model)),
+			l("div.button-area", editIcons)
 		)
 	}
 
@@ -120,17 +120,35 @@ export class SelectionView extends Component {
 				return l("span.title", options, " | ")
 			if (typeof options === "string" || isArfElement(options))
 				return l("span.content", options)
-
 			if (options.restricted) {
 				return l("select",
-					{ oninput: (event) => { model[options.key] = event.target.value; update() } },
-					...(options.options || []).map(e => l("option", { selected: model[e.key] == e }, e)))
+					{
+						oninput: (event) => {
+							if (options.key)
+								model[options.key] = event.target.value
+							else
+								options.set(event.target.value)
+							update()
+						},
+						style: { width: options.short ? "5rem" : "10rem" }
+					},
+					...(options.options || []).map(e => l("option", {
+						selected: options.key ? model[options.key] == e : options.value
+					}, e)))
 			}
 			else {
 				return [l("input", {
 					placeholder: options.key,
-					oninput: (event) => { model[options.key] = event.target.value; update() },
-					value: model[options.key],
+					oninput: (event) => {
+						if (options.key)
+							model[options.key] = event.target.value
+						else
+							options.set(event.target.value)
+						update()
+					},
+					type: options.type || "",
+					style: { width: options.short ? "5rem" : "10rem" },
+					value: options.key ? model[options.key] : options.value,
 					attributes: { list: "input-datalist" + options.key }
 				}),
 				l("datalist#input-datalist" + options.key, ...(options.options || []).map(e => l("option", e)))]
@@ -157,7 +175,7 @@ export class SelectionView extends Component {
 }
 
 
-function parseSetup(_setup){
+function parseSetup(_setup) {
 	const setup = {
 		columns: "auto auto",
 		rows: 6,
