@@ -29,9 +29,11 @@ export function l(tag, options, ...children) {
 		children.unshift(options)
 		options = {}
 	}
-	for (let i in children)
-		if (children[i] instanceof Array)
+	for (let i = 0; i < children.length; i++)
+		if (children[i] instanceof Array) {
 			children.splice(i, 1, ...children[i])
+			i--
+		}
 	children = children.filter(e => e !== undefined && e !== null)
 		.map(e => {
 			if (typeof e === "string" || isArfElement(e))

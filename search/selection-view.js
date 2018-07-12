@@ -1,10 +1,11 @@
-import { Component, l, update } from "../arf/arf.js"
+import { Component, l, update, isArfElement } from "../arf/arf.js"
 import iconButton, { editIcon, crossIcon, deleteIcon, acceptIcon } from "./icons.js"
 
 export class SelectionView extends Component {
 	constructor(model, setup, editSetup) {
 		super()
 		this.model = model
+		this.editedModel = {}
 		if (!setup) {
 			var entries = []
 			for (var key in model) {
@@ -18,10 +19,12 @@ export class SelectionView extends Component {
 	}
 
 	renderThis() {
+		const setup = this.editing ? this.editSetup : this.setup
+		const model = this.editing ? this.editedModel : this.model
 		return l("div",
-			l("div", ...(this.setup.upperContent || (() => []))(this.model).filter(e => e)),
-			l("div.grid", ...(this.setup.gridContent || (() => []))(this.model).filter(e => e)),
-			l("div", ...(this.setup.lowerContent || (() => []))(this.model).filter(e => e))
+			l("div", ...(setup.upperContent || (() => []))(model).filter(e => e)),
+			l("div.grid", ...(setup.gridContent || (() => []))(model).filter(e => e)),
+			l("div", ...(setup.lowerContent || (() => []))(model).filter(e => e))
 		)
 	}
 
@@ -54,6 +57,9 @@ export class SelectionView extends Component {
 				gridTemplateColumns: "auto auto",
 				gridAutoRows: "2rem",
 				lineHeight: "2rem"
+			},
+			"input": {
+				margin: "0.25rem"
 			}
 		}
 	}
@@ -66,20 +72,27 @@ export class SelectionView extends Component {
 			editIcons.push(
 				iconButton(acceptIcon({ filter: "invert(1)" }), () => {
 					this.editing = false
+					if (this.editSetup.onAccept)
+						this.editSetup.onAccept(this.editedModel)
 					update()
 				}),
 				iconButton(crossIcon({ filter: "invert(1)" }), () => {
 					this.editing = false
+					if (this.editSetup.onCancel)
+						this.editSetup.onCancel()
 					update()
 				}),
 				iconButton(deleteIcon({ filter: "invert(1)" }), () => {
 					this.editing = false
+					if (this.editSetup.onDelete)
+						this.editSetup.onDelete(this.model)
 					update()
 				})
 			)
 		else if (this.editSetup && this.editSetup.editable(this.model))
 			editIcons.push(iconButton(editIcon({ filter: "invert(1)" }), () => {
 				this.editing = true
+				this.editedModel = JSON.parse(JSON.stringify(this.model))
 				update()
 			}))
 		return l("header", { style: { background: this.headerBackground() } },
@@ -95,22 +108,42 @@ export class SelectionView extends Component {
 		return colors[0] || ""
 	}
 
-	static entries(_setup, ...entries) {
-		const setup = {
-			columns: "auto auto",
-			rows: 6,
-			span: 6
-		}
-		if (_setup.span)
-			setup.rows = _setup.span
-		for (var key in _setup)
-			setup[key] = _setup[key]
-		const columns = setup.columns.split(" ").length
+	static entries(setup, ...entries) {
+		return this.splitIntoSections(setup, (e, i, columns) => {
+			return i % columns ? l("span.content", e) : l("span.title", e, " | ")
+		}, ...entries)
+	}
+
+	static editEntries(model, setup, ...entries) {
+		return this.splitIntoSections(setup, (options, i, columns) => {
+			if (!(i % columns))
+				return l("span.title", options, " | ")
+			if (typeof options === "string" || isArfElement(options))
+				return l("span.content", options)
+
+			if (options.restricted) {
+				return l("select",
+					{ oninput: (event) => { model[options.key] = event.target.value; update() } },
+					...(options.options || []).map(e => l("option", { selected: model[e.key] == e }, e)))
+			}
+			else {
+				return [l("input", {
+					placeholder: options.key,
+					oninput: (event) => { model[options.key] = event.target.value; update() },
+					value: model[options.key],
+					attributes: { list: "input-datalist" + options.key }
+				}),
+				l("datalist#input-datalist" + options.key, ...(options.options || []).map(e => l("option", e)))]
+			}
+		}, ...entries)
+	}
+
+	static splitIntoSections(setup, entryMap, ...entries) {
+		setup = parseSetup(setup)
 		var sections = []
-		for (let i = 0; i < entries.length; i += columns * setup.rows)
-			sections.push(entries.slice(i, i + columns * setup.rows))
+		for (let i = 0; i < entries.length; i += setup.columnNumber * setup.rows)
+			sections.push(entries.slice(i, i + setup.columnNumber * setup.rows))
 		return sections.map(section => {
-			var count = -1
 			return l("div.section", {
 				style: {
 					gridArea: "span " + setup.span,
@@ -118,10 +151,22 @@ export class SelectionView extends Component {
 					gridAutoRows: setup.rowHeight || "",
 					lineHeight: setup.rowHeight || ""
 				}
-			}, ...section.map(e => {
-				count++
-				return count % columns ? l("span.content", e) : l("span.title", e, " | ")
-			}))
+			}, ...section.map((e, i) => entryMap(e, i, setup.columnNumber)))
 		})
 	}
+}
+
+
+function parseSetup(_setup){
+	const setup = {
+		columns: "auto auto",
+		rows: 6,
+		span: 6
+	}
+	if (_setup.span)
+		setup.rows = _setup.span
+	for (var key in _setup)
+		setup[key] = _setup[key]
+	setup.columnNumber = setup.columns.split(" ").length
+	return setup
 }
