@@ -70,10 +70,10 @@ export class SelectionView extends Component {
 		var editIcons = []
 		if (this.editing)
 			editIcons.push(
-				iconButton(acceptIcon({ filter: "invert(1)" }), () => {
+				iconButton(deleteIcon({ filter: "invert(1)" }), () => {
 					this.editing = false
-					if (this.editSetup.onAccept)
-						this.editSetup.onAccept(this.editedModel)
+					if (this.editSetup.onDelete)
+						this.editSetup.onDelete(this.model)
 					update()
 				}),
 				iconButton(crossIcon({ filter: "invert(1)" }), () => {
@@ -82,10 +82,10 @@ export class SelectionView extends Component {
 						this.editSetup.onCancel()
 					update()
 				}),
-				iconButton(deleteIcon({ filter: "invert(1)" }), () => {
+				iconButton(acceptIcon({ filter: "invert(1)" }), () => {
 					this.editing = false
-					if (this.editSetup.onDelete)
-						this.editSetup.onDelete(this.model)
+					if (this.editSetup.onAccept)
+						this.editSetup.onAccept(this.model, this.editedModel)
 					update()
 				})
 			)
