@@ -85,7 +85,7 @@ export class SearchEngine {
 
 	resetFilter() {
 		const current = this.filter
-		this.filter = { type: "", query: "" }
+		this.filter = { type: this.collectionSetup.defaultFilter || "", query: "" }
 		if (!(current.type == "" && current.query == ""))
 			this.changed()
 	}
@@ -101,8 +101,10 @@ export class SearchEngine {
 		this.collectionSetup = setup
 		if (!Object.keys(setup.sortingModel).includes(this.sorting))
 			this.resetSorting()
-		if (!Object.keys(setup.filterModel).includes(this.filter.type))
+		const setupFilters = Object.keys(setup.filterModel)
+		if (!setupFilters.includes(this.filter.type))
 			this.resetFilter()
+		this.filters = this.filters.map(f => setupFilters.includes(f.type))
 	}
 
 	addCurrentFilter() {

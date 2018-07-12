@@ -16,9 +16,10 @@ export class CollectionSetup {
 		// { compact: boolean, entries: { key: string, shown: boolean }[] }
 		this.tableSetup = { compact: false, entries: [] }
 		this.gridSetup = { compact: false, entries: [] }
-		for (var i in source) {
-			this[i] = source[i]
-		}
+		this.allowAnythingFilter = true
+		this.defaultFilter = ""
+		if (source)
+			this.copyFrom(source)
 	}
 
 	title(key) {
@@ -98,6 +99,24 @@ export class CollectionSetup {
 			this.filterModel[key] = filterModel
 		if (sortingModel !== false)
 			this.sortingModel[key] = sortingModel
+	}
+
+	copyFrom(source) {
+		for (let key in source.titles)
+			this.titles[key] = source.titles[key]
+		for (let key in source.entryModel)
+			this.entryModel[key] = source.entryModel[key]
+		for (let key in source.filterModel)
+			this.filterModel[key] = source.filterModel[key]
+		for (let key in source.sortingModel)
+			this.sortingModel[key] = source.sortingModel[key]
+		for (let key in source.titles)
+			this.titles[key] = source.titles[key]
+		this.view = source.view
+		this.tableSetup = { compact: source.tableSetup.compact, entries: source.tableSetup.entries }
+		this.gridSetup = { compact: source.gridSetup.compact, entries: source.gridSetup.entries }
+		this.allowAnythingFilter = source.allowAnythingFilter
+		this.defaultFilter = source.defaultFilter
 	}
 
 	static fromExample(source, autoCapitalise = true) {

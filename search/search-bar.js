@@ -184,16 +184,10 @@ export class SearchBar extends Component {
 						update()
 					}
 				},
-				l("span", filter.type ? this.title(filter.type) : "Anything"),
+				l("span", filter.type ? this.engine.collectionSetup.title(filter.type) : "Anything"),
 				filter.query
 			)
 		})
-	}
-
-	title(key) {
-		if (this.engine.collectionSetup.titles && this.engine.collectionSetup.titles[key])
-			return this.engine.collectionSetup.titles[key]
-		return key
 	}
 
 	searchThing() {
@@ -228,10 +222,12 @@ export class SearchBar extends Component {
 	}
 
 	filterOptions() {
-		const types = [l("option", this.engine.type ? { value: "", selected: true } : { value: "" }, "Anything")]
+		const types = []
+		if (this.engine.collectionSetup.allowAnythingFilter)
+			types.push(l("option", this.engine.type ? { value: "", selected: true } : { value: "" }, "Anything"))
 		for (let key in this.engine.collectionSetup.filterModel) {
 			const props = key == this.engine.type ? { value: key, selected: true } : { value: key }
-			types.push(l("option", props, this.title(key)))
+			types.push(l("option", props, this.engine.collectionSetup.title(key)))
 		}
 		return types
 	}
@@ -296,7 +292,7 @@ export class SearchBar extends Component {
 			if (typeof this.engine.collectionSetup.sortingModel[key] === "string")
 				continue
 			const props = key == this.engine.sorting ? { value: key, selected: true } : { value: key }
-			types.push(l("option", props, this.title(key)))
+			types.push(l("option", props, this.engine.collectionSetup.title(key)))
 		}
 		return types
 	}
