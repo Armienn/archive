@@ -5,7 +5,7 @@ var vtree
 var rootNode
 var render
 export function update() {
-	if(!render)
+	if (!render)
 		return console.error("render has not yet been set")
 	currentRender = Date.now()
 	if (!vtree) {
@@ -22,17 +22,27 @@ export function update() {
 }
 
 export function l(tag, options, ...children) {
-	if (typeof options == "string" ||
+	if (!(typeof options === "object" && !(typeof options === "string" ||
 		options instanceof virtualDom.VNode ||
 		options instanceof virtualDom.VText ||
 		options instanceof Component
-	) {
+	))) {
 		children.unshift(options)
 		options = {}
 	}
 	for (let i in children)
 		if (children[i] instanceof Array)
 			children.splice(i, 1, ...children[i])
+	children = children.filter(e => e !== undefined && e !== null)
+		.map(e => {
+			if (typeof e === "string" ||
+				e instanceof virtualDom.VNode ||
+				e instanceof virtualDom.VText ||
+				e instanceof Component)
+				return e
+			else
+				return "" + e
+		})
 	for (let i in children)
 		if (children[i] instanceof Component) {
 			var node = children[i].render()
@@ -80,7 +90,7 @@ function subcomponentsHaveChanged(component) {
 	for (var i in component._components) {
 		var subcomponent = component._components[i]
 		var tree = subcomponent.component.render()
-		if (tree != subcomponent.tree){
+		if (tree != subcomponent.tree) {
 			subcomponent.tree = tree
 			changes = true
 		}
@@ -118,8 +128,8 @@ function insertRule(sheet, key, rule) {
 		sheet.cssRules[index].style[i] = rule[i]
 }
 
-export function clearStylesheets(){
-	for(var key in stylesheets)
+export function clearStylesheets() {
+	for (var key in stylesheets)
 		document.head.removeChild(stylesheets[key])
 	stylesheets = {}
 }
@@ -135,7 +145,7 @@ export class Component {
 	render() {
 		if (!this.renderThis)
 			throw new Error("Component is missing renderThis()")
-		if(this.lastRender == currentRender)
+		if (this.lastRender == currentRender)
 			return this.tree
 		if (!stylesheets[this.designation] || this.constructor.styleHasChanged())
 			this.style()
@@ -174,6 +184,6 @@ function getDesignation(component) {
 	return "site-" + component.constructor.name
 }
 
-export function setRenderFunction(r){
+export function setRenderFunction(r) {
 	render = r
 }
