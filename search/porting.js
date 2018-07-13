@@ -52,14 +52,7 @@ export function fromXSV(data, separator) {
 	var table = []
 	for (let i in rows)
 		table.push(rows[i].split(separator).map(e => e.trim()))
-	var collection = []
-	for (var i = 1; i < table.length; i++) {
-		var entry = {}
-		collection.push(entry)
-		for (var j in table[0])
-			entry[table[0][j]] = table[i][j]
-	}
-	return collection
+	return objectsFromTable(table)
 }
 
 export function detectXSV(data, lines, separator) {
@@ -83,4 +76,15 @@ export function toMarkdown(collection, fields) {
 export function fromMarkdown(data) {
 	// regex to remove the ---|---|--- line if it exists
 	return this.fromXSV(data.replace(/\n\s*[-:|]+\s*\n/, "\n"), "|")
+}
+
+export function objectsFromTable(table){
+	var collection = []
+	for (var i = 1; i < table.length; i++) {
+		var entry = {}
+		collection.push(entry)
+		for (var j in table[0])
+			entry[table[0][j]] = table[i][j]
+	}
+	return collection
 }
