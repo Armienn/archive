@@ -101,17 +101,22 @@ export class CollectionSetup {
 			this.sortingModel[key] = sortingModel
 	}
 
-	copyFrom(source) {
+	copyFrom(source, ...exceptions) {
 		for (let key in source.titles)
-			this.titles[key] = source.titles[key]
+			if (!exceptions.includes(key))
+				this.titles[key] = source.titles[key]
 		for (let key in source.entryModel)
-			this.entryModel[key] = source.entryModel[key]
+			if (!exceptions.includes(key))
+				this.entryModel[key] = source.entryModel[key]
 		for (let key in source.filterModel)
-			this.filterModel[key] = source.filterModel[key]
+			if (!exceptions.includes(key))
+				this.filterModel[key] = source.filterModel[key]
 		for (let key in source.sortingModel)
-			this.sortingModel[key] = source.sortingModel[key]
+			if (!exceptions.includes(key))
+				this.sortingModel[key] = source.sortingModel[key]
 		for (let key in source.titles)
-			this.titles[key] = source.titles[key]
+			if (!exceptions.includes(key))
+				this.titles[key] = source.titles[key]
 		this.view = source.view
 		this.tableSetup = { compact: source.tableSetup.compact, entries: source.tableSetup.entries }
 		this.gridSetup = { compact: source.gridSetup.compact, entries: source.gridSetup.entries }

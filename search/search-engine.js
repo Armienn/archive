@@ -105,7 +105,7 @@ export class SearchEngine {
 		const setupFilters = Object.keys(setup.filterModel)
 		if (!setupFilters.includes(this.filter.type))
 			this.resetFilter()
-		this.filters = this.filters.map(f => setupFilters.includes(f.type))
+		this.filters = this.filters.filter(f => setupFilters.includes(f.type) || (f.type === "" && setup.allowAnythingFilter))
 	}
 
 	addCurrentFilter() {
@@ -192,7 +192,7 @@ export class SearchEngine {
 		var parts = serializeFilters.split(";")
 		this.filters = parts.map(p => {
 			var blob = p.split(":")
-			return { type: blob.length > 1 ? blob[0] : "", query: blob.length > 1 ? blob[1] : blob[0] }
+			return { type: blob.length > 1 ? blob[0] : "", query: blob.length > 1 ? blob[1] || "" : blob[0] || "" }
 		})
 		this.resetFilter()
 		this.changed()

@@ -11,7 +11,7 @@ export class SectionNavigation extends Component {
 	}
 
 	renderThis() {
-		return l("nav" + (this.shown ? ".mobile-nav" : ""),
+		return l("nav" + (this.shown ? "" : ".mobile-hidden"),
 			l("ul",
 				...this.navigationEntries()
 			),
@@ -30,18 +30,23 @@ export class SectionNavigation extends Component {
 				backgroundColor: Styling.styling.headerBackground,
 				color: Styling.styling.headerText,
 				height: "100%",
-				overflowY: "auto",
 				fontWeight: "bold",
 				zIndex: "1"
 			},
 			footer: {
 				position: "absolute",
 				fontWeight: "normal",
-				top: "calc(100% - 3rem)",
+				bottom: "0",
+				height: "3rem",
+				width: "12rem",
 				padding: "0.5rem",
 				textAlign: "center",
 				fontSize: "0.8rem",
 				backgroundColor: Styling.styling.headerBackground,
+			},
+			ul:{
+				height: "calc(100% - 3rem)",
+				overflowY: "auto"
 			},
 			".mobile-menu-button": {
 				position: "absolute",
