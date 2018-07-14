@@ -146,6 +146,10 @@ export class SearchBar extends Component {
 			".filter-tag": {
 				padding: "0.5em",
 				margin: "0 0.25em",
+				whiteSpace: "nowrap",
+				maxWidth: "25em",
+				overflow: "hidden",
+				textOverflow: "ellipsis",
 				transition: "0.5s ease",
 				color: "white",
 				cursor: "pointer",
@@ -203,7 +207,7 @@ export class SearchBar extends Component {
 			if (this.engine.filter.query)
 				this.engine.query = ""
 			else
-				this.engine.type = ""
+				this.engine.type = this.engine.collectionSetup.defaultFilter || ""
 			update()
 		}, ".remove")
 	}
@@ -216,6 +220,9 @@ export class SearchBar extends Component {
 				this.engine.type = event.target.value
 				if (this.engine.currentFilterType().restricted)
 					this.engine.query = ""
+				const filterType = this.engine.currentFilterType()
+				if(!this.engine.query && filterType.defaultFilter)
+					this.engine.query = filterType.defaultFilter
 				update()
 			}
 		}, ...this.filterOptions())

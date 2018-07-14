@@ -101,6 +101,15 @@ export class CollectionSetup {
 			this.sortingModel[key] = sortingModel
 	}
 
+	addScriptFilter(defaultFilter = "return model") {
+		this.filterModel["Custom Script"] = {
+			filter: (m, q) => {
+				return new Function("var model = this;" + q).call(m)
+			},
+			defaultFilter: defaultFilter
+		}
+	}
+
 	copyFrom(source, ...exceptions) {
 		for (let key in source.titles)
 			if (!exceptions.includes(key))
