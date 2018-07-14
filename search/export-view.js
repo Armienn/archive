@@ -2,11 +2,12 @@ import { Component, l, update } from "../arf/arf.js"
 import { stringFrom } from "./util.js"
 
 export class ExportView extends Component {
-	constructor(site) {
+	constructor(site, onExport = e => e) {
 		super()
 		this.site = site
 		this.type = "JSON"
 		this.dataToExport = "table"
+		this.onExport = onExport
 	}
 
 	renderThis() {
@@ -54,8 +55,8 @@ export class ExportView extends Component {
 
 	fieldsToExport() {
 		if (this.dataToExport == "raw")
-			return this.allKeys(this.site.engine.filteredCollection)
-		return this.allFields(this.site.sections.collection.collectionSetup.tableSetup.entries.filter(e => e.shown))
+			return this.allKeys(this.onExport(this.site.engine.filteredCollection, this.dataToExport))
+		return this.allFields(this.onExport(this.site.sections.collection.collectionSetup.tableSetup.entries.filter(e => e.shown), this.dataToExport))
 	}
 
 	allKeys(collection) {
