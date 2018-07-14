@@ -102,7 +102,8 @@ export class CollectionSetup {
 	}
 
 	addScriptFilter(defaultFilter = "return model") {
-		this.filterModel["Custom Script"] = {
+		this.titles["_script_"] = "Custom Script"
+		this.filterModel["_script_"] = {
 			filter: (m, q) => {
 				return new Function("var model = this;" + q).call(m)
 			},

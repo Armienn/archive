@@ -193,7 +193,7 @@ export class SearchEngine {
 		this.filters = parts.map(p => {
 			var blob = p.split(":")
 			return { type: blob.length > 1 ? blob[0] : "", query: blob.length > 1 ? blob[1] || "" : blob[0] || "" }
-		})
+		}).filter(e => e.type !== "_script_")
 		this.resetFilter()
 		this.changed()
 	}
