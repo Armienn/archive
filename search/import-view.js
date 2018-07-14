@@ -27,7 +27,7 @@ export class ImportView extends Component {
 					var collection = this.site.importMethods[this.type](this.importBlob)
 					if (!collection.length)
 						return
-					this.onImport(collection)
+					this.onImport(collection, this.type)
 				}
 			}, "Import")
 		)
@@ -46,8 +46,8 @@ export class ImportView extends Component {
 	detectType() {
 		var data = this.importBlob.trim()
 		var lines = data.split("\n").splice(0, 10)
-		for(var type in this.site.detectMethods){
-			if(this.site.detectMethods[type](data, lines))
+		for (var type in this.site.detectMethods) {
+			if (this.site.detectMethods[type](data, lines))
 				return type
 		}
 		if (lines.length < 2)
