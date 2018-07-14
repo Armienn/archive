@@ -64,6 +64,11 @@ export class SelectionView extends Component {
 		}
 	}
 
+	switchToEdit(){
+		this.editing = true
+		this.editedModel = JSON.parse(JSON.stringify(this.model))
+	}
+
 	header() {
 		if (!this.setup.header)
 			return
@@ -91,8 +96,7 @@ export class SelectionView extends Component {
 			)
 		else if (this.editSetup && this.editSetup.editable(this.model))
 			editIcons.push(iconButton(editIcon({ filter: "invert(1)" }), () => {
-				this.editing = true
-				this.editedModel = JSON.parse(JSON.stringify(this.model))
+				this.switchToEdit()
 				update()
 			}))
 		return l("header", { style: { background: this.headerBackground() } },

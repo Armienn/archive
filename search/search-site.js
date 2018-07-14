@@ -107,7 +107,10 @@ export class SearchSite extends Component {
 		this.sections.collection.collectionComponent.cachedEntries.delete(model)
 		this.sections.collection.collectionComponent.hasChanged = true
 		this.selection = model
-		this.sections.selection.content = collectionSetup.view(model, collection)
+		if (typeof collectionSetup === "string")
+			this.sections.selection.content = this.collectionSetups[collectionSetup].view(model, collection)
+		else
+			this.sections.selection.content = collectionSetup.view(model, collection)
 		update()
 	}
 
@@ -134,7 +137,7 @@ export class SearchSite extends Component {
 	setCollection(collection, setup) {
 		this.sections.collection.collection = collection
 		this.sections.collection.setCollectionSetup(
-			typeof setup == "string" ?
+			typeof setup === "string" ?
 				this.collectionSetups[setup] :
 				setup)
 	}
