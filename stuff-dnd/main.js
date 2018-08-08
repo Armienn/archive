@@ -2,6 +2,7 @@ import { SearchSite } from "../search/search-site.js"
 import { update, setRenderFunction } from "../arf/arf.js"
 import { CollectionSetup } from "../search/collection-setup.js"
 import { State } from "./state.js"
+import { DataStore } from "../search/data-store.js"
 //import { ExportView } from "../search/export-view.js"
 //import { ImportView } from "../search/import-view.js"
 
@@ -53,13 +54,15 @@ function spellCollectionSetup() {
 class DnDStuff {
 	constructor(site) {
 		this.site = site
-		this.data = {} // new PokemonData()
+		this.data = new DataStore()
 		this.state = new State()
 		//this.localCollectionGroup = new CollectionGroup("Local")
 		this.collectorInfo = {}
 		this.location = { tab: "game-spells", type: "", path: "" }
 		this.selectedLocal
-		this.loadBaseData()
+		this.data.addDataSource("spells")
+		this.data.load(() => this.tryLoad())
+		//this.loadBaseData()
 		//this.loadCollectionData()
 	}
 
@@ -200,29 +203,6 @@ class DnDStuff {
 		return setup
 	}
 
-	loadBaseData() {
-		/*this.loadJSONData("pokemons")
-		this.loadJSONData("moves")
-		this.loadJSONData("abilities")
-		this.loadJSONData("natures")
-		this.loadJSONData("eggGroups", "egg-groups")*/
-		requestJSON("./spells.json", (spells) => {
-			this.data.spells = spells
-			this.state.thingsLoaded.spells = true
-			this.tryLoad()
-		})
-	}
-
-	loadJSONData(thing, file) {
-		if (!file)
-			file = thing
-		requestJSON("./data-usum/" + file + ".json", (data) => {
-			this.data[thing] = data
-			this.state.thingsLoaded[thing] = true
-			this.tryLoad()
-		})
-	}
-
 	/*loadCollectionData() {
 		if (!window.location.search)
 			return
@@ -275,7 +255,7 @@ class DnDStuff {
 	}
 
 	tryLoad() {
-		if (!this.state.thingsAreLoaded)
+		if (!this.data.finishedLoading())
 			return
 		//this.data.movesList = Object.keys(this.data.moves).map(key => this.data.moves[key])
 		var spellSetup = spellCollectionSetup()
@@ -327,37 +307,4 @@ class DnDStuff {
 		if (defaultTab)
 			this.site.setCollection(defaultTab.pokemons, "pokemonIndividuals")
 	}
-}
-
-
-export function requestJSON(url, callback) {
-	request(url, function (response) {
-		callback(JSON.parse(response))
-	})
-}
-
-function request(url, callback) {
-	var xmlHttp = new XMLHttpRequest()
-	xmlHttp.onreadystatechange = function () {
-		if (xmlHttp.readyState == 4) {
-			if (xmlHttp.status == 200)
-				callback(xmlHttp.responseText)
-			else {
-				document.getElementById("loading").innerHTML = "Failed to load external data"
-				/*document.getElementById("loading").onclick = () => {
-					stuff.state.externalInventory.load = false
-					stuff.tryLoad()
-				}*/
-			}
-		}
-	}
-	xmlHttp.onerror = function () {
-		document.getElementById("loading").innerHTML = "Failed to load external data"
-		/*document.getElementById("loading").onclick = () => {
-			stuff.state.externalInventory.load = false
-			stuff.tryLoad()
-		}*/
-	}
-	xmlHttp.open("GET", url, true)
-	xmlHttp.send()
 }
