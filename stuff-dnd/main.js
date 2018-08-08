@@ -1,8 +1,8 @@
 import { SearchSite } from "../search/search-site.js"
-import { update, setRenderFunction } from "../arf/arf.js"
+import { update, setRenderFunction, l } from "../arf/arf.js"
 import { CollectionSetup } from "../search/collection-setup.js"
-import { State } from "./state.js"
 import { DataStore } from "../search/data-store.js"
+import { SelectionView } from "../search/selection-view.js"
 //import { ExportView } from "../search/export-view.js"
 //import { ImportView } from "../search/import-view.js"
 
@@ -46,8 +46,8 @@ function spellCollectionSetup() {
 	setup.addScriptFilter("return model.stats.atk > 150 || model.stats.spa > 150")
 	setup.showTableEntries(["name", "schools", "level", "components", "castingtime", "shortdescription"])
 	setup.showGridEntries(["name", "schools", "level", "components", "castingtime", "shortdescription"])
-	// const view = new PokemonView()
-	// setup.view = (pokemon, collection) => view.withPokemon(pokemon, collection)
+	const view = new SpellView()
+	setup.view = (spell) => view.withSpell(spell)
 	return setup
 }
 
@@ -55,7 +55,6 @@ class DnDStuff {
 	constructor(site) {
 		this.site = site
 		this.data = new DataStore()
-		this.state = new State()
 		//this.localCollectionGroup = new CollectionGroup("Local")
 		this.collectorInfo = {}
 		this.location = { tab: "game-spells", type: "", path: "" }
@@ -262,10 +261,10 @@ class DnDStuff {
 		this.site.addCollectionSetup("spells", spellSetup)
 		this.site.setCollection(this.data.spells, "spells")
 		//this.localCollectionGroup.loadFromLocalStorage()
-		this.state.loaded = true
+		var loaded = true
 		if (this.loadData) {
 			//try {
-			this.state.loaded = !this.loadData()
+			loaded = !this.loadData()
 			//}
 			//catch (e) {
 			/*document.getElementById("loading").innerHTML = "Failed to load external collection: " + e.message
@@ -276,7 +275,7 @@ class DnDStuff {
 			return*/
 			//}
 		}
-		if (!this.state.loaded)
+		if (!loaded)
 			return
 		//this.selectCollectionFrom(this.location.tab)
 		update()
@@ -286,7 +285,6 @@ class DnDStuff {
 	tryLoadAgain() {
 		if (!this.state.externalThingsAreLoaded)
 			return
-		this.state.loaded = true
 		var tab = this.externalCollectionGroup.tabs[Object.keys(this.externalCollectionGroup.tabs)[0]]
 		if (this.location)
 			this.selectCollectionFrom(this.location.tab, tab)
@@ -306,5 +304,32 @@ class DnDStuff {
 				return this.site.setCollection(tab.pokemons, "pokemonIndividuals")
 		if (defaultTab)
 			this.site.setCollection(defaultTab.pokemons, "pokemonIndividuals")
+	}
+}
+
+export class SpellView {
+	constructor() {
+		this.view = new SelectionView({}, {
+			header: {
+				content: (spell) => [spell.name],
+				colors: () => "#888"
+			},
+			upperContent: (spell) => [l("div", { style: { padding: "0.5rem" } }, spell.description)],
+			gridContent: (spell) => {
+				var entries = []
+				for (var key in spell) {
+					entries.push(key)
+					entries.push(spell[key])
+				}
+				return SelectionView.entries({ span: 7 }, ...entries)
+			}
+			//lowerContent: (pokemon) => [l("header", { style: { background: "rgba(" + Styling.styling.tableColor + ",0.3)" } }, "Moves"), this.collectionView]
+		})
+	}
+
+	withSpell(pokemon) {
+		if (this.view.model != pokemon)
+			this.view.model = pokemon
+		return this.view
 	}
 }
