@@ -33,14 +33,17 @@ function spellCollectionSetup() {
 	setup.add("castingtime", "Casting Time")
 	setup.add("range", "Range")
 	setup.add("area", "Area")
+	setup.add("target", "Target")
 	setup.add("effect", "Effect")
 	setup.add("duration", "Duration")
 	setup.add("savingthrow", "Saving Throw")
 	setup.add("spellresistance", "Spell Resistance")
 	setup.add("materialcomponents", "Material Components")
+	setup.add("arcanematerialcomponents", "Arcane Material Components")
 	setup.add("arcanefocus", "Arcane Focus")
 	setup.add("divinefocus", "Divine Focus")
 	setup.add("focus", "Focus")
+	setup.add("xpcost", "XP Cost")
 	setup.add("shortdescription", "Description")
 	setup.add("reference", "Reference")
 	setup.addScriptFilter("return model.stats.atk > 150 || model.stats.spa > 150")
@@ -312,18 +315,20 @@ export class SpellView {
 		this.view = new SelectionView({}, {
 			header: {
 				content: (spell) => [spell.name],
-				colors: () => "#888"
+				colors: () => ["#888"]
 			},
-			upperContent: (spell) => [l("div", { style: { padding: "0.5rem" } }, spell.description)],
+			upperContent: (spell) => [l("pre", { style: { padding: "0.5rem" } }, spell.shortdescription)],
 			gridContent: (spell) => {
 				var entries = []
 				for (var key in spell) {
-					entries.push(key)
+					if (["description", "shortdescription", "name"].includes(key))
+						continue
+					entries.push(window.site.collectionSetups.spells.title(key))
 					entries.push(spell[key])
 				}
-				return SelectionView.entries({ span: 7 }, ...entries)
-			}
-			//lowerContent: (pokemon) => [l("header", { style: { background: "rgba(" + Styling.styling.tableColor + ",0.3)" } }, "Moves"), this.collectionView]
+				return SelectionView.entries({}, ...entries)
+			},
+			lowerContent: (spell) => [l("pre", { style: { padding: "0.5rem", whiteSpace: "pre-wrap", textAlign: "justify" } }, spell.description)]
 		})
 	}
 
