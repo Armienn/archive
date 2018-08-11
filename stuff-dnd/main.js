@@ -3,6 +3,9 @@ import { update, setRenderFunction, l } from "../arf/arf.js"
 import { CollectionSetup } from "../search/collection-setup.js"
 import { DataStore } from "../search/data-store.js"
 import { SelectionView } from "../search/selection-view.js"
+import { CollectionGroup } from "../search/collection-group.js"
+import { CollectionEditor } from "../search/collection-editor.js"
+import { NewSpellView } from "./new-spell-view.js"
 //import { ExportView } from "../search/export-view.js"
 //import { ImportView } from "../search/import-view.js"
 
@@ -13,7 +16,6 @@ window.onload = function () {
 	window.stuff = stuff
 	site.header = "D&D 3.5 Stuff"
 	//site.sections.header.url = "https://armienn.github.com/pokemon"
-	//site.sections.navigation.navigationEntries = () => stuff.navThing()
 	site.sections.navigation.navigationSetup = () => stuff.navThing()
 	setRenderFunction(() => site.render())
 	update()
@@ -58,13 +60,17 @@ class DnDStuff {
 	constructor(site) {
 		this.site = site
 		this.data = new DataStore()
-		//this.localCollectionGroup = new CollectionGroup("Local")
+		this.localCollectionGroup = new CollectionGroup("Local", "3.5spells")
 		this.collectorInfo = {}
 		this.location = { tab: "game-spells", type: "", path: "" }
 		this.selectedLocal
 		this.data.addDataSource("spells")
-		this.data.load(() => this.tryLoad())
-		//this.loadBaseData()
+		this.data.load(() => {
+			this.data.spellMap = {}
+			for (var spell of this.data.spells)
+				this.data.spellMap[spell.name] = spell
+			this.initialise()
+		})
 		//this.loadCollectionData()
 	}
 
@@ -81,83 +87,32 @@ class DnDStuff {
 			},
 			selected: this.site.sections.collection.collection == this.data.spells
 		}
-		/*if (this.localCollectionGroup.tabs.length)
+		if (this.localCollectionGroup.tabs.length)
 			setup["Game Data"]["Local"] = {}
 		for (let tab of this.localCollectionGroup.tabs) {
 			setup["Game Data"]["Local"][tab.title] = {
 				action: () => {
 					this.selectedLocal = tab
-					this.site.setCollection(tab.pokemons, "knownSpells")
+					this.site.setCollection(tab.list.map(e => this.data.spellMap[e]), "spells")
 					update()
 				},
-				selected: this.site.sections.collection.collection == tab.spells
-			}
-		}*/
-		setup["Game Data"]["Options"] = {}
-		/*setup["Game Data"]["Options"]["Import"] = {
-			action: () => {
-				this.site.show(new ImportView(this.site, (collection, type) => {
-					let parsedCollection = collection.map(e => type === "JSON" ? new Pokemon(e) : pokemonFromUnsanitised(e)).filter(e => e)
-					if (collection.length == 0)
-						parsedCollection = collection.map(e => pokemonFromUnsanitised(e)).filter(e => e)
-					const tab = this.localCollectionGroup.addTab("Imported", parsedCollection)
-					this.site.setCollection(tab.pokemons, "pokemonIndividuals")
-					this.site.clearSelection()
-					this.localCollectionGroup.saveToLocalStorage()
-					update()
-				}))
+				selected: this.selectedLocal === tab
 			}
 		}
-		setup["Game Data"]["Options"]["Export"] = {
-			action: () => {
-				this.site.show(new ExportView(this.site, (collection, type) => {
-					if (type == "raw")
-						return collection.map(e => {
-							const model = {}
-							for (var key in e)
-								model[key] = e[key]
-							delete model.base
-							return model
-						})
-					return collection
-				}))
-			}
-		}
-		setup["Game Data"]["Options"]["Add Collection"] = {
-			action: () => {
-				this.site.show(new CollectionEditor("New Collection",
-					(title) => {
-						const tab = this.localCollectionGroup.addTab(title, [])
-						this.site.setCollection(tab.pokemons, "pokemonIndividuals")
-						this.site.clearSelection()
-						this.localCollectionGroup.saveToLocalStorage()
-						update()
-					},
-					() => {
-						this.site.clearSelection()
-						update()
-					},
-					() => {
-						this.site.clearSelection()
-						update()
-					}
-				))
-			}
-		}*/
-		/*if (this.selectedLocal) {
+		if (this.selectedLocal) {
 			setup["Game Data"][this.selectedLocal.title] = {}
-			setup["Game Data"][this.selectedLocal.title]["Add Pokémon"] = {
+			setup["Game Data"][this.selectedLocal.title]["Add Spell"] = {
 				action: () => {
 					const tab = this.selectedLocal
-					this.site.show(new NewPokemonView(tab.title,
-						(pokemon) => {
+					this.site.show(new NewSpellView(tab.title,
+						(model) => {
 							this.site.clearSelection()
-							if (!pokemon)
+							if (!model)
 								return update()
-							tab.pokemons.push(pokemon)
+							tab.list.push(model)
 							this.localCollectionGroup.saveToLocalStorage()
-							this.site.showModel(pokemon, "pokemonIndividuals", tab.pokemons)
-							this.site.sections.selection.content.switchToEdit()
+							this.site.showModel(this.data.spellMap[model], "spells", tab.list)
+							//this.site.sections.selection.content.switchToEdit()
 							update()
 						},
 						() => {
@@ -201,7 +156,58 @@ class DnDStuff {
 						update()
 					}
 				}
+		}
+		setup["Game Data"]["Options"] = {}
+		/*setup["Game Data"]["Options"]["Import"] = {
+			action: () => {
+				this.site.show(new ImportView(this.site, (collection, type) => {
+					let parsedCollection = collection.map(e => type === "JSON" ? new Pokemon(e) : pokemonFromUnsanitised(e)).filter(e => e)
+					if (collection.length == 0)
+						parsedCollection = collection.map(e => pokemonFromUnsanitised(e)).filter(e => e)
+					const tab = this.localCollectionGroup.addTab("Imported", parsedCollection)
+					this.site.setCollection(tab.pokemons, "pokemonIndividuals")
+					this.site.clearSelection()
+					this.localCollectionGroup.saveToLocalStorage()
+					update()
+				}))
+			}
+		}
+		setup["Game Data"]["Options"]["Export"] = {
+			action: () => {
+				this.site.show(new ExportView(this.site, (collection, type) => {
+					if (type == "raw")
+						return collection.map(e => {
+							const model = {}
+							for (var key in e)
+								model[key] = e[key]
+							delete model.base
+							return model
+						})
+					return collection
+				}))
+			}
 		}*/
+		setup["Game Data"]["Options"]["Add Collection"] = {
+			action: () => {
+				this.site.show(new CollectionEditor("New Collection",
+					(title) => {
+						const tab = this.localCollectionGroup.addTab(title, [])
+						this.site.setCollection(tab.list, "spells")
+						this.site.clearSelection()
+						this.localCollectionGroup.saveToLocalStorage()
+						update()
+					},
+					() => {
+						this.site.clearSelection()
+						update()
+					},
+					() => {
+						this.site.clearSelection()
+						update()
+					}
+				))
+			}
+		}
 		return setup
 	}
 
@@ -256,14 +262,14 @@ class DnDStuff {
 		this.site.setCollection(tab, "pokemonIndividuals")
 	}
 
-	tryLoad() {
+	initialise() {
 		if (!this.data.finishedLoading())
 			return
 		//this.data.movesList = Object.keys(this.data.moves).map(key => this.data.moves[key])
 		var spellSetup = spellCollectionSetup()
 		this.site.addCollectionSetup("spells", spellSetup)
 		this.site.setCollection(this.data.spells, "spells")
-		//this.localCollectionGroup.loadFromLocalStorage()
+		this.localCollectionGroup.loadFromLocalStorage()
 		var loaded = true
 		if (this.loadData) {
 			//try {
@@ -314,7 +320,7 @@ export class SpellView {
 	constructor() {
 		this.view = new SelectionView({}, {
 			header: {
-				content: (spell) => [spell.name],
+				content: (spell) => spell.name,
 				colors: () => ["#888"]
 			},
 			upperContent: (spell) => [l("pre", { style: { padding: "0.5rem" } }, spell.shortdescription)],
@@ -329,12 +335,23 @@ export class SpellView {
 				return SelectionView.entries({}, ...entries)
 			},
 			lowerContent: (spell) => [l("pre", { style: { padding: "0.5rem", whiteSpace: "pre-wrap", textAlign: "justify" } }, spell.description)]
+		}, {
+			editable: () => true,
+			onDelete: (model) => {
+				site.clearSelection()
+				if(stuff.selectedLocal){
+					stuff.selectedLocal.list.splice(stuff.selectedLocal.list.indexOf(model.name), 1)
+					site.setCollection(stuff.selectedLocal.list.map(e => stuff.data.spellMap[e]), "spells")
+					// TODO: Save
+				}
+				site.engine.changed(true)
+			},
 		})
 	}
 
-	withSpell(pokemon) {
-		if (this.view.model != pokemon)
-			this.view.model = pokemon
+	withSpell(model) {
+		if (this.view.model != model)
+			this.view.model = model
 		return this.view
 	}
 }

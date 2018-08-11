@@ -178,7 +178,6 @@ export class SelectionView extends Component {
 	}
 }
 
-
 function parseSetup(_setup) {
 	const setup = {
 		columns: "auto auto",
