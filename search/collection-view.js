@@ -75,6 +75,7 @@ export class CollectionView extends Component {
 				lineHeight: "2em",
 				maxWidth: "calc(100% - 2em)",
 				flexGrow: "0",
+				flexShrink: "0",
 				overflowX: "auto",
 				overflowY: "hidden",
 				transition: "0.5s ease"
@@ -91,6 +92,13 @@ export class CollectionView extends Component {
 				fontWeight: "bold",
 				width: "2em",
 				height: "2em"
+			},
+			"span.count": {
+				fontSize: "0.8em",
+				lineHeight: "2.5em",
+				marginRight: "1em",
+				whiteSpace: "nowrap",
+				opacity: "0.5"
 			},
 			"button.label": {
 				fontSize: "0.8em",
@@ -119,6 +127,7 @@ export class CollectionView extends Component {
 
 	viewSettings() {
 		return l("div.table-settings",
+			l("span.count", "Showing: " + this.engine.filteredCollection.length),
 			l("button.label" + (this.currentCompact() ? ".active" : ".inactive"), {
 				onclick: () => {
 					if (this.mode == "table")

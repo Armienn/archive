@@ -23,6 +23,7 @@ export class SearchEngine {
 		if (this._collection === value)
 			return
 		this._collection = value
+		this.filteredCollection = value
 		this.changed(true)
 	}
 
@@ -85,7 +86,7 @@ export class SearchEngine {
 
 	resetFilter() {
 		const current = this.filter
-		this.filter = { type: "", query: "" }
+		this.filter = { type: this.collectionSetup.defaultFilter || "", query: "" }
 		if (!(current.type == "" && current.query == ""))
 			this.changed()
 	}
@@ -101,8 +102,10 @@ export class SearchEngine {
 		this.collectionSetup = setup
 		if (!Object.keys(setup.sortingModel).includes(this.sorting))
 			this.resetSorting()
-		if (!Object.keys(setup.filterModel).includes(this.filter.type))
+		const setupFilters = Object.keys(setup.filterModel)
+		if (!setupFilters.includes(this.filter.type))
 			this.resetFilter()
+		this.filters = this.filters.filter(f => setupFilters.includes(f.type) || (f.type === "" && setup.allowAnythingFilter))
 	}
 
 	addCurrentFilter() {
@@ -189,8 +192,8 @@ export class SearchEngine {
 		var parts = serializeFilters.split(";")
 		this.filters = parts.map(p => {
 			var blob = p.split(":")
-			return { type: blob.length > 1 ? blob[0] : "", query: blob.length > 1 ? blob[1] : blob[0] }
-		})
+			return { type: blob.length > 1 ? blob[0] : "", query: blob.length > 1 ? blob[1] || "" : blob[0] || "" }
+		}).filter(e => e.type !== "_script_")
 		this.resetFilter()
 		this.changed()
 	}

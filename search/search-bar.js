@@ -146,6 +146,10 @@ export class SearchBar extends Component {
 			".filter-tag": {
 				padding: "0.5em",
 				margin: "0 0.25em",
+				whiteSpace: "nowrap",
+				maxWidth: "25em",
+				overflow: "hidden",
+				textOverflow: "ellipsis",
 				transition: "0.5s ease",
 				color: "white",
 				cursor: "pointer",
@@ -184,16 +188,10 @@ export class SearchBar extends Component {
 						update()
 					}
 				},
-				l("span", filter.type ? this.title(filter.type) : "Anything"),
+				l("span", filter.type ? this.engine.collectionSetup.title(filter.type) : "Anything"),
 				filter.query
 			)
 		})
-	}
-
-	title(key) {
-		if (this.engine.collectionSetup.titles && this.engine.collectionSetup.titles[key])
-			return this.engine.collectionSetup.titles[key]
-		return key
 	}
 
 	searchThing() {
@@ -209,7 +207,7 @@ export class SearchBar extends Component {
 			if (this.engine.filter.query)
 				this.engine.query = ""
 			else
-				this.engine.type = ""
+				this.engine.type = this.engine.collectionSetup.defaultFilter || ""
 			update()
 		}, ".remove")
 	}
@@ -222,16 +220,21 @@ export class SearchBar extends Component {
 				this.engine.type = event.target.value
 				if (this.engine.currentFilterType().restricted)
 					this.engine.query = ""
+				const filterType = this.engine.currentFilterType()
+				if(!this.engine.query && filterType.defaultFilter)
+					this.engine.query = filterType.defaultFilter
 				update()
 			}
 		}, ...this.filterOptions())
 	}
 
 	filterOptions() {
-		const types = [l("option", this.engine.type ? { value: "", selected: true } : { value: "" }, "Anything")]
+		const types = []
+		if (this.engine.collectionSetup.allowAnythingFilter)
+			types.push(l("option", this.engine.type ? { value: "", selected: true } : { value: "" }, "Anything"))
 		for (let key in this.engine.collectionSetup.filterModel) {
 			const props = key == this.engine.type ? { value: key, selected: true } : { value: key }
-			types.push(l("option", props, this.title(key)))
+			types.push(l("option", props, this.engine.collectionSetup.title(key)))
 		}
 		return types
 	}
@@ -296,7 +299,7 @@ export class SearchBar extends Component {
 			if (typeof this.engine.collectionSetup.sortingModel[key] === "string")
 				continue
 			const props = key == this.engine.sorting ? { value: key, selected: true } : { value: key }
-			types.push(l("option", props, this.title(key)))
+			types.push(l("option", props, this.engine.collectionSetup.title(key)))
 		}
 		return types
 	}

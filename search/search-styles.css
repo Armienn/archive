@@ -102,6 +102,7 @@ button:hover {
 }
 
 button.icon{
+	font-size: 1rem;
 	padding: 0.25em;
 	height: 2em;
 }
@@ -125,10 +126,13 @@ html{
 			"navigation selection" !important;
 	}
 
-	nav.mobile-nav{
+	nav{
 		position: absolute;
 		padding-top: 3rem;
 		width: 12rem;
+	}
+	nav.mobile-hidden{
+		display: none;
 	}
 	
 	button.mobile-menu-button {

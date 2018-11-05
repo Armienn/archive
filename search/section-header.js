@@ -8,11 +8,12 @@ export class SectionHeader extends Component {
 		super()
 		this.main = main
 		this.header = "header"
+		this.url
 	}
 
 	renderThis() {
 		return l("header",
-			l("h1", this.header),
+			l("h1", this.url ? l("a", { href: this.url }, this.header) : this.header),
 			iconButton(menuIcon({ filter: Styling.styling.headerIconFilter }),
 				() => { this.main.sections.navigation.shown = true; update() }, ".mobile-menu-button")
 		)

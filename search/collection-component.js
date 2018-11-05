@@ -201,7 +201,7 @@ export class CollectionComponent extends Component {
 	getEntries(getEntry) {
 		const currentSetup = this.currentSetup()
 		if (this.cachedSetup !== currentSetup)
-			this.cachedEntries = new Map()
+			this.clearCache()
 		this.cachedSetup = currentSetup
 		return this.engine.filteredCollection.map(e => {
 			let cachedEntry = this.cachedEntries.get(e)
@@ -213,9 +213,13 @@ export class CollectionComponent extends Component {
 		})
 	}
 
+	clearCache(){
+		this.cachedEntries = new Map()
+	}
+	
 	rowFrom(model) {
 		return l("tr" + (this.selected() == model ? ".selected" : ""),
-			{ onclick: () => this.select(model, this.collectionSetup), style: this.collectionSetup.style(model) }, ...this.collectionSetup.entries(this.mode)
+			{ onclick: () => this.select(model, this.collectionSetup, this.engine.collection), style: this.collectionSetup.style(model) }, ...this.collectionSetup.entries(this.mode)
 				.filter(e => e.shown)
 				.map(e => l("th", this.collectionSetup.entry(e.key, model)))
 		)
@@ -223,7 +227,7 @@ export class CollectionComponent extends Component {
 
 	cardFrom(model) {
 		return l("div.card" + (this.selected() == model ? ".selected" : ""),
-			{ onclick: () => this.select(model, this.collectionSetup), style: this.collectionSetup.style(model) }, ...this.collectionSetup.entries(this.mode)
+			{ onclick: () => this.select(model, this.collectionSetup, this.engine.collection), style: this.collectionSetup.style(model) }, ...this.collectionSetup.entries(this.mode)
 				.filter(e => e.shown)
 				.map(e => l("span.card",
 					l("label.card", this.collectionSetup.title(e.key)),

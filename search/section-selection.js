@@ -38,11 +38,12 @@ export class SectionSelection extends Component {
 		})
 	}
 
-	getTop(){
+	getTop() {
 		return this.content ? (this.top ? this.top + "px" : "-50vh") : "0"
 	}
 
 	renderThis() {
+		const topPixels = this.content && this.content.header ? 24 + 16 * 3 : 24
 		return l("section",
 			l("div.position-box",
 				{
@@ -52,11 +53,11 @@ export class SectionSelection extends Component {
 				},
 				l("div.selection-box" + (this.content ? ".show" : ""),
 					this.grabBar(),
-					...[this.content && this.content.header ? this.content.header() : undefined].filter(e=>e),
+					...[this.content && this.content.header ? this.content.header() : undefined].filter(e => e),
 					l("div.content",
 						{
 							style: {
-								height: this.top ? -this.top - 24 + "px" : "calc(50vh - 24px)"
+								height: this.top ? -this.top - topPixels + "px" : "calc(50vh - " + topPixels + "px)"
 							}
 						}, this.content ? callOrReturn(this.content) : "")
 				)
@@ -92,7 +93,21 @@ export class SectionSelection extends Component {
 				fontSize: "1.5rem",
 				fontWeight: "bold",
 				height: "3rem",
-				lineHeight: "3rem"
+				lineHeight: "3rem",
+				display: "flex"
+			},
+			"header button": {
+				height: "2.5rem",
+				width: "2.5rem",
+				padding: "0.5rem",
+				margin: "0.25rem"
+			},
+			".header-area": {
+				flexGrow: "1"
+			},
+			".button-area": {
+				height: "3rem",
+				minWidth: "fit-content"
 			},
 			"div.content": {
 				position: "absolute",
@@ -107,6 +122,8 @@ export class SectionSelection extends Component {
 			},
 			".close-button": {
 				position: "absolute",
+				fontSize: "0.75rem",
+				width: "2rem",
 				right: "0",
 				opacity: "0.5",
 				transition: "0.3s ease"

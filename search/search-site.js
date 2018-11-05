@@ -14,11 +14,11 @@ export class SearchSite extends Component {
 			navigation: new SectionNavigation(this),
 			selection: new SectionSelection(this),
 			collection: new CollectionView(
-				(model, setup) => {
+				(model, setup, collection) => {
 					if (this.selection == model)
 						this.clearSelection()
 					else
-						this.showModel(model, setup)
+						this.showModel(model, setup, collection)
 				},
 				() => this.selection,
 				() => this.sections.selection.getTop().substr(1)
@@ -102,12 +102,15 @@ export class SearchSite extends Component {
 		}
 	}
 
-	showModel(model, collectionSetup) {
+	showModel(model, collectionSetup, collection) {
 		this.sections.collection.collectionComponent.cachedEntries.delete(this.selection)
 		this.sections.collection.collectionComponent.cachedEntries.delete(model)
 		this.sections.collection.collectionComponent.hasChanged = true
 		this.selection = model
-		this.sections.selection.content = collectionSetup.view(model)
+		if (typeof collectionSetup === "string")
+			this.sections.selection.content = this.collectionSetups[collectionSetup].view(model, collection)
+		else
+			this.sections.selection.content = collectionSetup.view(model, collection)
 		update()
 	}
 
@@ -134,7 +137,7 @@ export class SearchSite extends Component {
 	setCollection(collection, setup) {
 		this.sections.collection.collection = collection
 		this.sections.collection.setCollectionSetup(
-			typeof setup == "string" ?
+			typeof setup === "string" ?
 				this.collectionSetups[setup] :
 				setup)
 	}

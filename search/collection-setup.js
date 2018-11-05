@@ -17,9 +17,10 @@ export class CollectionSetup {
 		this.tableSetup = { compact: false, entries: [] }
 		this.gridSetup = { compact: false, entries: [] }
 		this.style = () => { return {} }
-		for (var i in source) {
-			this[i] = source[i]
-		}
+		this.allowAnythingFilter = true
+		this.defaultFilter = ""
+		if (source)
+			this.copyFrom(source)
 	}
 
 	title(key) {
@@ -99,6 +100,39 @@ export class CollectionSetup {
 			this.filterModel[key] = filterModel
 		if (sortingModel !== false)
 			this.sortingModel[key] = sortingModel
+	}
+
+	addScriptFilter(defaultFilter = "return model") {
+		this.titles["_script_"] = "Custom Script"
+		this.filterModel["_script_"] = {
+			filter: (m, q) => {
+				return new Function("var model = this;" + q).call(m)
+			},
+			defaultFilter: defaultFilter
+		}
+	}
+
+	copyFrom(source, ...exceptions) {
+		for (let key in source.titles)
+			if (!exceptions.includes(key))
+				this.titles[key] = source.titles[key]
+		for (let key in source.entryModel)
+			if (!exceptions.includes(key))
+				this.entryModel[key] = source.entryModel[key]
+		for (let key in source.filterModel)
+			if (!exceptions.includes(key))
+				this.filterModel[key] = source.filterModel[key]
+		for (let key in source.sortingModel)
+			if (!exceptions.includes(key))
+				this.sortingModel[key] = source.sortingModel[key]
+		for (let key in source.titles)
+			if (!exceptions.includes(key))
+				this.titles[key] = source.titles[key]
+		this.view = source.view
+		this.tableSetup = { compact: source.tableSetup.compact, entries: source.tableSetup.entries }
+		this.gridSetup = { compact: source.gridSetup.compact, entries: source.gridSetup.entries }
+		this.allowAnythingFilter = source.allowAnythingFilter
+		this.defaultFilter = source.defaultFilter
 	}
 
 	static fromExample(source, autoCapitalise = true) {

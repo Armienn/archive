@@ -7,13 +7,17 @@ export class SectionNavigation extends Component {
 		super()
 		this.main = main
 		this.shown = false
+		// ()=>{[headerTitle]: {[groupTitle]: {[entryTitle]: {action: string | ()=>void, selected: boolean}}}}
+		this.navigationSetup
+		this.setup = {}
 		this.navigationEntries = () => [""]
 	}
 
 	renderThis() {
-		return l("nav" + (this.shown ? ".mobile-nav" : ""),
+		return l("nav" + (this.shown ? "" : ".mobile-hidden"),
 			l("ul",
-				...this.navigationEntries()
+				...this.navigationEntries(),
+				...(this.navigationSetup ? this.getSetupEntries() : [])
 			),
 			l("footer",
 				l("a", { href: "https://github.com/Armienn" }, "Design and code © Armienn, 2017-2018.")
@@ -23,6 +27,25 @@ export class SectionNavigation extends Component {
 		)
 	}
 
+	getSetupEntries() {
+		const setup = this.navigationSetup()
+		const entries = []
+		for (let headerTitle in setup) {
+			entries.push(l("li.header", headerTitle))
+			for (let groupTitle in setup[headerTitle]) {
+				if (groupTitle)
+					entries.push(l("li.group", groupTitle))
+				for (let entryTitle in setup[headerTitle][groupTitle]) {
+					const entry = setup[headerTitle][groupTitle][entryTitle]
+					entries.push(l("li.entry" + (entry.selected === true ? ".selected" : entry.selected === false ? ".unselected" : "") + (entry.action ? "" : ".unclickable"),
+						typeof entry.action === "string" ? {} : { onclick: entry.action || (() => { }) },
+						typeof entry.action === "string" ? l("a", { href: entry.action }, entryTitle) : entryTitle))
+				}
+			}
+		}
+		return entries
+	}
+
 	static styleThis() {
 		return {
 			nav: {
@@ -30,18 +53,58 @@ export class SectionNavigation extends Component {
 				backgroundColor: Styling.styling.headerBackground,
 				color: Styling.styling.headerText,
 				height: "100%",
-				overflowY: "auto",
 				fontWeight: "bold",
 				zIndex: "1"
 			},
 			footer: {
 				position: "absolute",
 				fontWeight: "normal",
-				top: "calc(100% - 3rem)",
+				bottom: "0",
+				height: "3rem",
+				width: "12rem",
 				padding: "0.5rem",
 				textAlign: "center",
 				fontSize: "0.8rem",
 				backgroundColor: Styling.styling.headerBackground,
+			},
+			ul: {
+				height: "calc(100% - 3rem)",
+				overflowY: "auto"
+			},
+			"li": {
+				width: "100%"
+			},
+			"li.header": {
+				padding: "1rem 0.25rem 0.25rem 0.25rem",
+				fontSize: "1.2rem"
+			},
+			"li.group": {
+				fontSize: "1rem",
+				padding: "0.25rem",
+				backgroundColor: "rgba(0,0,0,0.3)"
+			},
+			"li.entry": {
+				cursor: "pointer",
+				padding: "0 0.25rem",
+				height: "2em",
+				lineHeight: "2em",
+				transition: "0.3s ease"
+			},
+			"li.entry:hover": {
+				backgroundColor: "rgba(255,255,255,0.3)"
+			},
+			"li.entry.unselected:hover": {
+				backgroundColor: "rgba(255,255,255,0.3)",
+				opacity: "0.7"
+			},
+			".selected": {
+				backgroundColor: "rgba(255,255,255,0.3)"
+			},
+			".unselected": {
+				opacity: "0.5"
+			},
+			"li.entry.unclickable": {
+				cursor: "unset"
 			},
 			".mobile-menu-button": {
 				position: "absolute",
