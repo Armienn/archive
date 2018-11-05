@@ -16,6 +16,7 @@ export class CollectionSetup {
 		// { compact: boolean, entries: { key: string, shown: boolean }[] }
 		this.tableSetup = { compact: false, entries: [] }
 		this.gridSetup = { compact: false, entries: [] }
+		this.style = () => { return {} }
 		for (var i in source) {
 			this[i] = source[i]
 		}

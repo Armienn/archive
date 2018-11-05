@@ -168,7 +168,7 @@ export class CollectionComponent extends Component {
 				)
 			),
 			l("tbody",
-				...this.getEntries(e=>this.getRow(e))
+				...this.getEntries(e=>this.rowFrom(e))
 			)
 		)
 	}
@@ -193,6 +193,11 @@ export class CollectionComponent extends Component {
 			}, this.collectionSetup.title(e.key)))
 	}
 
+	getGrid() {
+		return l("div.grid" + (this.collectionSetup.gridSetup.compact ? ".compact" : ""),
+			...this.getEntries(e => this.cardFrom(e)))
+	}
+
 	getEntries(getEntry) {
 		const currentSetup = this.currentSetup()
 		if (this.cachedSetup !== currentSetup)
@@ -208,22 +213,17 @@ export class CollectionComponent extends Component {
 		})
 	}
 
-	getRow(model) {
+	rowFrom(model) {
 		return l("tr" + (this.selected() == model ? ".selected" : ""),
-			{ onclick: () => this.select(model, this.collectionSetup) }, ...this.collectionSetup.entries(this.mode)
+			{ onclick: () => this.select(model, this.collectionSetup), style: this.collectionSetup.style(model) }, ...this.collectionSetup.entries(this.mode)
 				.filter(e => e.shown)
 				.map(e => l("th", this.collectionSetup.entry(e.key, model)))
 		)
 	}
 
-	getGrid() {
-		return l("div.grid" + (this.collectionSetup.gridSetup.compact ? ".compact" : ""),
-			...this.getEntries(e => this.cardFrom(e)))
-	}
-
 	cardFrom(model) {
 		return l("div.card" + (this.selected() == model ? ".selected" : ""),
-			{ onclick: () => this.select(model, this.collectionSetup) }, ...this.collectionSetup.entries(this.mode)
+			{ onclick: () => this.select(model, this.collectionSetup), style: this.collectionSetup.style(model) }, ...this.collectionSetup.entries(this.mode)
 				.filter(e => e.shown)
 				.map(e => l("span.card",
 					l("label.card", this.collectionSetup.title(e.key)),
