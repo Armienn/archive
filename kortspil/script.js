@@ -9,9 +9,7 @@ window.onload = () => {
 new Card({
 	type: "Område",
 	title: "Dyster Skov",
-text: "Væsner i dette område får +1 forsvar.\\nOmråder kan være i asdf-dækket, og kan spilles i en gruppe.",
-	cost: 0,
-	strength: null,
+	text: "Væsner i dette område får +1 forsvar.\\nOmråder kan være i asdf-dækket, og kan spilles i en gruppe.",
 }),
 new Card({
 	type: "Væsen",
@@ -68,6 +66,7 @@ function createCard(card) {
 	container.appendChild(type)
 	container.appendChild(title)
 	container.appendChild(text)
+	if (card.cost !== null && card.strength !== cost)
 	container.appendChild(cost)
 	if (card.strength !== null && card.strength !== undefined)
 		container.appendChild(strength)
@@ -94,7 +93,7 @@ class Card {
 		type = "Besværgelse",
 		title = "Unavngivet",
 		text = "",
-		cost = 0,
+		cost = null,
 		strength = null,
 	}) {
 		this.type = type
