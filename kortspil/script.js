@@ -9,7 +9,7 @@ window.onload = () => {
 new Card({
 	type: "Område",
 	title: "Dyster Skov",
-	text: "Væsner i dette område får +1 forsvar.\nOmråder kan være i asdf-dækket, og kan spilles i en gruppe.",
+text: "Væsner i dette område får +1 forsvar.\\nOmråder kan være i asdf-dækket, og kan spilles i en gruppe.",
 	cost: 0,
 	strength: null,
 }),
