@@ -52,21 +52,28 @@ textarea { grid-area: input; }
 
 .title {
 	top: 3mm;
-	width: 100%;
+	width: calc(100% - 20mm);
 	text-align: center;
+	border-bottom: 0.5mm solid black;
+	margin: 0 10mm;
 }
 
 .type {
-	top: 50%;
-	width: 100%;
-	text-align: center;
-}
-
-.text {
-	top: 60%;
+	top: 8mm;
 	width: 100%;
 	text-align: center;
 	font-weight: normal;
+	font-size: 3.5mm;
+}
+
+.text {
+	bottom: 10%;
+	width: 100%;
+	text-align: center;
+	font-weight: normal;
+	white-space: pre-line;
+	padding: 2mm;
+	box-sizing: border-box;
 }
 
 .cost {
@@ -74,7 +81,7 @@ textarea { grid-area: input; }
 	right: 2mm;
 	text-align: center;
 	font-size: 5mm;
-	border: 1mm solid black;
+	border: 0.5mm solid black;
 	border-radius: 6mm;
 	width: 6mm;
 	height: 6mm;
@@ -86,7 +93,7 @@ textarea { grid-area: input; }
 	width: 100%;
 	text-align: center;
 	font-size: 5mm;
-	border: 1mm solid black;
+	border: 0.5mm solid black;
 	border-radius: 6mm;
 	width: 6mm;
 	height: 6mm;

@@ -35,8 +35,7 @@ window.onload = () => {
 	newCardSection("enchantments")
 
 	const buttons = document.getElementById("buttons")
-	buttons.appendChild(newButton("show defined", () => showCards()))
-	buttons.appendChild(newButton("show generated", () => showCards(generatedCards)))
+	buttons.appendChild(newButton("show all defined", () => showCards()))
 
 	newPartSection("immediateEffects")
 	newPartSection("permanentEffects")
@@ -62,16 +61,17 @@ function newCardSection(type) {
 	element.value = localStorage.korttingCards?.[type] || defaultCards[type]
 	element.onchange = () => {
 		localStorage.korttingCards[type] = element.value
-		showCards()
+		showCards(cards[type])
 	}
 	const buttons = document.getElementById("buttons")
-	buttons.appendChild(newSwitchButton(type, type))
+	buttons.appendChild(newSwitchButton(type, type, () => cards[type]))
 }
 
-function newSwitchButton(text, input) {
+function newSwitchButton(text, input, cardsToShow) {
 	return newButton(text, () => {
 		hideInputs()
 		inputs[input].className = ""
+		showCards(cardsToShow())
 	})
 }
 
@@ -97,7 +97,7 @@ function newPartSection(type) {
 		showCards(generatedCards)
 	}
 	const buttons = document.getElementById("buttons")
-	buttons.appendChild(newSwitchButton(type, type))
+	buttons.appendChild(newSwitchButton(type, type, () => generatedCards))
 }
 
 function showCards(cardsToShow) {
