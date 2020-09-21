@@ -1,4 +1,18 @@
 const defaultParts = {
+	triggerEffects: `[
+{
+	trigger: "når deres kort kommer i spil.",
+},
+{
+	trigger: "når deres kort angriber.",
+},
+{
+	trigger: "når deres kort forsvarer.",
+},
+{
+	trigger: "når deres kort dør.",
+},
+]`,
 	immediateEffects: `[
 {
 	text: "Giv 1 skade til et væsen eller en spiller.",

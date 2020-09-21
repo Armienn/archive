@@ -8,6 +8,7 @@ const cardParts = {
 		spell: "Besværgelse",
 		enchantment: "Fortryllelse",
 	},
+	triggerEffects: [],
 	immediateEffects: [],
 	permanentEffects: [],
 }
@@ -38,6 +39,7 @@ window.onload = () => {
 	const buttons = document.getElementById("buttons")
 	buttons.appendChild(newButton("show all defined", () => showCards()))
 
+	newPartSection("triggerEffects")
 	newPartSection("immediateEffects")
 	newPartSection("permanentEffects")
 
@@ -48,7 +50,7 @@ window.onload = () => {
 	for (const key in inputs)
 		grid.appendChild(inputs[key])
 
-	generateCardsOrWhatever()
+	generateCards()
 	showCards()
 
 	/*fetch("cards.json").then(response => {
@@ -100,7 +102,7 @@ function newPartSection(type) {
 	element.value = localStorage["korttingParts" + type] || defaultParts[type]
 	element.onchange = () => {
 		localStorage["korttingParts" + type] = element.value
-		generateCardsOrWhatever()
+		generateCards()
 		showCards(generatedCards)
 	}
 	const buttons = document.getElementById("buttons")
@@ -180,9 +182,10 @@ class Card {
 	}
 }
 
-function generateCardsOrWhatever() {
+function generateCards() {
 	parseParts()
 	generatedCards = [
+		...cardParts.triggerEffects.flatMap(areasFromTriggerEffect),
 		...cardParts.immediateEffects.flatMap(x => [
 			areaFromImmediate(x),
 			spellFromImmediate(x),
@@ -211,6 +214,15 @@ function generateCardsOrWhatever() {
 function parseParts() {
 	for (const type in defaultParts)
 		cardParts[type] = eval(inputs[type].value) || []
+}
+
+function areasFromTriggerEffect(effect) {
+	const effectTypes = ["Evner", "Indbyggede evner", "Tilføjede evner"]
+	return effectTypes.map(x => new Card({
+		type: cardParts.types.area,
+		title: "asdf",
+		text: x + " i området, som aktiveres via udmattelse, aktiveres i stedet " + effect.trigger,
+	}))
 }
 
 function areaFromImmediate(effect) {
