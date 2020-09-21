@@ -22,6 +22,7 @@ const cards = {
 }
 
 let generatedCards = []
+let useTypeAsTitle = false
 
 const inputs = {}
 
@@ -39,6 +40,10 @@ window.onload = () => {
 
 	newPartSection("immediateEffects")
 	newPartSection("permanentEffects")
+
+	buttons.appendChild(newButton("toggle card names", () => {
+		useTypeAsTitle = !useTypeAsTitle
+	}))
 
 	for (const key in inputs)
 		grid.appendChild(inputs[key])
@@ -129,8 +134,8 @@ function createCard(card) {
 	const text = newElement("div.text")
 	const cost = newElement("div.cost")
 	const strength = newElement("div.strength")
-	type.textContent = card.type
-	title.textContent = card.title
+	type.textContent = useTypeAsTitle ? "" : card.type
+	title.textContent = useTypeAsTitle ? card.type : card.title
 	text.textContent = card.text
 	cost.textContent = card.cost
 	strength.textContent = card.strength
