@@ -178,24 +178,28 @@ class Card {
 function generateCardsOrWhatever() {
 	parseParts()
 	generatedCards = [
-		...cardParts.immediateEffects.map(areaFromImmediate),
-		...cardParts.permanentEffects.map(areaFromPermanent),
-		...cardParts.immediateEffects.map(spellFromImmediate),
-		...cardParts.permanentEffects.map(spellFromPermanent),
-		...cardParts.immediateEffects.map(enchantmentFromImmediate),
-		...cardParts.permanentEffects.map(enchantmentFromPermanent),
-		...cardParts.immediateEffects.map(artifactFromImmediate),
-		...cardParts.permanentEffects.map(artifactFromPermanent),
-		...cardParts.immediateEffects.map(creatureFromImmediate(1)),
-		...cardParts.immediateEffects.map(creatureFromImmediate(2)),
-		...cardParts.immediateEffects.map(creatureFromImmediate(3)),
-		...cardParts.immediateEffects.map(creatureFromImmediate(4)),
-		...cardParts.immediateEffects.map(creatureFromImmediate(5)),
-		...cardParts.permanentEffects.map(creatureFromPermanent(1)),
-		...cardParts.permanentEffects.map(creatureFromPermanent(2)),
-		...cardParts.permanentEffects.map(creatureFromPermanent(3)),
-		...cardParts.permanentEffects.map(creatureFromPermanent(4)),
-		...cardParts.permanentEffects.map(creatureFromPermanent(5)),
+		...cardParts.immediateEffects.flatMap(x => [
+			areaFromImmediate(x),
+			spellFromImmediate(x),
+			enchantmentFromImmediate(x),
+			artifactFromImmediate(x),
+			creatureFromImmediate(x, 1),
+			creatureFromImmediate(x, 2),
+			creatureFromImmediate(x, 3),
+			creatureFromImmediate(x, 4),
+			creatureFromImmediate(x, 5),
+		]),
+		...cardParts.permanentEffects.flatMap(x => [
+			areaFromPermanent(x),
+			spellFromPermanent(x),
+			enchantmentFromPermanent(x),
+			artifactFromPermanent(x),
+			creatureFromPermanent(x, 1),
+			creatureFromPermanent(x, 2),
+			creatureFromPermanent(x, 3),
+			creatureFromPermanent(x, 4),
+			creatureFromPermanent(x, 5),
+		]),
 	]
 }
 
@@ -225,7 +229,7 @@ function spellFromImmediate(effect) {
 		type: cardParts.types.spell,
 		title: "asdf",
 		text: effect.text,
-		cost: effect.cost,
+		cost: Math.abs(effect.cost),
 	})
 }
 
@@ -234,7 +238,7 @@ function spellFromPermanent(effect) {
 		type: cardParts.types.spell,
 		title: "asdf",
 		text: "Giv et væsen " + effect.text + " resten af turen",
-		cost: effect.cost,
+		cost: Math.abs(effect.cost),
 	})
 }
 
@@ -243,7 +247,7 @@ function enchantmentFromImmediate(effect) {
 		type: cardParts.types.enchantment,
 		title: "asdf",
 		text: "asdf har \"Udmat: " + effect.text + "\"",
-		cost: effect.cost,
+		cost: Math.abs(effect.cost),
 	})
 }
 
@@ -252,7 +256,7 @@ function enchantmentFromPermanent(effect) {
 		type: cardParts.types.enchantment,
 		title: "asdf",
 		text: "asdf har " + effect.text,
-		cost: effect.cost,
+		cost: Math.abs(effect.cost),
 	})
 }
 
@@ -261,7 +265,7 @@ function artifactFromImmediate(effect) {
 		type: cardParts.types.artifact,
 		title: "asdf",
 		text: "Udmat: " + effect.text,
-		cost: effect.cost * 2,
+		cost: Math.abs(effect.cost * 2),
 	})
 }
 
@@ -270,11 +274,11 @@ function artifactFromPermanent(effect) {
 		type: cardParts.types.artifact,
 		title: "asdf",
 		text: "Udmat: Giv et væsen " + effect.text + " resten af turen",
-		cost: effect.cost * 2,
+		cost: Math.abs(effect.cost * 2),
 	})
 }
 
-const creatureFromImmediate = (strength) => (effect) => {
+function creatureFromImmediate(effect, strength) {
 	return new Card({
 		type: cardParts.types.creature,
 		title: "asdf",
@@ -284,7 +288,7 @@ const creatureFromImmediate = (strength) => (effect) => {
 	})
 }
 
-const creatureFromPermanent = (strength) => (effect) => {
+function creatureFromPermanent(effect, strength) {
 	return new Card({
 		type: cardParts.types.creature,
 		title: "asdf",
