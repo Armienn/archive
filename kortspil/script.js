@@ -58,9 +58,10 @@ window.onload = () => {
 function newCardSection(type) {
 	const element = newElement("textarea.hidden")
 	inputs[type] = element
-	element.value = localStorage.korttingCards?.[type] || defaultCards[type]
+	element.value = localStorage["korttingCards" + type] || defaultCards[type]
 	element.onchange = () => {
-		localStorage.korttingCards[type] = element.value
+		localStorage["korttingCards" + type] = element.value
+		parseCards()
 		showCards(cards[type])
 	}
 	const buttons = document.getElementById("buttons")
@@ -71,6 +72,7 @@ function newSwitchButton(text, input, cardsToShow) {
 	return newButton(text, () => {
 		hideInputs()
 		inputs[input].className = ""
+		parseCards()
 		showCards(cardsToShow())
 	})
 }
@@ -90,9 +92,9 @@ function newButton(text, click) {
 function newPartSection(type) {
 	const element = newElement("textarea.hidden")
 	inputs[type] = element
-	element.value = localStorage.korttingParts?.[type] || defaultParts[type]
+	element.value = localStorage["korttingParts" + type] || defaultParts[type]
 	element.onchange = () => {
-		localStorage.korttingParts[type] = element.value
+		localStorage["korttingParts" + type] = element.value
 		generateCardsOrWhatever()
 		showCards(generatedCards)
 	}
@@ -101,7 +103,8 @@ function newPartSection(type) {
 }
 
 function showCards(cardsToShow) {
-	parseCards()
+	if(!cardsToShow)
+		parseCards()
 	const element = document.getElementById("cards")
 	element.innerHTML = ""
 	if (cardsToShow)
@@ -175,14 +178,46 @@ class Card {
 function generateCardsOrWhatever() {
 	parseParts()
 	generatedCards = [
+		...cardParts.immediateEffects.map(areaFromImmediate),
+		...cardParts.permanentEffects.map(areaFromPermanent),
 		...cardParts.immediateEffects.map(spellFromImmediate),
 		...cardParts.permanentEffects.map(spellFromPermanent),
+		...cardParts.immediateEffects.map(enchantmentFromImmediate),
+		...cardParts.permanentEffects.map(enchantmentFromPermanent),
+		...cardParts.immediateEffects.map(artifactFromImmediate),
+		...cardParts.permanentEffects.map(artifactFromPermanent),
+		...cardParts.immediateEffects.map(creatureFromImmediate(1)),
+		...cardParts.immediateEffects.map(creatureFromImmediate(2)),
+		...cardParts.immediateEffects.map(creatureFromImmediate(3)),
+		...cardParts.immediateEffects.map(creatureFromImmediate(4)),
+		...cardParts.immediateEffects.map(creatureFromImmediate(5)),
+		...cardParts.permanentEffects.map(creatureFromPermanent(1)),
+		...cardParts.permanentEffects.map(creatureFromPermanent(2)),
+		...cardParts.permanentEffects.map(creatureFromPermanent(3)),
+		...cardParts.permanentEffects.map(creatureFromPermanent(4)),
+		...cardParts.permanentEffects.map(creatureFromPermanent(5)),
 	]
 }
 
 function parseParts() {
 	for (const type in defaultParts)
 		cardParts[type] = eval(inputs[type].value) || []
+}
+
+function areaFromImmediate(effect) {
+	return new Card({
+		type: cardParts.types.area,
+		title: "asdf",
+		text: "Ting i området har \"Udmat: " + effect.text + "\", og koster " + effect.cost + " energi mere.",
+	})
+}
+
+function areaFromPermanent(effect) {
+	return new Card({
+		type: cardParts.types.area,
+		title: "asdf",
+		text: "Ting i området har " + effect.text + ", og koster " + effect.cost + " energi mere.",
+	})
 }
 
 function spellFromImmediate(effect) {
@@ -198,8 +233,64 @@ function spellFromPermanent(effect) {
 	return new Card({
 		type: cardParts.types.spell,
 		title: "asdf",
-		text: effect.text,
+		text: "Giv et væsen " + effect.text + " resten af turen",
 		cost: effect.cost,
+	})
+}
+
+function enchantmentFromImmediate(effect) {
+	return new Card({
+		type: cardParts.types.enchantment,
+		title: "asdf",
+		text: "asdf har \"Udmat: " + effect.text + "\"",
+		cost: effect.cost,
+	})
+}
+
+function enchantmentFromPermanent(effect) {
+	return new Card({
+		type: cardParts.types.enchantment,
+		title: "asdf",
+		text: "asdf har " + effect.text,
+		cost: effect.cost,
+	})
+}
+
+function artifactFromImmediate(effect) {
+	return new Card({
+		type: cardParts.types.artifact,
+		title: "asdf",
+		text: "Udmat: " + effect.text,
+		cost: effect.cost * 2,
+	})
+}
+
+function artifactFromPermanent(effect) {
+	return new Card({
+		type: cardParts.types.artifact,
+		title: "asdf",
+		text: "Udmat: Giv et væsen " + effect.text + " resten af turen",
+		cost: effect.cost * 2,
+	})
+}
+
+const creatureFromImmediate = (strength) => (effect) => {
+	return new Card({
+		type: cardParts.types.creature,
+		title: "asdf",
+		text: "Udmat: " + effect.text,
+		cost: strength + effect.cost,
+		strength: strength
+	})
+}
+
+const creatureFromPermanent = (strength) => (effect) => {
+	return new Card({
+		type: cardParts.types.creature,
+		title: "asdf",
+		text: effect.text,
+		cost: strength + effect.cost,
+		strength: strength
 	})
 }
 
@@ -428,8 +519,28 @@ const defaultParts = {
 ]`,
 	permanentEffects: `[
 {
-	type: "lifelink",
-	text: "asdf har Lifelink.\\nNår noget med Lifelink giver skade, giver det lige så meget liv til sin side.",
+	text: "Lifelink",
+	helpText: "Når noget med Lifelink giver skade, giver det lige så meget liv til sin side.",
+	cost: 1,
+},
+{
+	text: "Hast",
+	helpText: "Når noget med Lifelink giver skade, giver det lige så meget liv til sin side.",
+	cost: 1,
+},
+{
+	text: "Deathtouch",
+	helpText: "Når noget med Lifelink giver skade, giver det lige så meget liv til sin side.",
+	cost: 1,
+},
+{
+	text: "Flying",
+	helpText: "Når noget med Lifelink giver skade, giver det lige så meget liv til sin side.",
+	cost: 1,
+},
+{
+	text: "Reach",
+	helpText: "Når noget med Lifelink giver skade, giver det lige så meget liv til sin side.",
 	cost: 1,
 },
 ]`,
