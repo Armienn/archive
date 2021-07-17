@@ -5,8 +5,8 @@ const cardText = {
 		structure: "Struktur",
 		creature: "Væsen",
 		action: "Handling",
-		passive: "Aktiv Effekt",
-		active: "Passiv Effekt",
+		active: "Aktiv Effekt",
+		passive: "Passiv Effekt",
 		meta: "Meta Effekt",
 		category: "Kategori",
 	},
@@ -64,7 +64,7 @@ function newCardSection(type) {
 		showCards(cards[type])
 	}
 	const buttons = document.getElementById("buttons")
-	buttons.appendChild(newSwitchButton(type, type, () => cards[type]))
+	buttons.appendChild(newSwitchButton(cardText.types[type] || type, type, () => cards[type]))
 }
 
 function newSwitchButton(text, input, cardsToShow) {
