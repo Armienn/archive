@@ -36,7 +36,7 @@ textarea { grid-area: input; }
 	overflow-y: auto;
 }
 
-.title, .type, .text, .icon, img {
+.title, .type, .text-container, .icon, img {
 	position: absolute;
 }
 
@@ -66,14 +66,21 @@ textarea { grid-area: input; }
 	font-weight: normal;
 }
 
-.text {
+.text-container {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
 	bottom: 3mm;
 	width: 100%;
+	height: 15mm;
+	padding: 0 2mm;
+	box-sizing: border-box;
+}
+
+.text {
 	text-align: center;
 	font-weight: normal;
 	white-space: pre-line;
-	padding: 0 2mm;
-	box-sizing: border-box;
 }
 
 .icon {

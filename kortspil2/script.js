@@ -111,6 +111,7 @@ function parseCards() {
 
 function createCard(card) {
 	const container = newElement("div.card")
+	const textContainer = newElement("div.text-container")
 	const type = newElement("div.type")
 	const title = newElement("div.title")
 	const text = newElement("div.text")
@@ -123,7 +124,8 @@ function createCard(card) {
 	image.src = card.image
 	container.appendChild(type)
 	container.appendChild(title)
-	container.appendChild(text)
+	container.appendChild(textContainer)
+	textContainer.appendChild(text)
 	container.appendChild(icon)
 	container.appendChild(image)
 	container.onclick = () => clickCard(card)
