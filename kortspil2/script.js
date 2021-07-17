@@ -115,14 +115,17 @@ function createCard(card) {
 	const title = newElement("div.title")
 	const text = newElement("div.text")
 	const icon = newElement("div.icon")
+	const image = newElement("img")
 	type.textContent = card.type
 	title.textContent = card.title
 	text.textContent = card.text
 	icon.textContent = card.icon
+	image.src = card.image
 	container.appendChild(type)
 	container.appendChild(title)
 	container.appendChild(text)
 	container.appendChild(icon)
+	container.appendChild(image)
 	container.onclick = () => clickCard(card)
 	return container
 }
@@ -152,18 +155,13 @@ class Card {
 		title = "Unavngivet",
 		text = "",
 		icon = "X",
+		image = "default.jpg",
 	}) {
 		this.type = type
 		this.title = title
 		this.text = text
 		this.icon = icon
+		this.image = image
 	}
 }
 
-function ruleCard(type, text) {
-	return new Card({
-		type: "Regelkort",
-		title: type,
-		text: text,
-	})
-}
