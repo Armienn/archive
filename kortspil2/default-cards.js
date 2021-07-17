@@ -1,12 +1,26 @@
 const defaultCards = {
 	rules: `[
-	ruleCard("Struktur", "Strukturer gør noget"),
-	ruleCard("Væsen", "Væsner gør også noget"),
+new Card({
+	title: "Struktur",
+	text: "Strukturer gør noget",
+}),
+new Card({
+	title: "Væsen",
+	text: "Væsner gør også noget",
+}),
 ]`,
 	structure: `[
 new Card({
-	title: "asdf",
-	text: "Evner i området, som aktiveres via udmattelse, aktiveres i stedet når deres kort kommer i spil.",
+	title: "Hjem",
+	text: "Udmat: Tilføj en kilde, hvis der er færre end 6 kilder.",
+}),
+new Card({
+	title: "Koloni",
+	text: "Udmat: Tilføj kilder indtil der er mindst 3.",
+}),
+new Card({
+	title: "Universitet",
+	text: "Udmat: Tilføj en dobbeltkilde, hvis der er færre end 3 kilder.",
 }),
 ]`,
 	creatures: `[

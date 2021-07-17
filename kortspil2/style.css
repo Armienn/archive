@@ -36,7 +36,7 @@ textarea { grid-area: input; }
 	overflow-y: auto;
 }
 
-.title, .type, .text, .icon {
+.title, .type, .text, .icon, img {
 	position: absolute;
 }
 
@@ -86,4 +86,11 @@ textarea { grid-area: input; }
 	width: 6mm;
 	height: 6mm;
 	line-height: 6mm;
+}
+
+img {
+	top: 13mm;
+	right: 3mm;
+	width: 57.5mm;
+	height: 57.5mm;
 }
