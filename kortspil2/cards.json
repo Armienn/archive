@@ -1,0 +1,16 @@
+[
+	{
+		"type": "Væsen",
+		"title": "Drage",
+		"text": "Slår hårdt",
+		"cost": 3,
+		"strength": 2
+	},
+	{
+		"type": "Væsen",
+		"title": "Dragør",
+		"text": "Slår hårdt",
+		"cost": 3,
+		"strength": 2
+	}
+]

@@ -1,0 +1,89 @@
+* {
+	margin:0;
+	padding:0;
+}
+
+html, body {
+	width:100%;
+	height:100%;
+	font: 14px sans-serif;
+	tab-size: 2;
+}
+
+#grid {
+	display: grid;
+	width:100%;
+	height:100%;
+	grid-template-columns: 20rem 1fr;
+	grid-template-rows: auto 1fr;
+	grid-template-areas: 
+		"buttons cards"
+		"input cards";
+}
+
+.hidden {
+	display: none;
+}
+
+#buttons { grid-area: buttons; }
+button { width: 100%; }
+textarea { grid-area: input; }
+#cards {
+	grid-area: cards;
+	display: flex;
+	flex-wrap: wrap;
+	background-color: grey;
+	overflow-y: auto;
+}
+
+.title, .type, .text, .icon {
+	position: absolute;
+}
+
+.card {
+	position: relative;
+	background-color: white;
+	height: 88.9mm;
+	width: 63.5mm;
+	border-radius: 3mm;
+	margin: 1mm;
+	font: bold 3.5mm serif;
+}
+
+.title {
+	top: 3mm;
+	width: calc(100% - 20mm);
+	font-size: 4mm;
+	text-align: center;
+	border-bottom: 0.5mm solid black;
+	margin: 0 10mm;
+}
+
+.type {
+	top: 8mm;
+	width: 100%;
+	text-align: center;
+	font-weight: normal;
+}
+
+.text {
+	bottom: 3mm;
+	width: 100%;
+	text-align: center;
+	font-weight: normal;
+	white-space: pre-line;
+	padding: 0 2mm;
+	box-sizing: border-box;
+}
+
+.icon {
+	top: 2mm;
+	right: 2mm;
+	text-align: center;
+	font-size: 5mm;
+	border: 0.5mm solid black;
+	border-radius: 6mm;
+	width: 6mm;
+	height: 6mm;
+	line-height: 6mm;
+}
