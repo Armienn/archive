@@ -1,6 +1,6 @@
 "use strict"
 
-const cardParts = {
+const cardText = {
 	types: {
 		area: "Område",
 		creature: "Væsen",
@@ -8,9 +8,13 @@ const cardParts = {
 		spell: "Besværgelse",
 		enchantment: "Fortryllelse",
 	},
+}
+
+const cardParts = {
 	triggerEffects: [],
 	immediateEffects: [],
 	permanentEffects: [],
+	offBattleFieldEffects: [],
 }
 
 const cards = {
@@ -42,9 +46,17 @@ window.onload = () => {
 	newPartSection("triggerEffects")
 	newPartSection("immediateEffects")
 	newPartSection("permanentEffects")
+	newPartSection("offBattleFieldEffects")
 
 	buttons.appendChild(newButton("toggle card names", () => {
 		useTypeAsTitle = !useTypeAsTitle
+	}))
+
+	buttons.appendChild(newButton("clear localStorage", () => {
+		for (const type in cards)
+			delete localStorage["korttingCards" + type]
+		for (const type in cardParts)
+			delete localStorage["korttingParts" + type]
 	}))
 
 	for (const key in inputs)
@@ -110,7 +122,7 @@ function newPartSection(type) {
 }
 
 function showCards(cardsToShow) {
-	if(!cardsToShow)
+	if (!cardsToShow)
 		parseCards()
 	const element = document.getElementById("cards")
 	element.innerHTML = ""
@@ -148,6 +160,7 @@ function createCard(card) {
 		container.appendChild(cost)
 	if (card.strength !== null && card.strength !== undefined)
 		container.appendChild(strength)
+	container.onclick = () => clickCard(card)
 	return container
 }
 
@@ -164,6 +177,10 @@ function newElement(definition) {
 	}
 	element.className = classes.join(", ")
 	return element
+}
+
+function clickCard(card) {
+	console.log(card)
 }
 
 class Card {
@@ -186,8 +203,10 @@ function generateCards() {
 	parseParts()
 	generatedCards = [
 		...cardParts.triggerEffects.flatMap(areasFromTriggerEffect),
+		...plainCreatures(9),
 		...cardParts.immediateEffects.flatMap(x => [
 			areaFromImmediate(x),
+			spellAreaFromImmediate(x),
 			spellFromImmediate(x),
 			enchantmentFromImmediate(x),
 			artifactFromImmediate(x),
@@ -195,10 +214,10 @@ function generateCards() {
 			creatureFromImmediate(x, 2),
 			creatureFromImmediate(x, 3),
 			creatureFromImmediate(x, 4),
-			creatureFromImmediate(x, 5),
 		]),
 		...cardParts.permanentEffects.flatMap(x => [
 			areaFromPermanent(x),
+			spellAreaFromPermanent(x),
 			spellFromPermanent(x),
 			enchantmentFromPermanent(x),
 			artifactFromPermanent(x),
@@ -206,9 +225,15 @@ function generateCards() {
 			creatureFromPermanent(x, 2),
 			creatureFromPermanent(x, 3),
 			creatureFromPermanent(x, 4),
-			creatureFromPermanent(x, 5),
 		]),
-	]
+		...cardParts.offBattleFieldEffects.flatMap(x => [
+			areaFromPermanent(x),
+			creatureFromPermanent(x, 1),
+			creatureFromPermanent(x, 2),
+			creatureFromPermanent(x, 3),
+			creatureFromPermanent(x, 4),
+		]),
+	].filter(x => x)
 }
 
 function parseParts() {
@@ -219,15 +244,28 @@ function parseParts() {
 function areasFromTriggerEffect(effect) {
 	const effectTypes = ["Evner", "Indbyggede evner", "Tilføjede evner"]
 	return effectTypes.map(x => new Card({
-		type: cardParts.types.area,
+		type: cardText.types.area,
 		title: "asdf",
-		text: x + " i området, som aktiveres via udmattelse, aktiveres i stedet " + effect.trigger,
+		text: (effect.throne ? "Trone\n" : "") + x + " i området, som aktiveres via udmattelse, aktiveres i stedet " + effect.trigger
+			+ (effect.cost ? "\n\nTing i området koster " + effect.cost + " energi mere." : ""),
 	}))
+}
+
+function plainCreatures(maxSize) {
+	const cards = []
+	for (let i = 1; i <= maxSize; i++)
+		cards.push(new Card({
+			type: cardText.types.creature,
+			title: "asdf",
+			strength: i,
+			cost: i,
+		}))
+	return cards
 }
 
 function areaFromImmediate(effect) {
 	return new Card({
-		type: cardParts.types.area,
+		type: cardText.types.area,
 		title: "asdf",
 		text: "Ting i området har \"Udmat: " + effect.text + "\", og koster " + effect.cost + " energi mere.",
 	})
@@ -235,15 +273,31 @@ function areaFromImmediate(effect) {
 
 function areaFromPermanent(effect) {
 	return new Card({
-		type: cardParts.types.area,
+		type: cardText.types.area,
 		title: "asdf",
 		text: "Ting i området har " + effect.text + ", og koster " + effect.cost + " energi mere.",
 	})
 }
 
+function spellAreaFromImmediate(effect) {
+	return new Card({
+		type: cardText.types.area,
+		title: "asdf",
+		text: "Ting i området har \"Når dette spilles, " + effect.text + "\", og koster " + effect.cost + " energi mere.",
+	})
+}
+
+function spellAreaFromPermanent(effect) {
+	return new Card({
+		type: cardText.types.area,
+		title: "asdf",
+		text: "Ting i området har \"Når dette spilles, giv noget " + effect.text + " resten af turen\", og koster " + effect.cost + " energi mere.",
+	})
+}
+
 function spellFromImmediate(effect) {
 	return new Card({
-		type: cardParts.types.spell,
+		type: cardText.types.spell,
 		title: "asdf",
 		text: effect.text,
 		cost: Math.abs(effect.cost),
@@ -252,34 +306,34 @@ function spellFromImmediate(effect) {
 
 function spellFromPermanent(effect) {
 	return new Card({
-		type: cardParts.types.spell,
+		type: cardText.types.spell,
 		title: "asdf",
-		text: "Giv et væsen " + effect.text + " resten af turen",
+		text: "Giv noget " + effect.text + " resten af turen",
 		cost: Math.abs(effect.cost),
 	})
 }
 
 function enchantmentFromImmediate(effect) {
 	return new Card({
-		type: cardParts.types.enchantment,
+		type: cardText.types.enchantment,
 		title: "asdf",
-		text: "asdf har \"Udmat: " + effect.text + "\"",
+		text: "Det fortryllede har \"Udmat: " + effect.text + "\"",
 		cost: Math.abs(effect.cost),
 	})
 }
 
 function enchantmentFromPermanent(effect) {
 	return new Card({
-		type: cardParts.types.enchantment,
+		type: cardText.types.enchantment,
 		title: "asdf",
-		text: "asdf har " + effect.text,
+		text: "Det fortryllede har " + effect.text,
 		cost: Math.abs(effect.cost),
 	})
 }
 
 function artifactFromImmediate(effect) {
 	return new Card({
-		type: cardParts.types.artifact,
+		type: cardText.types.artifact,
 		title: "asdf",
 		text: "Udmat: " + effect.text,
 		cost: Math.abs(effect.cost * 2),
@@ -288,7 +342,7 @@ function artifactFromImmediate(effect) {
 
 function artifactFromPermanent(effect) {
 	return new Card({
-		type: cardParts.types.artifact,
+		type: cardText.types.artifact,
 		title: "asdf",
 		text: "Udmat: Giv et væsen " + effect.text + " resten af turen",
 		cost: Math.abs(effect.cost * 2),
@@ -296,8 +350,10 @@ function artifactFromPermanent(effect) {
 }
 
 function creatureFromImmediate(effect, strength) {
+	if (effect.skipCreatures)
+		return
 	return new Card({
-		type: cardParts.types.creature,
+		type: cardText.types.creature,
 		title: "asdf",
 		text: "Udmat: " + effect.text,
 		cost: strength + effect.cost,
@@ -306,8 +362,10 @@ function creatureFromImmediate(effect, strength) {
 }
 
 function creatureFromPermanent(effect, strength) {
+	if (effect.skipCreatures)
+		return
 	return new Card({
-		type: cardParts.types.creature,
+		type: cardText.types.creature,
 		title: "asdf",
 		text: effect.text,
 		cost: strength + effect.cost,

@@ -12,6 +12,21 @@ const defaultParts = {
 {
 	trigger: "når deres kort dør.",
 },
+{
+	trigger: "når denne side får liv.",
+	throne: true,
+	cost: 2,
+},
+{
+	trigger: "når en modstander tager skade.",
+	throne: true,
+	cost: 2,
+},
+{
+	trigger: "når du trækker et kort.",
+	throne: true,
+	cost: 2,
+},
 ]`,
 	immediateEffects: `[
 {
@@ -31,16 +46,40 @@ const defaultParts = {
 	cost: 4,
 },
 {
-	text: "Giv 5 skade til et væsen eller en spiller.",
-	cost: 5,
+	text: "Giv 1 liv til en spiller.",
+	cost: 1,
 },
 {
-	text: "Giv 10 skade til et væsen.",
-	cost: 5,
+	text: "Giv 2 liv til en spiller.",
+	cost: 2,
+},
+{
+	text: "Giv 3 liv til en spiller.",
+	cost: 3,
+},
+{
+	text: "Giv 4 liv til en spiller.",
+	cost: 4,
 },
 {
 	text: "Få 1 energi",
 	cost: 1,
+},
+{
+	text: "Få 2 energi",
+	cost: 3,
+},
+{
+	text: "Dræb et væsen.",
+	cost: 5,
+},
+{
+	text: "Ødelæg en fortryllelse eller struktur.",
+	cost: 4,
+},
+{
+	text: "Træk et kort.",
+	cost: 3,
 },
 ]`,
 	permanentEffects: `[
@@ -65,29 +104,74 @@ const defaultParts = {
 	cost: -1,
 },
 {
+	text: "+1 Styrke",
+	cost: 1,
+	skipCreatures: true,
+},
+{
+	text: "+2 Styrke",
+	cost: 2,
+	skipCreatures: true,
+},
+{
+	text: "+3 Styrke",
+	cost: 3,
+	skipCreatures: true,
+},
+{
+	text: "+4 Styrke",
+	cost: 4,
+	skipCreatures: true,
+},
+{
+	text: "Plyndring",
+	helpText: "Væsner med Plyndring kan angribe et område.",
+	cost: 4,
+},
+{
+	text: "Hærgen",
+	helpText: "Væsner med Hærgen kan angribe en struktur eller fortryllelse.",
+	cost: 3,
+},
+{
+	text: "Udfordring",
+	helpText: "Væsner med Udfordring kan angribe et væsen.",
+	cost: 2,
+},
+{
 	text: "Lifelink",
 	helpText: "Når noget med Lifelink giver skade, giver det lige så meget liv til sin side.",
 	cost: 1,
 },
 {
 	text: "Haste",
-	helpText: "Når noget med Lifelink giver skade, giver det lige så meget liv til sin side.",
 	cost: 1,
 },
 {
 	text: "Deathtouch",
-	helpText: "Når noget med Lifelink giver skade, giver det lige så meget liv til sin side.",
 	cost: 1,
 },
 {
 	text: "Flying",
-	helpText: "Når noget med Lifelink giver skade, giver det lige så meget liv til sin side.",
-	cost: 1,
+	cost: 2,
 },
 {
 	text: "Reach",
-	helpText: "Når noget med Lifelink giver skade, giver det lige så meget liv til sin side.",
-	cost: 2,
+	cost: 1,
+},
+{
+	text: "Vigilance",
+	cost: 1,
+},
+{
+	text: "First Strike",
+	cost: 1,
+},
+]`,
+	offBattleFieldEffects: `[
+{
+	text: "Flash",
+	cost: 1,
 },
 ]`,
 }
