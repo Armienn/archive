@@ -5,10 +5,9 @@ const cardText = {
 		structure: "Struktur",
 		creature: "Væsen",
 		action: "Handling",
-		active: "Aktiv Effekt",
-		passive: "Passiv Effekt",
-		meta: "Meta Effekt",
-		category: "Kategori",
+		active: "Effekt - Aktiv",
+		passive: "Effekt - Passiv",
+		category: "Egenskab",
 	},
 }
 
@@ -19,7 +18,6 @@ const cards = {
 	action: [],
 	passive: [],
 	active: [],
-	meta: [],
 	category: [],
 }
 
