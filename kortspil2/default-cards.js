@@ -14,6 +14,7 @@ new Card({
 	title: "Hjem",
 	type: "Struktur - Hjem",
 	text: "Udmat: Tilføj en kilde, hvis der er færre end 6 kilder.",
+	image: "cards/hjem.jpg",
 }),
 new Card({
 	title: "Koloni",
@@ -44,6 +45,7 @@ new Card({
 new Card({
 	title: "Barakkerne",
 	icon: "L",
+	image: "cards/barakker.jpg",
 }),
 new Card({
 	title: "Kirkegård",
@@ -98,6 +100,7 @@ new Card({
 new Card({
 	title: "Soldat",
 	icon: "L",
+	image: "cards/soldat.jpg",
 }),
 new Card({
 	title: "Havfrue",
@@ -122,6 +125,7 @@ new Card({
 new Card({
 	title: "Elefant",
 	icon: "l",
+	image: "cards/elefant.jpg",
 }),
 new Card({
 	title: "Tiger",
@@ -156,6 +160,7 @@ new Card({
 	title: "Magisk Meteor",
 	text: "Giv (S) skade til en struktur.",
 	icon: "M",
+	image: "cards/meteor.jpg",
 }),
 new Card({
 	title: "Plyndring",
@@ -296,16 +301,19 @@ new Card({
 	title: "M Falkeham",
 	text: "Påvirkede bliver Flyvende",
 	icon: "M",
+	image: "cards/falkeham.jpg",
 }),
 new Card({
 	title: "Falkeham",
 	text: "Påvirkede bliver Flyvende",
 	icon: "L",
+	image: "cards/falkeham.jpg",
 }),
 new Card({
 	title: "D Falkeham",
 	text: "Påvirkede bliver Flyvende",
 	icon: "D",
+	image: "cards/falkeham.jpg",
 }),
 new Card({
 	title: "M Kampsans",
@@ -343,16 +351,19 @@ new Card({
 	title: "M Pilesalve",
 	text: "Aktivér: Giv 2 skade til et væsen.",
 	icon: "M",
+	image: "cards/pilesalve.jpg",
 }),
 new Card({
 	title: "L Pilesalve",
 	text: "Aktivér: Giv 2 skade til et væsen.",
 	icon: "L",
+	image: "cards/pilesalve.jpg",
 }),
 new Card({
 	title: "Pilesalve",
 	text: "Aktivér: Giv 2 skade til et væsen.",
 	icon: "D",
+	image: "cards/pilesalve.jpg",
 }),
 new Card({
 	title: "M Katapultsalve",
