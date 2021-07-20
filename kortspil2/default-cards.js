@@ -1,14 +1,5 @@
 const defaultCards = {
-	rules: `[
-new Card({
-	title: "Struktur",
-	text: "Strukturer gør noget",
-}),
-new Card({
-	title: "Væsen",
-	text: "Væsner gør også noget",
-}),
-]`,
+	rules: `[]`,
 	structure: `[
 new Card({
 	title: "Hjem",
@@ -20,15 +11,18 @@ new Card({
 	title: "Koloni",
 	type: "Struktur - Hjem",
 	text: "Udmat: Tilføj kilder indtil der er mindst 3.",
+	image: "cards/koloni.jpg",
 }),
 new Card({
 	title: "Universitet",
 	type: "Struktur - Hjem",
 	text: "Udmat: Tilføj en dobbeltkilde, hvis der er færre end 3 kilder.",
+	image: "cards/universitet.jpg",
 }),
 new Card({
-	title: "Laputa",
+	title: "Himmelby",
 	icon: "M.",
+	image: "cards/svæveby.jpg",
 }),
 new Card({
 	title: "Hovedstaden",
@@ -41,6 +35,7 @@ new Card({
 new Card({
 	title: "Den Evige Morgens Tårn",
 	icon: "M",
+	image: "cards/tårn.jpg",
 }),
 new Card({
 	title: "Barakkerne",
@@ -50,6 +45,7 @@ new Card({
 new Card({
 	title: "Kirkegård",
 	icon: "D",
+	image: "cards/kirkegård.jpg",
 }),
 new Card({
 	title: "Kompasstenen",
@@ -58,10 +54,12 @@ new Card({
 new Card({
 	title: "Lund",
 	icon: "l",
+	image: "cards/skov.jpg",
 }),
 new Card({
-	title: "Gar, Metalørkenen",
+	title: "Kratermine",
 	icon: "d",
+	image: "cards/krater.jpg",
 }),
 ]`,
 	creature: `[
