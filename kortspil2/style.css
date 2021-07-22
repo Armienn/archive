@@ -47,13 +47,13 @@ textarea { grid-area: input; }
 	width: 63.5mm;
 	border-radius: 3mm;
 	margin: 1mm;
-	font: bold 3.5mm serif;
+	font: bold 3mm serif;
 }
 
 .title {
 	top: 3mm;
 	width: calc(100% - 20mm);
-	font-size: 4mm;
+	font-size: 3.5mm;
 	text-align: center;
 	border-bottom: 0.5mm solid black;
 	margin: 0 10mm;
@@ -71,10 +71,16 @@ textarea { grid-area: input; }
 	flex-direction: column;
 	justify-content: center;
 	bottom: 3mm;
-	width: 100%;
+	width: calc(100% - 6mm);
 	height: 15mm;
-	padding: 0 2mm;
+	margin: 0 3mm;
 	box-sizing: border-box;
+	border-bottom: 0.5mm solid black;
+  border-top: 0.5mm solid black;
+}
+
+.text-container:empty {
+	border-top: none;
 }
 
 .text {
@@ -85,7 +91,7 @@ textarea { grid-area: input; }
 
 .icon {
 	top: 2mm;
-	right: 2mm;
+	left: 2mm;
 	text-align: center;
 	font-size: 5mm;
 	border: 0.5mm solid black;
@@ -100,4 +106,5 @@ img {
 	right: 3mm;
 	width: 57.5mm;
 	height: 57.5mm;
+	image-rendering: -webkit-optimize-contrast;
 }

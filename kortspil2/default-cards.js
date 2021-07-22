@@ -483,17 +483,17 @@ new Card({
 }),
 new Card({
 	title: "Fortryllelsesting",
-	type: "Kategori - Lukket",
+	type: "Egenskab - Lukket",
 	text: "Magiske Effekter kan ikke tilføjes normalt, men til eksisterende væsner eller strukturer for (2)",
 }),
 new Card({
 	title: "Kulturting",
-	type: "Kategori - Lukket",
+	type: "Egenskab - Lukket",
 	text: "Livlige Effekter kan ikke tilføjes normalt, men spilles som et separat kort for (5), og har \\"Denne effekt påvirker alle dine væsner og strukturer.\\"",
 }),
 new Card({
 	title: "Udstyrsting",
-	type: "Kategori - Lukket",
+	type: "Egenskab - Lukket",
 	text: "Livløse Effekter kan ikke tilføjes normalt, men spilles som et separat kort for (2), og har \\"(1): Tilføj til et væsen eller struktur.\\"",
 }),
 ]`
