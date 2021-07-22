@@ -4,19 +4,19 @@ const defaultCards = {
 new Card({
 	title: "Hjem",
 	type: "Struktur - Hjem",
-	text: "Udmat: Tilføj en kilde, hvis der er færre end 6 kilder.",
+	text: "Udmat: Tilføj to kilder, hvis der er færre end 6.",
 	image: "cards/hjem.jpg",
 }),
 new Card({
 	title: "Koloni",
 	type: "Struktur - Hjem",
-	text: "Udmat: Tilføj kilder indtil der er mindst 3.",
+	text: "Udmat: Tilføj kilder indtil der er mindst 4.",
 	image: "cards/koloni.jpg",
 }),
 new Card({
 	title: "Universitet",
 	type: "Struktur - Hjem",
-	text: "Udmat: Tilføj en dobbeltkilde, hvis der er færre end 3 kilder.",
+	text: "Udmat: Tilføj en dobbeltkilde, hvis der er færre end 3.",
 	image: "cards/universitet.jpg",
 }),
 new Card({
@@ -25,17 +25,19 @@ new Card({
 	image: "cards/svæveby.jpg",
 }),
 new Card({
-	title: "Hovedstaden",
+	title: "Dværgeværksted",
 	icon: "L.",
+	image: "cards/dværgeværksted.jpg",
 }),
 new Card({
-	title: "De Dødes By",
+	title: "Nekropolis",
 	icon: "D.",
+	image: "cards/nekropolis.jpg",
 }),
 new Card({
-	title: "Den Evige Morgens Tårn",
+	title: "Morgentårn",
 	icon: "M",
-	image: "cards/tårn.jpg",
+	image: "cards/morgentårn.jpg",
 }),
 new Card({
 	title: "Barakkerne",
@@ -50,6 +52,7 @@ new Card({
 new Card({
 	title: "Kompasstenen",
 	icon: "m",
+	image: "cards/kompassten.jpg",
 }),
 new Card({
 	title: "Lund",
@@ -66,13 +69,15 @@ new Card({
 new Card({
 	title: "Drage",
 	icon: "M.",
-}),
-new Card({
-	title: "Engel",
-	icon: "M.",
+	image: "cards/drage.jpg",
 }),
 new Card({
 	title: "Troldmand",
+	icon: "M.",
+	image: "cards/troldmand.jpg",
+}),
+new Card({
+	title: "Engel/Dværg?",
 	icon: "L.",
 }),
 new Card({
@@ -103,18 +108,21 @@ new Card({
 new Card({
 	title: "Havfrue",
 	icon: "L",
+	image: "cards/havfrue.jpg",
 }),
 new Card({
 	title: "Golem",
 	icon: "D",
+	image: "cards/golem.jpg",
 }),
 new Card({
 	title: "Spider Construct",
 	icon: "D",
 }),
 new Card({
-	title: "Elemental",
+	title: "Lue",
 	icon: "m",
+	image: "cards/lue.jpg",
 }),
 new Card({
 	title: "Djævel",
@@ -128,6 +136,7 @@ new Card({
 new Card({
 	title: "Tiger",
 	icon: "l",
+	image: "cards/tiger.jpg",
 }),
 new Card({
 	title: "Zombie",
@@ -143,6 +152,7 @@ new Card({
 	title: "Magimissil",
 	text: "Giv (S) skade til et væsen.",
 	icon: "M",
+	image: "cards/magimissil.jpg",
 }),
 new Card({
 	title: "Hærgen",
@@ -153,6 +163,7 @@ new Card({
 	title: "Pletskud",
 	text: "Giv (S) skade til et væsen.",
 	icon: "D",
+	image: "cards/pletskud.jpg",
 }),
 new Card({
 	title: "Magisk Meteor",
@@ -169,6 +180,7 @@ new Card({
 	title: "Katapultering",
 	text: "Giv (S) skade til en struktur.",
 	icon: "D",
+	image: "cards/katapult.jpg",
 }),
 new Card({
 	title: "Genoplivning",
@@ -232,19 +244,16 @@ new Card({
 }),
 new Card({
 	title: "M Annullér",
-	type: "Handling - Fælde",
 	text: "Forhindr aktivering af et sæt på mindre end (S) kort.",
 	icon: "M",
 }),
 new Card({
 	title: "L Annullér",
-	type: "Handling - Fælde",
 	text: "Forhindr aktivering af et sæt på mindre end (S) kort.",
 	icon: "L",
 }),
 new Card({
 	title: "D Annullér",
-	type: "Handling - Fælde",
 	text: "Forhindr aktivering af et sæt på mindre end (S) kort.",
 	icon: "D",
 }),
@@ -264,6 +273,7 @@ new Card({
 	title: "Feltudstyr",
 	text: "Påvirkede får +1 Styrke",
 	icon: "D",
+	image: "cards/feltudstyr.jpg",
 }),
 new Card({
 	title: "M Sværd",
@@ -279,6 +289,7 @@ new Card({
 	title: "Sværd",
 	text: "Påvirkede får +2 Angreb",
 	icon: "D",
+	image: "cards/sværd.jpg",
 }),
 new Card({
 	title: "M Skjold",
@@ -294,12 +305,12 @@ new Card({
 	title: "Skjold",
 	text: "Påvirkede får +2 Forsvar",
 	icon: "D",
+	image: "cards/skjold.jpg",
 }),
 new Card({
 	title: "M Falkeham",
 	text: "Påvirkede bliver Flyvende",
 	icon: "M",
-	image: "cards/falkeham.jpg",
 }),
 new Card({
 	title: "Falkeham",
@@ -311,7 +322,6 @@ new Card({
 	title: "D Falkeham",
 	text: "Påvirkede bliver Flyvende",
 	icon: "D",
-	image: "cards/falkeham.jpg",
 }),
 new Card({
 	title: "M Kampsans",
@@ -328,34 +338,17 @@ new Card({
 	text: "Påvirkede bliver Snild",
 	icon: "D",
 }),
-new Card({
-	title: "M Øjeblikkelighed",
-	text: "Påvirkede får Flash",
-	icon: "M",
-}),
-new Card({
-	title: "Øjeblikkelighed",
-	text: "Påvirkede får Flash",
-	icon: "L",
-}),
-new Card({
-	title: "D Øjeblikkelighed",
-	text: "Påvirkede får Flash",
-	icon: "D",
-}),
 ]`,
 	active: `[
 new Card({
 	title: "M Pilesalve",
 	text: "Aktivér: Giv 2 skade til et væsen.",
 	icon: "M",
-	image: "cards/pilesalve.jpg",
 }),
 new Card({
 	title: "L Pilesalve",
 	text: "Aktivér: Giv 2 skade til et væsen.",
 	icon: "L",
-	image: "cards/pilesalve.jpg",
 }),
 new Card({
 	title: "Pilesalve",
@@ -496,7 +489,7 @@ new Card({
 new Card({
 	title: "Kulturting",
 	type: "Kategori - Lukket",
-	text: "Livlige Effekter kan ikke tilføjes normalt, men spilles som et separat kort for (4), og har \\"Denne effekt påvirker alle dine væsner og strukturer.\\"",
+	text: "Livlige Effekter kan ikke tilføjes normalt, men spilles som et separat kort for (5), og har \\"Denne effekt påvirker alle dine væsner og strukturer.\\"",
 }),
 new Card({
 	title: "Udstyrsting",
