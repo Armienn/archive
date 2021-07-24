@@ -33,10 +33,10 @@ window.onload = () => {
 	const buttons = document.getElementById("buttons")
 	buttons.appendChild(newButton("show all defined", () => showCards()))
 
-	buttons.appendChild(newButton("clear localStorage", () => {
+	/*buttons.appendChild(newButton("clear localStorage", () => {
 		for (const type in cards)
 			delete localStorage["korttingCards2" + type]
-	}))
+	}))*/
 
 	for (const key in inputs)
 		grid.appendChild(inputs[key])
