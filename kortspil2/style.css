@@ -83,7 +83,7 @@ textarea { grid-area: input; }
 	border-top: none;
 }
 
-img + .text-container {
+img.main + .text-container {
 	height: 15mm;
 }
 
@@ -105,7 +105,7 @@ img + .text-container {
 	line-height: 6mm;
 }
 
-img {
+img.main {
 	top: 13mm;
 	right: 3mm;
 	width: 57.5mm;

@@ -111,7 +111,7 @@ function createCard(card) {
 	const container = newElement("div.card")
 	addTextElement(card.type, "div.type", container)
 	addTextElement(card.title, "div.title", container)
-	addTextElement(card.icon, "div.icon", container)
+	addIconElement(card.icon, container)
 	addImageElement(card.image, container)
 	addMainTextElement(card.text, container) // this needs to be after image element for styling reasons
 	container.onclick = () => clickCard(card)
@@ -124,10 +124,34 @@ function addTextElement(text, type, container) {
 	container.appendChild(element)
 }
 
+function addIconElement(text, container) {
+	const icon = getIconFor(text)
+	if (!icon)
+		return addTextElement(card.icon, "div.icon", container)
+	const element = newElement("img.icon")
+	element.src = icon
+	container.appendChild(element)
+}
+
+function getIconFor(text) {
+	switch (text) {
+		case "M.": return "cards/s-am.jpg"
+		case "L.": return "cards/s-al.jpg"
+		case "D.": return "cards/s-ad.jpg"
+		case "M": return "cards/s-bm.jpg"
+		case "L": return "cards/s-bl.jpg"
+		case "D": return "cards/s-bd.jpg"
+		case "m": return "cards/s-pm.jpg"
+		case "l": return "cards/s-pl.jpg"
+		case "d": return "cards/s-pd.jpg"
+		case "X": return "cards/s-x.jpg"
+	}
+}
+
 function addImageElement(src, container) {
 	if (!src)
 		return
-	const element = newElement("img")
+	const element = newElement("img.main")
 	element.src = src
 	container.appendChild(element)
 }
