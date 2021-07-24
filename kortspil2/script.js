@@ -109,26 +109,34 @@ function parseCards() {
 
 function createCard(card) {
 	const container = newElement("div.card")
-	const textContainer = newElement("div.text-container")
-	const type = newElement("div.type")
-	const title = newElement("div.title")
-	const text = newElement("div.text")
-	const icon = newElement("div.icon")
-	const image = newElement("img")
-	type.textContent = card.type
-	title.textContent = card.title
-	text.textContent = card.text
-	icon.textContent = card.icon
-	image.src = card.image
-	container.appendChild(type)
-	container.appendChild(title)
-	container.appendChild(textContainer)
-	if(card.text)
-		textContainer.appendChild(text)
-	container.appendChild(icon)
-	container.appendChild(image)
+	addTextElement(card.type, "div.type", container)
+	addTextElement(card.title, "div.title", container)
+	addTextElement(card.icon, "div.icon", container)
+	addImageElement(card.image, container)
+	addMainTextElement(card.text, container) // this needs to be after image element for styling reasons
 	container.onclick = () => clickCard(card)
 	return container
+}
+
+function addTextElement(text, type, container) {
+	const element = newElement(type)
+	element.textContent = text
+	container.appendChild(element)
+}
+
+function addImageElement(src, container) {
+	if (!src)
+		return
+	const element = newElement("img")
+	element.src = src
+	container.appendChild(element)
+}
+
+function addMainTextElement(text, container) {
+	const textContainer = newElement("div.text-container")
+	container.appendChild(textContainer)
+	if (text)
+		addTextElement(text, "div.text", textContainer)
 }
 
 function newElement(definition) {

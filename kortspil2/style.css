@@ -72,7 +72,7 @@ textarea { grid-area: input; }
 	justify-content: center;
 	bottom: 3mm;
 	width: calc(100% - 6mm);
-	height: 15mm;
+	height: 72mm;
 	margin: 0 3mm;
 	box-sizing: border-box;
 	border-bottom: 0.5mm solid black;
@@ -81,6 +81,10 @@ textarea { grid-area: input; }
 
 .text-container:empty {
 	border-top: none;
+}
+
+img + .text-container {
+	height: 15mm;
 }
 
 .text {
