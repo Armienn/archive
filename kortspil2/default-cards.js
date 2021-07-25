@@ -30,11 +30,12 @@ const defaultSetup = {
 			{
 				"type": "Regler",
 				"title": "Runde",
-				"text": "En runde består de følgende faser:\n\nOpfriskning - Udmattede kort opfriskes, og kilder øges.\n\nKorttræk - Læg et valgfrit antal kort fra hånden ned i bunden af dækket, og træk 1 kort mere end der blev lagt ned."
+				"text": "En runde består de følgende faser:\n\nOpfriskning:\nUdmattede kort opfriskes, og kilder øges.\n\nKorttrækning:\nLæg et valgfrit antal kort fra hånden i bunden af dækket, og træk 1 kort mere end der blev lagt ned.\n\nHovedfase:\nKort kan spilles.\n\nKampfase:\nVæsner kan angribe.\n\nAfslutning:\nFlyt kort fra hjemmet til valen."
 			},
 			{
 				"type": "Regler",
-				"title": "Opsætning"
+				"title": "Opsætning",
+				"text": "Før en kamp kan begynde, skal spillet opsættes først:\n\nHver spiller skal have et 36-korts dæk, som indeholder mindst 1 Hjemmestruktur og højst 3 af hvert kort.\n\nLæg en hjemmestruktur i spil med en 20 liv, og læg op til fire Egenskaber/effekter i spil, som påvirker alle spillere(?)\n\nLæg 2 eller 3 kilder i spil, alt efter om man er første eller følgende spiller.\n\nTræk 5 kort."
 			},
 			{
 				"type": "Grundkort",
