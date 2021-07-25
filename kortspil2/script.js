@@ -5,8 +5,7 @@ const cardText = {
 		structure: "Struktur",
 		creature: "Væsen",
 		action: "Handling",
-		active: "Effekt - Aktiv",
-		passive: "Effekt - Passiv",
+		passive: "Effekt",
 		category: "Egenskab",
 	},
 }
@@ -17,7 +16,6 @@ const cards = {
 	creature: [],
 	action: [],
 	passive: [],
-	active: [],
 	category: [],
 }
 
@@ -33,10 +31,10 @@ window.onload = () => {
 	const buttons = document.getElementById("buttons")
 	buttons.appendChild(newButton("show all defined", () => showCards()))
 
-	/*buttons.appendChild(newButton("clear localStorage", () => {
+	buttons.appendChild(newButton("clear localStorage", () => {
 		for (const type in cards)
 			delete localStorage["korttingCards2" + type]
-	}))*/
+	}))
 
 	for (const key in inputs)
 		grid.appendChild(inputs[key])
@@ -134,18 +132,7 @@ function addIconElement(text, container) {
 }
 
 function getIconFor(text) {
-	switch (text) {
-		case "M.": return "cards/s-am.jpg"
-		case "L.": return "cards/s-al.jpg"
-		case "D.": return "cards/s-ad.jpg"
-		case "M": return "cards/s-bm.jpg"
-		case "L": return "cards/s-bl.jpg"
-		case "D": return "cards/s-bd.jpg"
-		case "m": return "cards/s-pm.jpg"
-		case "l": return "cards/s-pl.jpg"
-		case "d": return "cards/s-pd.jpg"
-		case "X": return "cards/s-x.jpg"
-	}
+	return "cards/s-" + text + ".jpg"
 }
 
 function addImageElement(src, container) {
