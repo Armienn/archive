@@ -14,7 +14,7 @@ html, body {
 	display: grid;
 	width: 100%;
 	height: 100%;
-	grid-template-columns: 20rem 1fr;
+	grid-template-columns: min-content 1fr;
 	grid-template-rows: 1fr max-content;
 	grid-template-areas: 
 		"input cards"
@@ -31,7 +31,10 @@ button { width: 100%; }
 	grid-area: input;
 	display: flex;
 	flex-direction: column;
+	width: 20rem;
 	padding-bottom: 2rem;
+	overflow: hidden;
+	resize: horizontal;
 }
 #cards {
 	grid-area: cards;

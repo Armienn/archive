@@ -1,19 +1,9 @@
 "use strict"
 
-const config = {
-	cardTypes: {
-		"Regler": { type: "Regel", image: "" },
-		"Strukturer": { type: "Struktur", image: "cards/tårn.jpg" },
-		"Væsener": { type: "Væsen", image: "cards/soldat.jpg" },
-		"Handlinger": { type: "Handling", image: "cards/pilesalve.jpg" },
-		"Effekter": { type: "Effekt", image: "default.jpg" },
-		"Egenskaber": { type: "Egenskab", image: "default.jpg" },
-	}
-}
-
-let cards = {}
+let cardTypes = { "Regler": {} }
+let cards = { "Regler": [] }
 let currentCard = null
-let currentCardGroup = null
+let currentCardType = null
 
 function getElement(id) {
 	return document.getElementById(id)
@@ -26,17 +16,20 @@ window.onload = () => {
 }
 
 function loadCards() {
-	const saved = localStorage["kortting2-cards"]
-	cards = saved ? JSON.parse(saved) : defaultCards
+	const saved = localStorage["cardSetup"]
+	const setup = saved ? JSON.parse(saved) : defaultSetup
+	cardTypes = setup.cardTypes
+	cards = setup.cards
 }
 
 function setupCardGroups() {
 	getElement("buttons").innerHTML = ""
 	getElement("buttons").appendChild(newButton("All cards", () => {
 		getElement("add-card").className = "hidden"
+		currentCardType = null
 		showCurrentCards()
 	}))
-	for (const cardType in config.cardTypes)
+	for (const cardType in cardTypes)
 		addCardGroupButton(cardType)
 }
 
@@ -49,7 +42,7 @@ function newButton(text, click) {
 
 function addCardGroupButton(type) {
 	const button = newButton(type, () => {
-		currentCardGroup = type
+		currentCardType = type
 		hideInputs()
 		getElement("add-card").className = ""
 		showCurrentCards()
@@ -68,18 +61,18 @@ function change(field) {
 }
 
 function saveCards() {
-	localStorage["kortting2-cards"] = JSON.stringify(cards)
+	localStorage["cardSetup"] = JSON.stringify({ cardTypes, cards })
 }
 
 function showCurrentCards() {
 	const element = getElement("cards")
 	element.innerHTML = ""
-	if (currentCardGroup)
-		for (const card of cards[currentCardGroup])
-			element.appendChild(createCard(card, config.cardTypes[currentCardGroup]))
+	if (currentCardType)
+		for (const card of cards[currentCardType])
+			element.appendChild(createCard(card, cardTypes[currentCardType]))
 	else for (const group in cards)
 		for (const card of cards[group])
-			element.appendChild(createCard(card, config.cardTypes[group]))
+			element.appendChild(createCard(card, cardTypes[group]))
 }
 
 function createCard(card, defaults = {}) {
@@ -182,11 +175,11 @@ function setInputClass(className) {
 }
 
 function addCardToCurrentGroup() {
-	if (!currentCardGroup)
+	if (!currentCardType)
 		return
 	currentCard = {}
 	clickCard(currentCard)
-	cards[currentCardGroup].push(currentCard)
+	cards[currentCardType].push(currentCard)
 }
 
 function removeCurrentCard() {
@@ -203,32 +196,16 @@ function removeCurrentCard() {
 
 function toggleConfig() {
 	const element = getElement("config")
-	element.value = JSON.stringify(config.cardTypes, null, "\t")
+	element.value = JSON.stringify({ cardTypes, cards }, null, "\t")
 	element.className = element.className ? "" : "hidden"
 }
 
 function changeConfig() {
-
+	const value = getElement("config").value
+	if (value)
+		localStorage["cardSetup"] = JSON.stringify(JSON.parse(value))
+	else
+		delete localStorage["cardSetup"]
+	loadCards()
+	showCurrentCards()
 }
-
-
-/*
-window.onload = () => {
-	const grid = document.getElementById("grid")
-	for (const section in cards)
-		addCardGroupButton(section)
-
-	const buttons = document.getElementById("buttons")
-	buttons.appendChild(newButton("show all defined", () => showCards()))
-
-	buttons.appendChild(newButton("clear localStorage", () => {
-		for (const type in cards)
-			delete localStorage["korttingCards2" + type]
-	}))
-
-	for (const key in inputs)
-		grid.appendChild(inputs[key])
-
-	showCards()
-}
-*/
