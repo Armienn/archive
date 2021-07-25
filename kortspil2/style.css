@@ -1,24 +1,24 @@
 * {
-	margin:0;
-	padding:0;
+	margin: 0;
+	padding: 0;
 }
 
 html, body {
-	width:100%;
-	height:100%;
+	width: 100%;
+	height: 100%;
 	font: 14px sans-serif;
 	tab-size: 2;
 }
 
 #grid {
 	display: grid;
-	width:100%;
-	height:100%;
+	width: 100%;
+	height: 100%;
 	grid-template-columns: 20rem 1fr;
-	grid-template-rows: auto 1fr;
+	grid-template-rows: 1fr max-content;
 	grid-template-areas: 
-		"buttons cards"
-		"input cards";
+		"input cards"
+		"buttons cards";
 }
 
 .hidden {
@@ -27,7 +27,12 @@ html, body {
 
 #buttons { grid-area: buttons; }
 button { width: 100%; }
-textarea { grid-area: input; }
+#edit {
+	grid-area: input;
+	display: flex;
+	flex-direction: column;
+	padding-bottom: 2rem;
+}
 #cards {
 	grid-area: cards;
 	display: flex;
@@ -35,6 +40,10 @@ textarea { grid-area: input; }
 	background-color: grey;
 	overflow-y: auto;
 }
+
+#edit button:first-child { margin-bottom: 2rem; }
+#edit * { width: 100%; }
+#edit textarea { flex:1; }
 
 .title, .type, .text-container, .icon, img {
 	position: absolute;

@@ -1,18 +1,66 @@
 <!DOCTYPE html>
 <html>
+
 <head>
 	<meta charset="utf-8" />
 	<title>Kort tingel tangel</title>
-	<link rel="stylesheet" href="style.css">
+	<link rel="stylesheet"
+		href="style.css">
 	<script src="default-cards.js"></script>
 	<script src="script.js"></script>
 </head>
+
 <body>
 
-<div id="grid">
-	<div id="buttons"></div>
-	<div id="cards"></div>
-</div>
+	<div id="grid">
+		<div id="edit">
+			<button onclick="toggleConfig()">Config</button>
+			<textarea id="config"
+				class="hidden"
+				onchange="changeConfig()">
+			</textarea>
+
+			<button id="add-card"
+				class="hidden"
+				onclick="addCardToCurrentGroup()">
+				Add card
+			</button>
+
+			<input type="text"
+				id="icon"
+				class="hidden"
+				placeholder="Icon"
+				onchange="change('icon')">
+			<input type="text"
+				id="title"
+				class="hidden"
+				placeholder="Title"
+				onchange="change('title')">
+			<input type="text"
+				id="type"
+				class="hidden"
+				placeholder="Type"
+				onchange="change('type')">
+			<textarea id="text"
+				class="hidden"
+				onchange="change('text')">
+			</textarea>
+			<input type="text"
+				id="image"
+				class="hidden"
+				placeholder="Image"
+				onchange="change('image')">
+
+			<button id="remove-card"
+				class="hidden"
+				onclick="removeCurrentCard()">
+				Remove card
+			</button>
+		</div>
+		<div id="buttons"></div>
+		<div id="cards"></div>
+	</div>
 
 </body>
+
 </html>

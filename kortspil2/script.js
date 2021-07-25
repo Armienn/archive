@@ -1,80 +1,43 @@
 "use strict"
 
-const cardText = {
-	types: {
-		structure: "Struktur",
-		creature: "Væsen",
-		action: "Handling",
-		passive: "Effekt",
-		category: "Egenskab",
-	},
+const config = {
+	cardTypes: {
+		"Regler": { type: "Regel", image: "" },
+		"Strukturer": { type: "Struktur", image: "cards/tårn.jpg" },
+		"Væsener": { type: "Væsen", image: "cards/soldat.jpg" },
+		"Handlinger": { type: "Handling", image: "cards/pilesalve.jpg" },
+		"Effekter": { type: "Effekt", image: "default.jpg" },
+		"Egenskaber": { type: "Egenskab", image: "default.jpg" },
+	}
 }
 
-const cards = {
-	rules: [],
-	structure: [],
-	creature: [],
-	action: [],
-	passive: [],
-	category: [],
+let cards = {}
+let currentCard = null
+let currentCardGroup = null
+
+function getElement(id) {
+	return document.getElementById(id)
 }
-
-const inputs = {}
-
-let currentCardType = "Regler"
 
 window.onload = () => {
-	const grid = document.getElementById("grid")
-	for (const section in cards)
-		newCardSection(section)
+	loadCards()
+	setupCardGroups()
+	showCurrentCards()
+}
 
-	const buttons = document.getElementById("buttons")
-	buttons.appendChild(newButton("show all defined", () => showCards()))
+function loadCards() {
+	const saved = localStorage["kortting2-cards"]
+	cards = saved ? JSON.parse(saved) : defaultCards
+}
 
-	buttons.appendChild(newButton("clear localStorage", () => {
-		for (const type in cards)
-			delete localStorage["korttingCards2" + type]
+function setupCardGroups() {
+	getElement("buttons").innerHTML = ""
+	getElement("buttons").appendChild(newButton("All cards", () => {
+		getElement("add-card").className = "hidden"
+		showCurrentCards()
 	}))
-
-	for (const key in inputs)
-		grid.appendChild(inputs[key])
-
-	showCards()
-
-	/*fetch("cards.json").then(response => {
-		cards = response.json().map(x => new Card(x))
-		element.value = "cards = " + JSON.stringify(cards, null, "\t")
-	})
-	.catch(()=> {
-		console.log("oh no")
-	})*/
-}
-
-function newCardSection(type) {
-	const element = newElement("textarea.hidden")
-	inputs[type] = element
-	element.value = localStorage["korttingCards2" + type] || defaultCards[type]
-	element.onchange = () => {
-		localStorage["korttingCards2" + type] = element.value
-		parseCards()
-		showCards(cards[type])
-	}
-	const buttons = document.getElementById("buttons")
-	buttons.appendChild(newSwitchButton(cardText.types[type] || type, type, () => cards[type]))
-}
-
-function newSwitchButton(text, input, cardsToShow) {
-	return newButton(text, () => {
-		hideInputs()
-		inputs[input].className = ""
-		parseCards()
-		showCards(cardsToShow())
-	})
-}
-
-function hideInputs() {
-	for (const key in inputs)
-		inputs[key].className = "hidden"
+	for (const cardType in config.cardTypes)
+		addCardGroupButton(cardType)
 }
 
 function newButton(text, click) {
@@ -84,48 +47,62 @@ function newButton(text, click) {
 	return button
 }
 
-function showCards(cardsToShow) {
-	if (!cardsToShow)
-		parseCards()
-	const element = document.getElementById("cards")
+function addCardGroupButton(type) {
+	const button = newButton(type, () => {
+		currentCardGroup = type
+		hideInputs()
+		getElement("add-card").className = ""
+		showCurrentCards()
+	})
+	getElement("buttons").appendChild(button)
+}
+
+function change(field) {
+	const value = getElement(field).value
+	if (value)
+		currentCard[field] = value
+	else
+		delete currentCard[field]
+	saveCards()
+	showCurrentCards()
+}
+
+function saveCards() {
+	localStorage["kortting2-cards"] = JSON.stringify(cards)
+}
+
+function showCurrentCards() {
+	const element = getElement("cards")
 	element.innerHTML = ""
-	if (cardsToShow)
-		for (const card of cardsToShow)
-			element.appendChild(createCard(card))
-	else for (const key in cards)
-		for (const card of cards[key])
-			element.appendChild(createCard(card))
+	if (currentCardGroup)
+		for (const card of cards[currentCardGroup])
+			element.appendChild(createCard(card, config.cardTypes[currentCardGroup]))
+	else for (const group in cards)
+		for (const card of cards[group])
+			element.appendChild(createCard(card, config.cardTypes[group]))
 }
 
-function parseCards() {
-	for (const type in cards) {
-		currentCardType = cardText.types[type]
-		const asdf = eval(inputs[type].value) || []
-		cards[type] = asdf.map(x => new Card(x))
-	}
-}
-
-function createCard(card) {
+function createCard(card, defaults = {}) {
 	const container = newElement("div.card")
-	addTextElement(card.type, "div.type", container)
-	addTextElement(card.title, "div.title", container)
-	addIconElement(card.icon, container)
-	addImageElement(card.image, container)
-	addMainTextElement(card.text, container) // this needs to be after image element for styling reasons
+	addTextgetElement(card.title ?? defaults.title ?? "Unavngivet", "div.title", container)
+	addTextgetElement(card.type ?? defaults.type ?? "", "div.type", container)
+	addIcongetElement(card.icon ?? defaults.icon ?? "x", container)
+	addImagegetElement(card.image ?? defaults.image ?? "", container)
+	addMainTextgetElement(card.text ?? defaults.text ?? "", container) // this needs to be after image element for styling reasons
 	container.onclick = () => clickCard(card)
 	return container
 }
 
-function addTextElement(text, type, container) {
+function addTextgetElement(text, type, container) {
 	const element = newElement(type)
 	element.textContent = text
 	container.appendChild(element)
 }
 
-function addIconElement(text, container) {
+function addIcongetElement(text, container) {
 	const icon = getIconFor(text)
 	if (!icon)
-		return addTextElement(card.icon, "div.icon", container)
+		return addTextgetElement(card.icon, "div.icon", container)
 	const element = newElement("img.icon")
 	element.src = icon
 	container.appendChild(element)
@@ -135,7 +112,7 @@ function getIconFor(text) {
 	return "cards/s-" + text + ".jpg"
 }
 
-function addImageElement(src, container) {
+function addImagegetElement(src, container) {
 	if (!src)
 		return
 	const element = newElement("img.main")
@@ -143,11 +120,11 @@ function addImageElement(src, container) {
 	container.appendChild(element)
 }
 
-function addMainTextElement(text, container) {
+function addMainTextgetElement(text, container) {
 	const textContainer = newElement("div.text-container")
 	container.appendChild(textContainer)
 	if (text)
-		addTextElement(text, "div.text", textContainer)
+		addTextgetElement(text, "div.text", textContainer)
 }
 
 function newElement(definition) {
@@ -166,22 +143,92 @@ function newElement(definition) {
 }
 
 function clickCard(card) {
-	console.log(card)
+	if (card === currentCard)
+		deselectCard()
+	else
+		selectCard(card)
 }
 
-class Card {
-	constructor({
-		type = currentCardType,
-		title = "Unavngivet",
-		text = "",
-		icon = "X",
-		image = "default.jpg",
-	}) {
-		this.type = type
-		this.title = title
-		this.text = text
-		this.icon = icon
-		this.image = image
+function selectCard(card) {
+	showInputs()
+	currentCard = card
+	getElement("icon").value = card.icon ?? ""
+	getElement("title").value = card.title ?? ""
+	getElement("type").value = card.type ?? ""
+	getElement("text").value = card.text ?? ""
+	getElement("image").value = card.image ?? ""
+}
+
+function deselectCard() {
+	hideInputs()
+	currentCard = null
+}
+
+function hideInputs() {
+	setInputClass("hidden")
+}
+
+function showInputs() {
+	setInputClass("")
+}
+
+function setInputClass(className) {
+	getElement("icon").className = className
+	getElement("title").className = className
+	getElement("type").className = className
+	getElement("text").className = className
+	getElement("image").className = className
+	getElement("remove-card").className = className
+}
+
+function addCardToCurrentGroup() {
+	if (!currentCardGroup)
+		return
+	currentCard = {}
+	clickCard(currentCard)
+	cards[currentCardGroup].push(currentCard)
+}
+
+function removeCurrentCard() {
+	for (const group in cards) {
+		const index = cards[group].indexOf(currentCard)
+		if (index >= 0) {
+			cards[group].splice(index, 1)
+			break
+		}
 	}
+	saveCards()
+	showCurrentCards()
 }
 
+function toggleConfig() {
+	const element = getElement("config")
+	element.value = JSON.stringify(config.cardTypes, null, "\t")
+	element.className = element.className ? "" : "hidden"
+}
+
+function changeConfig() {
+
+}
+
+
+/*
+window.onload = () => {
+	const grid = document.getElementById("grid")
+	for (const section in cards)
+		addCardGroupButton(section)
+
+	const buttons = document.getElementById("buttons")
+	buttons.appendChild(newButton("show all defined", () => showCards()))
+
+	buttons.appendChild(newButton("clear localStorage", () => {
+		for (const type in cards)
+			delete localStorage["korttingCards2" + type]
+	}))
+
+	for (const key in inputs)
+		grid.appendChild(inputs[key])
+
+	showCards()
+}
+*/

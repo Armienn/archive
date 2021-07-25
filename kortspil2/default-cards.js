@@ -1,49 +1,60 @@
+
+
+class Card {
+	constructor({
+		type = null,
+		title = "Unavngivet",
+		text = "",
+		icon = null,
+		image = null,
+	}) {
+		this.type = type
+		this.title = title
+		this.text = text
+		this.icon = icon
+		this.image = image
+	}
+}
+
 const defaultCards = {
-	rules: `[
+	Regler: [
 new Card({
 	title: "Runde",
 	type: "Regler",
 	text: "En runde består de følgende faser:\\nOpfriskning - Udmattede kort opfriskes, og kilder øges.\\nKorttræk - Læg et valgfrit antal kort fra hånden ned i bunden af dækket, og træk 1 kort mere end der blev lagt ned.",
-	image: "",
 }),
 new Card({
 	title: "Opsætning",
 	type: "Regler",
 	text: "",
-	image: "",
 }),
 new Card({
 	title: "Væsen",
 	type: "Grundkort",
 	text: "Væsner bliver i hjemmet indtil slutningen af turen.\\n\\nUdmat: Aktivér påvirkende handlinger, og angrib en modstander.",
-	image: "",
 }),
 new Card({
 	title: "Struktur",
 	type: "Grundkort",
 	text: "Strukturer bliver i hjemmet indtil slutningen af turen. Effekter på denne påvirker alle dine væsner af samme type.\\n\\nUdmat: Aktivér en påvirkende handling, eller øg en kilde med 1.",
-	image: "",
 }),
 new Card({
 	title: "Handling",
 	type: "Grundkort",
 	text: "Handlinger går til graven efter de har forladt hjemmet",
-	image: "",
 }),
 new Card({
 	title: "Effekt",
 	type: "Grundkort",
 	text: "Effekter går til graven efter de har forladt hjemmet.",
-	image: "",
 }),
 new Card({
 	title: "Egenskab",
 	type: "Grundkort",
 	text: "Egenskaber koster (3) ekstra energi at spille, og effekter på en egenskab koster dobbelt.",
-	image: "",
 }),
-]`,
-	structure: `[
+],
+	Strukturer: [
 new Card({
 	title: "Hjem",
 	type: "Struktur - Hjem",
@@ -107,8 +118,8 @@ new Card({
 	icon: "pd",
 	image: "cards/krater.jpg",
 }),
-]`,
-	creature: `[
+],
+	Væsener: [
 new Card({
 	title: "Drage",
 	icon: "am",
@@ -189,8 +200,8 @@ new Card({
 	title: "Poltergeist",
 	icon: "pd",
 }),
-]`,
-	action: `[
+],
+	Handlinger: [
 new Card({
 	title: "Magimissil",
 	text: "Giv (S) skade til et væsen.",
@@ -315,8 +326,8 @@ new Card({
 	text: "Læg et sæt i modstanderens hjem på mindre end (S) kort i graven.",
 	icon: "d",
 }),
-]`,
-	passive: `[
+],
+	Effekter: [
 new Card({
 	title: "M Feltudstyr",
 	text: "Påvirkede får +1 Styrke",
@@ -396,8 +407,8 @@ new Card({
 	text: "Påvirkede bliver Snild",
 	icon: "d",
 }),
-]`,
-	category: `[
+],
+	Egenskaber: [
 new Card({
 	title: "Magiske Væsner",
 	text: "Effekter på denne påvirker alle magiske væsner.",
@@ -503,13 +514,13 @@ new Card({
 new Card({
 	title: "Kulturting",
 	type: "Egenskab - Lukket",
-	text: "Livlige Effekter kan ikke tilføjes normalt, men spilles som en handling og har \\"Denne effekt påvirker op til (S) væsner eller strukturer indtil slutningen af turen.\\"",
+	text: "Livlige Effekter kan ikke tilføjes normalt, men spilles som en handling og har \"Denne effekt påvirker op til (S) væsner eller strukturer indtil slutningen af turen.\"",
 	image: "cards/s-l.jpg",
 }),
 new Card({
 	title: "Udstyrsting",
 	type: "Egenskab - Lukket",
-	text: "Livløse Effekter kan ikke tilføjes normalt, men spilles som et separat kort for (2), og har \\"(1): Tilføj til et væsen eller struktur.\\"",
+	text: "Livløse Effekter kan ikke tilføjes normalt, men spilles som et separat kort for (2), og har \"(1): Tilføj til et væsen eller struktur.\"",
 	image: "cards/s-d.jpg",
 }),
 new Card({
@@ -527,8 +538,8 @@ new Card({
 new Card({
 	title: "Udstyrsting 2",
 	type: "Egenskab - Lukket",
-	text: "Livløse Handlinger kan ikke aktiveres normalt, men spilles som et separat kort for (2). De har en Styrke på 1 og \\"(1): Tilføj til et væsen eller struktur.\\"",
+	text: "Livløse Handlinger kan ikke aktiveres normalt, men spilles som et separat kort for (2). De har en Styrke på 1 og \"(1): Tilføj til et væsen eller struktur.\"",
 	image: "cards/s-d.jpg",
 }),
-]`
+]
 }
