@@ -38,24 +38,28 @@ const defaultSetup = {
 				"text": "Før en kamp kan begynde, skal spillet opsættes først:\n\nHver spiller skal have et 36-korts dæk, som indeholder mindst 1 Hjemmestruktur og højst 3 af hvert kort.\n\nLæg en hjemmestruktur i spil med en 20 liv, og læg op til fire Egenskaber/effekter i spil, som påvirker alle spillere(?)\n\nLæg 2 eller 3 kilder i spil, alt efter om man er første eller følgende spiller.\n\nTræk 5 kort."
 			},
 			{
+				"title": "At spille et kort",
+				"text": "Kort kan spilles i hovedfasen, når der ikke er noget andet i gang.\n\n\nEt kort kan enten spilles ved at lægge det i hjemmet med forsiden opad, eller ved at betale 1 energi og lægge det med forsiden nedad. Hvis et kort ligger med forsiden nedad, kan det vendes når som helst og lægges i hjemmet.\n\nKort tager effekt når de forlader hjemmet. Et korts Styrke er 0, medmindre man bruger en kilde til at give det kildens Styrke."
+			},
+			{
 				"type": "Grundkort",
 				"title": "Væsen",
-				"text": "Væsner bliver i hjemmet indtil slutningen af turen.\n\nUdmat: Aktivér påvirkende handlinger, og angrib en modstander."
+				"text": "Væsner er Permanente.\n\nUdmat: Aktivér påvirkende handlinger, og angrib en modstander."
 			},
 			{
 				"type": "Grundkort",
 				"title": "Struktur",
-				"text": "Strukturer bliver i hjemmet indtil slutningen af turen. Effekter på denne påvirker alle dine væsner af samme type.\n\nUdmat: Aktivér en påvirkende handling, eller øg en kilde med 1."
+				"text": "Strukturer er Permanente.\n\nEffekter på denne påvirker alle dine væsner af samme type. (Væsner af samme type får +1 Forsvar?)\n\nUdmat: Aktivér en påvirkende handling, eller (øg en kilde med 1/giv et væsen +(S) forsvar indtil slutningen af turen/noget andet?)."
 			},
 			{
 				"type": "Grundkort",
 				"title": "Handling",
-				"text": "Handlinger går til graven efter de har forladt hjemmet"
+				"text": "Handlinger er Midlertidige.\n\nHandlinger kan flytte hjemmefra inden slutningen af turen."
 			},
 			{
 				"type": "Grundkort",
 				"title": "Effekt",
-				"text": "Effekter går til graven efter de har forladt hjemmet."
+				"text": "Effekter er Midlertidige.\n\nEffekter kan flytte hjemmefra inden slutningen af turen.\n\nEn effekt kan tilføjes til et væsen eller en struktur i hjemmet for én mere energi end antallet af tilføjede effekter på væsnet eller strukturen."
 			},
 			{
 				"type": "Grundkort",
@@ -140,28 +144,34 @@ const defaultSetup = {
 				"image": "cards/troldmand.jpg"
 			},
 			{
-				"title": "Engel/Dværg?",
-				"icon": "al"
+				"title": "Dværg",
+				"icon": "al",
+				"image": "cards/dværg.jpg"
 			},
 			{
-				"title": "Høj-Elver",
-				"icon": "al"
+				"title": "Alf",
+				"icon": "al",
+				"image": "cards/alf.jpg"
 			},
 			{
-				"title": "Lich",
-				"icon": "ad"
+				"title": "Lík",
+				"icon": "ad",
+				"image": "cards/lík.jpg"
 			},
 			{
-				"title": "Vampyr",
-				"icon": "ad"
+				"title": "Attervølv",
+				"icon": "ad",
+				"image": "cards/attervølv.jpg"
 			},
 			{
-				"title": "Fe",
-				"icon": "bm"
+				"title": "Nøkke",
+				"icon": "bm",
+				"image": "cards/nøkke.jpg"
 			},
 			{
-				"title": "Kelpie",
-				"icon": "bm"
+				"title": "Huldre",
+				"icon": "bm",
+				"image": "cards/huldre.jpg"
 			},
 			{
 				"title": "Soldat",
@@ -179,8 +189,9 @@ const defaultSetup = {
 				"image": "cards/golem.jpg"
 			},
 			{
-				"title": "Spider Construct",
-				"icon": "bd"
+				"title": "Edderbot",
+				"icon": "bd",
+				"image": "cards/edderbot.jpg"
 			},
 			{
 				"title": "Lue",
@@ -202,8 +213,9 @@ const defaultSetup = {
 				"image": "cards/tiger.jpg"
 			},
 			{
-				"title": "Zombie",
-				"icon": "pd"
+				"title": "Genganger",
+				"icon": "pd",
+				"image": "cards/genganger.jpg"
 			},
 			{
 				"title": "Poltergeist",
@@ -478,74 +490,74 @@ const defaultSetup = {
 				"image": "cards/s-p.jpg"
 			},
 			{
-				"type": "Egenskab - Lukket",
 				"title": "Magiskes Egenskab",
-				"text": "Effekter, som ikke trækker kort, aktiveres ikke normalt af Magiske væsner og strukturer, men i stedet når du trækker et kort.",
+				"type": "Egenskab - Lukket",
+				"text": "Magiske væsner og strukturer gør noget cool.",
 				"image": "cards/s-m.jpg"
 			},
 			{
-				"type": "Egenskab - Lukket",
 				"title": "Livliges Egenskab",
-				"text": "Effekter, som ikke giver liv, aktiveres ikke normalt af Livlige væsner og strukturer, men i stedet når dit hjem får liv.",
+				"type": "Egenskab - Lukket",
+				"text": "Livlige væsner og strukturer gør noget cool.",
 				"image": "cards/s-l.jpg"
 			},
 			{
-				"type": "Egenskab - Lukket",
 				"title": "Livløses Egenskab",
-				"text": "Effekter, som ikke giver skade, aktiveres ikke normalt af Livløse væsner og strukturer, men i stedet når dit hjem tager skade.",
+				"type": "Egenskab - Lukket",
+				"text": "Livløse væsner og strukturer gør noget cool.",
 				"image": "cards/s-d.jpg"
 			},
 			{
-				"type": "Egenskab - Lukket",
 				"title": "Avanceredes Egenskab",
+				"type": "Egenskab - Lukket",
 				"text": "Prisen på avancerede væsner og strukturer ignorerer den første effekt.",
 				"image": "cards/s-a.jpg"
 			},
 			{
-				"type": "Egenskab - Lukket",
 				"title": "Balanceredes Egenskab",
+				"type": "Egenskab - Lukket",
 				"text": "Balancerede væsner og strukturer forlader hjemmet med det samme.",
 				"image": "cards/s-b.jpg"
 			},
 			{
-				"type": "Egenskab - Lukket",
 				"title": "Primitives Egenskab",
+				"type": "Egenskab - Lukket",
 				"text": "Primitive væsner og strukturer øger deres Styrke med 1, når de forlader hjemmet.",
 				"image": "cards/s-p.jpg"
 			},
 			{
-				"type": "Egenskab - Lukket",
 				"title": "Fortryllelsesting",
+				"type": "Egenskab - Lukket",
 				"text": "Magiske Effekter kan ikke tilføjes normalt, men til eksisterende væsner eller strukturer for (2)",
 				"image": "cards/s-m.jpg"
 			},
 			{
-				"type": "Egenskab - Lukket",
 				"title": "Kulturting",
+				"type": "Egenskab - Lukket",
 				"text": "Livlige Effekter kan ikke tilføjes normalt, men spilles som en handling og har \"Denne effekt påvirker op til (S) væsner eller strukturer indtil slutningen af turen.\"",
 				"image": "cards/s-l.jpg"
 			},
 			{
-				"type": "Egenskab - Lukket",
 				"title": "Udstyrsting",
+				"type": "Egenskab - Lukket",
 				"text": "Livløse Effekter kan ikke tilføjes normalt, men spilles som et separat kort for (2), og har \"(1): Tilføj til et væsen eller struktur.\"",
 				"image": "cards/s-d.jpg"
 			},
 			{
-				"type": "Egenskab - Lukket",
 				"title": "Fortryllelsesting 2",
+				"type": "Egenskab - Lukket",
 				"text": "Magiske Handlinger kan ikke aktiveres normalt, men kan tilføjes som effekter til eksisterende væsner eller strukturer for (2), og har en Styrke på 1",
 				"image": "cards/s-m.jpg"
 			},
 			{
-				"type": "Egenskab - Lukket",
 				"title": "Kulturting 2",
+				"type": "Egenskab - Lukket",
 				"text": "Livlige Handlinger kan ikke aktiveres normalt, men kan tilføjes som effekter, og har en Styrke på 1",
 				"image": "cards/s-l.jpg"
 			},
 			{
-				"type": "Egenskab - Lukket",
 				"title": "Udstyrsting 2",
+				"type": "Egenskab - Lukket",
 				"text": "Livløse Handlinger kan ikke aktiveres normalt, men spilles som et separat kort for (2). De har en Styrke på 1 og \"(1): Tilføj til et væsen eller struktur.\"",
 				"image": "cards/s-d.jpg"
 			}

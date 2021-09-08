@@ -77,25 +77,25 @@ function showCurrentCards() {
 
 function createCard(card, defaults = {}) {
 	const container = newElement("div.card")
-	addTextgetElement(card.title ?? defaults.title ?? "Unavngivet", "div.title", container)
-	addTextgetElement(card.type ?? defaults.type ?? "", "div.type", container)
-	addIcongetElement(card.icon ?? defaults.icon ?? "x", container)
-	addImagegetElement(card.image ?? defaults.image ?? "", container)
-	addMainTextgetElement(card.text ?? defaults.text ?? "", container) // this needs to be after image element for styling reasons
+	addTextElement(card.title ?? defaults.title ?? "Unavngivet", "div.title", container)
+	addTextElement(card.type ?? defaults.type ?? "", "div.type", container)
+	addIconElement(card.icon ?? defaults.icon ?? "x", container)
+	addImageElement(card.image ?? defaults.image ?? "", container)
+	addMainTextElement(card.text ?? defaults.text ?? "", container) // this needs to be after image element for styling reasons
 	container.onclick = () => clickCard(card)
 	return container
 }
 
-function addTextgetElement(text, type, container) {
+function addTextElement(text, type, container) {
 	const element = newElement(type)
 	element.textContent = text
 	container.appendChild(element)
 }
 
-function addIcongetElement(text, container) {
+function addIconElement(text, container) {
 	const icon = getIconFor(text)
 	if (!icon)
-		return addTextgetElement(card.icon, "div.icon", container)
+		return addTextElement(card.icon, "div.icon", container)
 	const element = newElement("img.icon")
 	element.src = icon
 	container.appendChild(element)
@@ -105,7 +105,7 @@ function getIconFor(text) {
 	return "cards/s-" + text + ".jpg"
 }
 
-function addImagegetElement(src, container) {
+function addImageElement(src, container) {
 	if (!src)
 		return
 	const element = newElement("img.main")
@@ -113,11 +113,11 @@ function addImagegetElement(src, container) {
 	container.appendChild(element)
 }
 
-function addMainTextgetElement(text, container) {
+function addMainTextElement(text, container) {
 	const textContainer = newElement("div.text-container")
 	container.appendChild(textContainer)
 	if (text)
-		addTextgetElement(text, "div.text", textContainer)
+		addTextElement(text, "div.text", textContainer)
 }
 
 function newElement(definition) {
@@ -177,8 +177,7 @@ function setInputClass(className) {
 function addCardToCurrentGroup() {
 	if (!currentCardType)
 		return
-	currentCard = {}
-	clickCard(currentCard)
+	clickCard({})
 	cards[currentCardType].push(currentCard)
 }
 
