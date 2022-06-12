@@ -1,60 +1,132 @@
 ﻿html {
-	font-size: 24px;
-}
-
-body, div, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, pre, form, fieldset, input, textarea, p, blockquote, th, td {
-	padding: 0;
-	margin: 0;
+	font-size: 16px;
 }
 
 body {
-	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+	--background-color: #111;
+	--background-text-color: #fff;
+	--header-color: #222;
+	--header-text-color: #fff;
+	--header-active-color: #444;
+
 	font-size: 1rem;
-	color: white;
-	background-color: #333;
-	margin: 0;
-	padding: 0;
+	background-color: var(--background-color);
+	color: var(--background-text-color);
 }
 
-a, h1 {
+/********************************* Main ************************************/
+
+h1 {
 	text-align: center;
+	font-weight: bold;
+	font-size: 2rem;
 	padding: 1rem;
-	box-sizing: border-box;
-	background-color: #222;
+	background-color: var(--header-color);
+	color: var(--header-text-color);
 }
 
-a {
-	color: white;
-	text-decoration: none;
-	width: 100%;
-	display: block;
-	transition: background-color 0.3s ease;
+nav {
+	display: flex;
+	background-color: var(--header-color);
+	color: var(--header-text-color);
 }
 
-div {
-	display: flex;	
+nav button {
+	text-align: center;
+	flex: 1;
+	font-weight: bold;
+	font-size: 1.2rem;
+	padding: 1rem;
+	background-color: var(--header-color);
+	color: var(--header-text-color);
+	transition: 0.3s ease;
 }
 
-div a {
-	font-size: 0.5rem;
-	width: fit-content;
-	padding: 0.5rem;
-	flex-grow: 1;
-	float: left;
-}
-
-a:hover {
-	background-color: #444;
+nav button:hover {
+	background-color: var(--header-active-color);
 }
 
 main {
-	width: 30rem;
-	margin-left: calc(50vw - 15rem);
+	min-height: calc(100vh - 12rem);
+	padding-bottom: 1rem;
+}
+
+footer {
+	line-height: 2rem;
+	text-align: center;
+	font-size: 0.8rem;
+}
+
+/******************************** Common ***********************************/
+
+h2 {
+	text-align: center;
+	font-weight: bold;
+	font-size: 1.5rem;
+	padding: 0.5rem;
+	margin-top: 1rem;
+}
+
+h3 {
+	font-weight: bold;
+	font-size: 1.2rem;
+	padding: 0.5rem;
+}
+
+a {
+	color: unset;
+	text-decoration: none;
 }
 
 p {
-	margin: 0.5rem 1rem;
-	font-size: 0.5rem;
+	margin: 0.5rem 0;
 	text-align: center;
-	width: 100%;
 }
+
+.cards li {
+	list-style: none;
+	padding: 0.5rem;
+	margin-top: 2rem;
+	background-color: var(--header-color);
+	color: var(--header-text-color);
+	transition: 0.3s ease;
+}
+.cards li:hover {
+	background-color: var(--header-active-color);
+}
+
+.cards h3 {
+	padding: 0 0 1rem;
+	font-size: 1.5rem;
+	transition: 0.3s ease;
+}
+
+.cards p {
+	text-align: left;
+}
+
+#home, #games, #various {
+	max-width: 60rem;
+	margin: 0 auto;
+}
+
+/********************************* Home ************************************/
+
+#home h3 {
+	text-align: center;
+	font-weight: bold;
+	font-size: 1.5rem;
+	margin-top: 2rem;
+	background-color: var(--header-color);
+	color: var(--header-text-color);
+	transition: 0.3s ease;
+}
+#home h3:hover {
+	background-color: var(--header-active-color);
+}
+
+/******************************** Games ************************************/
+
+/********************************* Art *************************************/
+
+/******************************* Various ***********************************/

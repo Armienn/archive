@@ -1,36 +1,63 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+<meta charset="utf-8">
+<title>Armienn's Arbitrary Archive</title>
+<link rel="stylesheet"
+	type="text/css"
+	href="style-reset.css" />
+<link rel="stylesheet"
+	type="text/css"
+	href="styles.css" />
+<script src="home.js"></script>
+<script src="games.js"></script>
+<script src="art.js"></script>
+<script src="various.js"></script>
 
-<head>
-	<meta charset="utf-8">
-	<title>Armienn's Arbitrary Archive</title>
-	<link rel="stylesheet" type="text/css" href="styles.css" />
-</head>
+<script>
+	function loadPages() {
+		for (const page in pages)
+			document.getElementById(page).innerHTML = pages[page]
+		showPage("home")
+	}
+
+	function showPage(page) {
+		for (const article of document.getElementsByTagName("article"))
+			article.style.display = article.id === page ? "block" : "none"
+	}
+
+	window.onload = () => loadPages()
+</script>
 
 <body>
 	<header>
 		<h1>Armienn's Arbitrary Archive</h1>
 	</header>
 
-	<main>
-		<a href="../pokemon">Pokémon Stuff</a>
-		<a href="../Eld">Eld</a>
-		<a href="piong">Piong</a>
-		<a href="game-of-life">Game of Life +</a>
-		<a href="sokoban-tester">Sokoban Tester</a>
-		<a href="sandbox">Javascript Sandbox</a>
-		<a href="crypt">Crypt</a>
-		<div title="Ugly unfinished stuff">
-			<a href="draw">Draw</a>
-			<a href="voronoi">Voronoi stuff</a>
-			<a href="pathfinder">Pathfinder language stuff</a>
-			<a href="money">Money stuff</a>
-			<a href="../helm">Helm</a>
-			<a href="kortspil">Card game</a>
-			<a href="kortspil2">Card game v2</a>
-		</div>
-		<p>Instructions are for losers</p>
-	</main>
-</body>
+	<nav>
+		<button type="button"
+			onclick="showPage('home')">
+			Home
+		</button>
+		<button type="button"
+			onclick="showPage('games')">
+			Games
+		</button>
+		<button type="button"
+			onclick="showPage('art')">
+			Art
+		</button>
+		<button type="button"
+			onclick="showPage('various')">
+			Various
+		</button>
+	</nav>
 
-</html>
+	<main>
+		<article id="home"></article>
+		<article id="games"></article>
+		<article id="art"></article>
+		<article id="various"></article>
+	</main>
+
+	<footer>By Armienn</footer>
+</body>
