@@ -13,8 +13,13 @@ const various = [
 	},
 	{
 		name: "Identifying Unique Names",
-		link: "https://armienn.github.io/IdentifyingUniqueName",
+		link: "https://github.com/Armienn/IdentifyingUniqueName",
 		description: "This is a standard for personal ID's inspired by GUID's, and combined with Syllabic Numerals to be easy-ish to remember",
+	},
+	{
+		name: "Kan",
+		link: "https://www.reddit.com/r/kan/comments/lscvup/the_basics_of_kan_in_its_current_iteration/",
+		description: "This is my best attempt at a universal writing system so far",
 	},
 ]
 
