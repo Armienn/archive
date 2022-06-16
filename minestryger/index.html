@@ -18,7 +18,7 @@
 			game.update(action)
 			const newState = game.state.playState
 			if (newState === PlayState.Won && oldState !== PlayState.Won)
-				alert(`You won! Final time: ${(this.game.state.finishTime / 1000).toLocaleString(undefined, { minimumFractionDigits: 2 })} seconds`)
+				alert(`You won! Final time: ${(game.state.finishTime / 1000).toLocaleString(undefined, { minimumFractionDigits: 2 })} seconds`)
 			display.show()
 		}
 
