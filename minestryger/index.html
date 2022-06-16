@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<meta charset="utf-8">
+<title>Minestryger</title>
+<script src="minestryger.1868602d107bbfa5.js"></script>
+
+<script>
+	function startGame() {
+
+		const startNewGame = () => {
+			game = new Minestryger(display.state.desiredConfig)
+			display.updateGame(game)
+			input.game = game
+		}
+
+		const onAction = (action) => {
+			const oldState = game.state.playState
+			game.update(action)
+			const newState = game.state.playState
+			if (newState === PlayState.Won && oldState !== PlayState.Won)
+				alert("You won!")
+			display.show()
+		}
+
+		const host = document.getElementById("game-host")
+		let game = new Minestryger()
+		const display = new MinestrygerDisplay(game, host, defaultDisplayConfig)
+		const input = new MinestrygerInput(game, display, startNewGame, onAction)
+
+		display.show()
+		window.onresize = () => display.updateSize()
+	}
+
+	window.onload = startGame
+</script>
+
+<style>
+	#game-host {
+		position: absolute;
+		height: 100%;
+		width: 100%;
+		font-family: "Segoe UI", "Calibri";
+	}
+
+	#game-host #new-game-button {
+		background-color: #ccc;
+		transition: 0.1s ease;
+	}
+	#game-host #new-game-button:hover {
+		background-color: #888;
+	}
+</style>
+
+<body style="margin:0; padding:0;">
+	<div id="game-host"></div>
+</body>

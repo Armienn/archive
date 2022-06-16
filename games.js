@@ -8,6 +8,12 @@ const games = [
 		img: "",
 	},
 	{
+		name: "Minestryger",
+		link: "minestryger",
+		description: "This is a clone of Minesweeper. This version is not as pretty as it could be, since I've transplanted it from our family website without taking all of the styling along. I mostly made it for my parents, and set it up so it stores and displays their highscores on our site.",
+		img: "",
+	},
+	{
 		name: "Piong",
 		link: "piong",
 		description: "This is a clone of Pong I made waaay back. The code's not pretty, but the game is simple and playable",
