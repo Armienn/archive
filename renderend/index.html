@@ -2,56 +2,23 @@
 <html>
 <meta charset="utf-8">
 <title>Renderend</title>
-<script src="renderend.2a5b481c6281919c.js"></script>
+<script src="renderend.72efdd63bd397586.js"></script>
 
 <script>
 	function startGame() {
-		const canvas = document.getElementById("canvas")
-		const game = new Renderend()
-		const display = new RenderendDisplay(displayConfig, game, canvas)
-		const inputs = new RenderendInput(canvas)
+		const host = document.getElementById("game-host")
+		const renderend = new Renderend()
+		const display = new RenderendDisplay({...defaultDisplayConfig, assetFolder: "assets/"}, renderend, host)
+		const input = new RenderendInput(display.canvas)
+		const game = new RenderendRunner(display, input, renderend)
 
-		const step = () => {
-			game.update(...inputs.getNewActions())
-			display.show()
-		}
+		input.restart()
+		game.updateGame()
+		game.startDisplayLoop()
+		game.startGameLoop()
 
 		display.setSize(window.innerWidth, window.innerHeight)
 		window.onresize = () => display.setSize(window.innerWidth, window.innerHeight)
-		setInterval(step, 30)
-	}
-
-	const displayConfig = {
-		font: "Vt323",
-		sprites: {
-			"ship": {
-				url: "assets/ship.png",
-				width: 16,
-				height: 16,
-			},
-			"wall": {
-				url: "assets/wall.png",
-				width: 16,
-				height: 16,
-			},
-			"obstacle": {
-				url: "assets/obstacle.png",
-				width: 16,
-				height: 16,
-			},
-			"big-obstacle": {
-				url: "assets/big-obstacle.png",
-				width: 32,
-				height: 32,
-			},
-			"background": {
-				url: "assets/starry-background.png",
-				width: 220,
-				height: 160,
-				centerX: 0,
-				centerY: 0,
-			},
-		},
 	}
 
 	window.onload = startGame
@@ -60,12 +27,11 @@
 <style>
 	@font-face {
 		font-family: "Vt323";
-		src: url("assets/VT323-Regular.ttf");
+		src: url("0.1/assets/VT323-Regular.ttf");
 	}
 
 </style>
 
 <body style="margin:0; padding:0;">
-	<canvas id="canvas"
-		style="position: absolute;"></canvas>
+	<div id="game-host"></div>
 </body>
