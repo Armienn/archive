@@ -2,23 +2,15 @@
 <html>
 <meta charset="utf-8">
 <title>Renderend</title>
-<script src="renderend.72efdd63bd397586.js"></script>
+<script src="renderend.e511a909efd0caf5.js"></script>
 
 <script>
 	function startGame() {
 		const host = document.getElementById("game-host")
-		const renderend = new Renderend()
-		const display = new RenderendDisplay({...defaultDisplayConfig, assetFolder: "assets/"}, renderend, host)
-		const input = new RenderendInput(display.canvas)
-		const game = new RenderendRunner(display, input, renderend)
+		const game = RenderendGame.createAt(host, { })
 
-		input.restart()
-		game.updateGame()
 		game.startDisplayLoop()
 		game.startGameLoop()
-
-		display.setSize(window.innerWidth, window.innerHeight)
-		window.onresize = () => display.setSize(window.innerWidth, window.innerHeight)
 	}
 
 	window.onload = startGame
@@ -28,6 +20,11 @@
 	@font-face {
 		font-family: "Vt323";
 		src: url("0.1/assets/VT323-Regular.ttf");
+	}
+
+	#game-host {
+		height: 100vh;
+		width: 100vw;
 	}
 
 </style>
