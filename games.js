@@ -8,6 +8,12 @@ const games = [
 		img: "",
 	},
 	{
+		name: "Eld",
+		link: "meld",
+		description: "This is still only the very beginning of a game, but it's one I've wanted to make for a long time. It's a top-down pixel art game inspired by some my favourite games like A Link to the Past, Minecraft, Terraria and others.",
+		img: "",
+	},
+	{
 		name: "Minestryger",
 		link: "minestryger",
 		description: "This is a clone of Minesweeper. This version is not as pretty as it could be, since I've transplanted it from our family website without taking all of the styling along. I mostly made it for my parents, and set it up so it stores and displays their highscores on our site.",
