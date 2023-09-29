@@ -18,8 +18,7 @@ function createInput() {
 }
 
 function loadFiles(event) {
-	images.splice()
-	grid.innerHTML = ""
+	clearImages()
 	const files = event.target.files
 	for (let file of files) {
 		if (file.type.startsWith("image")) {
@@ -28,6 +27,14 @@ function loadFiles(event) {
 		}
 	}
 	showImages()
+}
+
+function clearImages() {
+	for(const url of images){
+		URL.revokeObjectURL(url)
+	}
+	images.splice(0, images.length)
+	grid.innerHTML = ""
 }
 
 function showImages() {
