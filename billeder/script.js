@@ -14,7 +14,7 @@ function createInput() {
 	input.type = "file"
 	input.webkitdirectory = true
 	input.addEventListener("change", loadFiles)
-	document.body.appendChild(input)
+	document.getElementById("top-bar").appendChild(input)
 }
 
 function loadFiles(event) {
