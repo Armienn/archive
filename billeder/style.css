@@ -1,0 +1,22 @@
+* {
+	margin:0;
+	padding:0;
+}
+
+html, body {
+	width:100%;
+	height:100%;
+	font: 14px sans-serif;
+	tab-size: 2;
+}
+
+#grid {
+	display: grid;
+	width:100%;
+	height:100%;
+	grid-template-columns: 1fr 1fr 1fr 1fr;
+	grid-template-rows: 4rem 1fr;
+	grid-template-areas: 
+		"buttons cards"
+		"input cards";
+}
