@@ -2,10 +2,12 @@
 
 const images = []
 let grid
+let imageHeight = 300
 
 window.onload = () => {
 	grid = document.getElementById("grid")
 	createFileInput()
+	createRangeInput()
 	showImages()
 }
 
@@ -46,20 +48,39 @@ function showImages() {
 function createImage(url) {
 	const image = newElement("img")
 	image.src = url
+	image.className = "grid-image"
+	image.style.height = imageHeight + "px"
 	image.addEventListener("click", function () {
-		if (image.style.position !== "fixed") {
-			image.style.position = "fixed"
-			image.style.height = "unset"
-			image.style.left = "calc(50% - " + image.naturalWidth / 2 + "px)"
-			image.style.top = "41px"
-		} else {
-			image.style.position = ""
+		if (image.className === "grid-image") {
+			image.className = "center-image"
 			image.style.height = ""
+			image.style.left = "calc(50% - " + image.naturalWidth / 2 + "px)"
+		} else {
+			image.className = "grid-image"
+			image.style.height = imageHeight + "px"
 			image.style.left = ""
-			image.style.top = ""
 		}
 	})
 	grid.appendChild(image)
+}
+
+function createRangeInput() {
+	const input = newElement("input")
+	input.type = "range"
+	input.min = 0
+	input.max = 1000
+	input.step = 50
+	input.value = 300
+	input.addEventListener("input", changeSize)
+	document.getElementById("top-bar").appendChild(input)
+}
+
+function changeSize(event) {
+	imageHeight = +event.target.value
+	if (imageHeight < 300)
+		imageHeight = imageHeight * 0.5 + 150
+	for (const image of document.getElementsByClassName("grid-image"))
+		image.style.height = imageHeight + "px"
 }
 
 function newElement(definition) {
