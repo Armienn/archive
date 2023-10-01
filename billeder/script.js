@@ -5,11 +5,11 @@ let grid
 
 window.onload = () => {
 	grid = document.getElementById("grid")
-	createInput()
+	createFileInput()
 	showImages()
 }
 
-function createInput() {
+function createFileInput() {
 	const input = newElement("input")
 	input.type = "file"
 	input.webkitdirectory = true
@@ -30,7 +30,7 @@ function loadFiles(event) {
 }
 
 function clearImages() {
-	for(const url of images){
+	for (const url of images) {
 		URL.revokeObjectURL(url)
 	}
 	images.splice(0, images.length)
@@ -38,14 +38,28 @@ function clearImages() {
 }
 
 function showImages() {
-	let index = 0
-	while (index < images.length) {
-		const image = newElement("img")
-		image.src = images[index]
-		grid.appendChild(image)
-
-		index = index + 1
+	for (const url of images) {
+		createImage(url)
 	}
+}
+
+function createImage(url) {
+	const image = newElement("img")
+	image.src = url
+	image.addEventListener("click", function () {
+		if (image.style.position !== "fixed") {
+			image.style.position = "fixed"
+			image.style.height = "unset"
+			image.style.left = "calc(50% - " + image.naturalWidth / 2 + "px)"
+			image.style.top = "41px"
+		} else {
+			image.style.position = ""
+			image.style.height = ""
+			image.style.left = ""
+			image.style.top = ""
+		}
+	})
+	grid.appendChild(image)
 }
 
 function newElement(definition) {

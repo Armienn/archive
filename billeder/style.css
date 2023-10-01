@@ -16,6 +16,7 @@ body {
 
 img {
 	height: 300px;
+	max-height: calc(100vh - 41px);
 }
 
 #top-bar {
