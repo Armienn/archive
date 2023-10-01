@@ -39,3 +39,19 @@ body {
 	position: fixed;
 	top: 41px;
 }
+
+#center-display {
+	display: none;
+	position: fixed;
+	height: 100vh;
+	width: 100vw;
+	top: 0;
+	justify-content: center;
+	background-color: rgba(0, 0, 0, 0.7);
+}
+
+#center-image {
+	max-height: calc(100vh - 41px);
+	position: fixed;
+	top: 41px;
+}

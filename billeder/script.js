@@ -51,15 +51,10 @@ function createImage(url) {
 	image.className = "grid-image"
 	image.style.height = imageHeight + "px"
 	image.addEventListener("click", function () {
-		if (image.className === "grid-image") {
-			image.className = "center-image"
-			image.style.height = ""
-			image.style.left = "calc(50% - " + image.naturalWidth / 2 + "px)"
-		} else {
-			image.className = "grid-image"
-			image.style.height = imageHeight + "px"
-			image.style.left = ""
-		}
+		const center = document.getElementById("center-image")
+		center.src = url
+		const display = document.getElementById("center-display")
+		display.style.display = "flex"
 	})
 	grid.appendChild(image)
 }
