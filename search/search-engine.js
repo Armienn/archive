@@ -166,6 +166,10 @@ export class SearchEngine {
 		return (a, b) => {
 			const A = this.collectionSetup.entryData(key, a)
 			const B = this.collectionSetup.entryData(key, b)
+			const aIsNumber = typeof A === "number"
+			const bIsNumber = typeof B === "number"
+			if (aIsNumber !== bIsNumber && (aIsNumber || bIsNumber))
+				return aIsNumber ? 1 : -1
 			return A > B ? 1 : A < B ? -1 : 0
 		}
 	}
