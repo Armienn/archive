@@ -3,14 +3,18 @@
 }
 
 body {
-	--background-color: #111;
+	--background-color-1: #181818;
+	--background-color-2: #111;
 	--background-text-color: #fff;
-	--header-color: #222;
+	--header-color: #333;
 	--header-text-color: #fff;
 	--header-active-color: #444;
+	--nav-color: #222;
+	--nav-text-color: #fff;
+	--nav-active-color: #444;
 
 	font-size: 1rem;
-	background-color: var(--background-color);
+	background: radial-gradient(circle, var(--background-color-1) 0%, var(--background-color-2) 100%);
 	color: var(--background-text-color);
 }
 
@@ -27,8 +31,9 @@ h1 {
 
 nav {
 	display: flex;
-	background-color: var(--header-color);
-	color: var(--header-text-color);
+	background-color: var(--nav-color);
+	color: var(--nav-text-color);
+	box-shadow: 0 1rem 1rem rgba(0,0,0,0.5);
 }
 
 nav button {
@@ -37,13 +42,13 @@ nav button {
 	font-weight: bold;
 	font-size: 1.2rem;
 	padding: 1rem;
-	background-color: var(--header-color);
-	color: var(--header-text-color);
+	background-color: var(--nav-color);
+	color: var(--nav-text-color);
 	transition: 0.3s ease;
 }
 
 nav button:hover {
-	background-color: var(--header-active-color);
+	background-color: var(--nav-active-color);
 }
 
 main {
@@ -87,7 +92,8 @@ p {
 	list-style: none;
 	padding: 0.5rem;
 	margin-top: 2rem;
-	background-color: var(--header-color);
+	border-radius: 0.5rem;
+	background: linear-gradient(var(--header-color), transparent);
 	color: var(--header-text-color);
 	transition: 0.3s ease;
 }
@@ -117,7 +123,8 @@ p {
 	font-weight: bold;
 	font-size: 1.5rem;
 	margin-top: 2rem;
-	background-color: var(--header-color);
+	border-radius: 0.5rem;
+	background: linear-gradient(to right, transparent, var(--header-color), transparent);
 	color: var(--header-text-color);
 	transition: 0.3s ease;
 }

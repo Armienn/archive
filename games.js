@@ -10,7 +10,7 @@ const games = [
 	{
 		name: "Eld",
 		link: "meld",
-		description: "This is still only the very beginning of a game, but it's one I've wanted to make for a long time. It's a top-down pixel art game inspired by some my favourite games like A Link to the Past, Minecraft, Terraria and others.",
+		description: "This is still only the very beginning of a game, but it's one I've wanted to make for a long time. It's a top-down pixel art game inspired by some of my favourite games like A Link to the Past, Minecraft, Terraria and others.",
 		img: "",
 	},
 	{
