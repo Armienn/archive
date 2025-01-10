@@ -102,6 +102,11 @@ export class CollectionSetup {
 			this.sortingModel[key] = sortingModel
 	}
 
+	addFilter(key, title, filter) {
+		this.titles[key] = title
+		this.filterModel[key] = { filter, defaultFilter }
+	}
+
 	addScriptFilter(defaultFilter = "return model") {
 		this.titles["_script_"] = "Custom Script"
 		this.filterModel["_script_"] = {
