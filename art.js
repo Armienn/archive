@@ -58,6 +58,17 @@ const carousels = [
 			"art/12022-6-30 1.jpg",
 		],
 	},
+	{
+		title: "Various",
+		images: [
+			"art/pathfinder lego.jpg",
+			"art/minas tirith.jpg",
+			"art/kort.jpg",
+			"art/Skitse 41.jpg",
+			"art/vertical-kan.jpg",
+			"art/Skitse 24a.jpg",
+		],
+	},
 ]
 
 function buildArt() {
@@ -65,7 +76,15 @@ function buildArt() {
 
 	return /* html */`
 <h2>Art</h2>
-<p class="aber">TODO</p>
+<p class="aber">Here's a small look into the art I've been making. It's mostly pencil/fineliner work, but once in a while I've dabbled in painting or digital. I've got a few videos on youtube, and a lot of posts on <a href="https://www.deviantart.com/thearmienn">DeviantArt</a></p>
+<iframe width="560" height="315"
+	src="https://www.youtube.com/embed/0sggEIPosOg?si=b7Tzu8NcoxuSwPH3"
+	title="YouTube video player" 
+	frameborder="0"
+	allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+	referrerpolicy="strict-origin-when-cross-origin"
+	allowfullscreen>
+</iframe>
 ${carousels.map(toCarousel).join("")}
 `
 }

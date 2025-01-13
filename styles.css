@@ -136,6 +136,22 @@ p {
 
 /********************************* Art *************************************/
 
+
+#art p {
+	margin-right: auto;
+	margin-left: auto;
+	max-width: 60rem;
+}
+
+#art a {
+	text-decoration: underline;
+}
+
+#art iframe {
+	display: block;
+	margin: 0 auto 2rem;
+}
+
 #art ol {
 	display: flex;
 	overflow: hidden;
