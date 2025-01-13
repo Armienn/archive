@@ -13,6 +13,6 @@ pages["home"] = /* html */`
 <p>This is a small original game inspired by the trench run from Star Wars.</p>
 <a href="https://armienn.github.io/SyllabicNumerals"><h3>Syllabic Numerals</h3></a>
 <p>This is a simple system I designed for making long numbers easier to remember.</p>
-<a href="https://armienn.github.io/SyllabicNumerals"><h3>Eld</h3></a>
+<a href="https://armienn.github.io/meld"><h3>Eld</h3></a>
 <p>This is a game I'm currently working on from time to time. It is not in a proper playable state yet, but I do like what I've got so far.</p>
 `

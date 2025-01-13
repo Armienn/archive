@@ -136,4 +136,24 @@ p {
 
 /********************************* Art *************************************/
 
+#art ol {
+	display: flex;
+	overflow: hidden;
+	margin-bottom: 2rem;
+	mask-image: linear-gradient(to right, transparent calc(50% - 60rem), white calc(50% - 30rem), white calc(50% + 30rem), transparent calc(50% + 60rem));
+}
+
+#art li {
+	display: flex;
+	flex-shrink: 0;
+	width: 60rem;
+	transition: 0.3s ease;
+}
+
+#art img {
+	height: 30rem;
+	max-width: 58rem;
+	margin: 0 auto;
+}
+
 /******************************* Various ***********************************/
